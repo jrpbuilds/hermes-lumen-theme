@@ -1,0 +1,85 @@
+# Development
+
+Everything a maintainer needs that isn't user-facing. For what can break on
+Hermes Desktop updates, see [COMPATIBILITY.md](./COMPATIBILITY.md).
+
+## Prerequisites
+
+- Node >= 22.22.2, npm (as pinned by `engines` in `package.json`)
+- A Hermes Desktop install to test against (`~/.hermes` by default; override
+  with `HERMES_HOME`)
+
+## Getting started
+
+```
+npm install
+npm run dev     # build --watch, synced into ~/.hermes/desktop-plugins/lumen
+```
+
+Hermes Desktop watches that file and hot-reloads the plugin on save, so
+edits to `src/` appear in the running app within a couple of seconds.
+
+## Project structure
+
+| Path                    | What it is                                                                          |
+| ----------------------- | ----------------------------------------------------------------------------------- |
+| `src/plugin.ts`         | Entry: registers theme + layout, injects the clarity-layer stylesheet               |
+| `src/theme.ts`          | The `DesktopTheme` contribution (palette selection + typography)                    |
+| `src/palettes.ts`       | Light/dark color sets and terminal ANSI palettes — single source of truth for color |
+| `src/lumen-layout.ts`   | The workspace layout tree contributed to the `layouts` area                         |
+| `src/behaviors/`        | DOM behaviors (sidebar-search click-to-focus)                                       |
+| `src/styles/tokens.css` | Design tokens; every value scoped to `[data-hermes-theme='lumen']`                  |
+| `src/styles/*.css`      | Per-surface clarity layer (sidebar, forms, kanban, …)                               |
+| `src/types/`            | Vendored mirrors of the app's plugin/theme/layout contracts                         |
+| `test/`                 | Vitest suites (see below)                                                           |
+| `scripts/`              | build / sync / check-artifact plumbing                                              |
+
+## Scripts
+
+| Script           | What it does                                                      |
+| ---------------- | ----------------------------------------------------------------- |
+| `./install.sh`   | Build + install in one step (flags in the README Install section) |
+| `npm run build`  | Bundle `src/` into the committed root `plugin.js`                 |
+| `npm run dev`    | `build --watch`, copying each build into the install dir          |
+| `npm run format` | Prettier-write the repo (artifact + lockfile are ignored)         |
+| `npm run sync`   | Copy the committed artifact into the install dir                  |
+| `npm run check`  | format + lint + typecheck + tests + artifact-parity gate          |
+| `npm run test`   | Vitest (palette, layout, WCAG contrast, behavior, artifact)       |
+
+## Why a committed build artifact
+
+Hermes Desktop evaluates a desktop plugin as a single self-contained ES module
+that may only import `@hermes/plugin-sdk` and `react*` — so multi-file sources
+require bundling. Committing the built `plugin.js` means `hermes plugins
+install` works straight from this repo with no build step on the consumer
+side; `scripts/check-artifact.mjs` (run by `npm run check` and CI) fails if
+the committed artifact drifts from `src/`.
+
+## Checks and tests
+
+`npm run check` runs the full gate used by CI:
+
+- **format** — Prettier parity across the repo. `plugin.js` and
+  `package-lock.json` are ignored (reformatting the artifact would break
+  byte parity with esbuild's output).
+- **lint** — ESLint with the Hermes workspace's shared rule set, so source
+  style stays consistent with the app this plugin targets.
+- **typecheck** — `tsc --noEmit` in strict mode against the vendored
+  contracts in `src/types/`.
+- **test** — five Vitest suites:
+  - `palettes.test.ts` — full-palette contract and no built-in-name collision
+  - `contrast.test.ts` — WCAG floors for core and meta text in both modes
+  - `lumen-layout.test.ts` — the layout tree satisfies the app's validator
+  - `sidebar-search.test.ts` — the search focus behavior, under jsdom
+  - `build.test.ts` — sanity markers on the committed artifact
+- **artifact parity** — the committed `plugin.js` must byte-match a fresh
+  build; rebuild and re-commit after any `src/` change.
+
+## Updating against a new Hermes Desktop
+
+1. Bump a dev install (`npm run dev`) against the new Hermes build.
+2. Walk the fragile-anchor checklist and surface order in
+   [COMPATIBILITY.md](./COMPATIBILITY.md), light **and** dark.
+3. Refresh the vendored type mirrors and the built-ins fixture if the app's
+   contracts changed (see the mirror table there).
+4. Update the "Validated against" line at the top of that doc.

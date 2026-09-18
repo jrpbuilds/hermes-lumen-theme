@@ -1,0 +1,4 @@
+# plugin.js is a committed build artifact (esbuild output of src/) so the repo
+# installs directly through `hermes plugins install` with no build step on the
+# consumer side. scripts/check-artifact.mjs guards it against drift.
+plugin.js linguist-generated

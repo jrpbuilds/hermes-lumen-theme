@@ -1,0 +1,37 @@
+{
+  "name": "hermes-lumen-theme",
+  "productName": "Lumen",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A brighter, clearer, more spacious Hermes Desktop theme with high-contrast palettes and a matching workspace layout.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch --sync",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "sync": "node scripts/sync.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && node scripts/check-artifact.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.1",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.10.0",
+    "eslint-plugin-perfectionist": "^5.11.1",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "globals": "^17.12.0",
+    "jsdom": "^30.1.0",
+    "prettier": "^3.6.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.44.0",
+    "vitest": "^5.0.1"
+  }
+}
