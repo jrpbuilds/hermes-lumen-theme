@@ -1,0 +1,232 @@
+/*
+ * Lumen clarity layer — design tokens.
+ * ------------------------------------
+ * Every rule in this layer is scoped to the Lumen skin, so the stylesheet is
+ * inert while any other theme is active.
+ *
+ * Values that coincide with the contributed palette are expressed through the
+ * app's seed/palette vars (`--theme-*`, `--dt-*`, written inline on :root by
+ * the app when the theme is applied — apps/desktop/src/themes/context.tsx), so
+ * src/palettes.ts stays the single source of truth for color. Fixed hexes here
+ * are Lumen-authored refinements with no palette counterpart.
+ */
+
+:root[data-hermes-theme='lumen'] {
+  /*
+   * Global UI scale. Lumen targets readable defaults; 18px on :root scales
+   * every rem-based size in the app (app native root is 16px via
+   * --dt-base-size; see docs/COMPATIBILITY.md for the impact).
+   */
+  font-size: 18px !important;
+
+  /* Brand accent — tracks the palette ring (== primary) in both modes. */
+  --lumen-accent: var(--dt-ring);
+  /* Control strokes reuse the sharpened primary stroke defined below. */
+  --lumen-control-border: var(--ui-stroke-primary);
+  /* Profile rail glyphs (sidebar bottom rail). */
+  --lumen-profile-rail-glyph: #343a44;
+
+  /*
+   * Shared form-control language.
+   */
+  --lumen-field-surface: color-mix(in srgb, var(--theme-card-seed) 82%, var(--theme-sidebar-seed));
+  --lumen-field-hover-surface: color-mix(in srgb, var(--theme-card-seed) 92%, var(--theme-sidebar-seed));
+  --lumen-field-border: #c6ced7;
+  --lumen-field-hover-border: #aeb8c4;
+
+  /*
+   * Sidebar.
+   */
+  /* Width of the styled sidebar scrollbar; the sessions list reserves the same
+     amount as a stable gutter, so divider rules couple to this variable to
+     span the same box as the section content (see styles/sidebar.css). */
+  --lumen-sidebar-scrollbar-width: 10px;
+  --lumen-sidebar-nav-surface: #f8f9fb;
+  --lumen-sidebar-section-tint: color-mix(in srgb, var(--dt-ring) 7%, var(--theme-sidebar-seed));
+  --lumen-sidebar-divider: #c9d0d8;
+  --lumen-row-hover-outline: color-mix(in srgb, var(--dt-ring) 14%, var(--lumen-sidebar-divider));
+  --lumen-row-selected-outline: color-mix(in srgb, var(--dt-ring) 38%, transparent);
+
+  /*
+   * Kanban nested scroll wells.
+   */
+  --lumen-scroll-well-background: var(--theme-sidebar-seed);
+  --lumen-scroll-well-border: #c4cbd4;
+  --lumen-scroll-well-scrollbar: #96a1ae;
+  --lumen-kanban-divider: var(--dt-border);
+
+  /*
+   * Purple metadata lozenges.
+   */
+  --lumen-pill-background: color-mix(in srgb, var(--dt-ring) 13%, var(--theme-card-seed));
+  --lumen-pill-border: color-mix(in srgb, var(--dt-ring) 32%, var(--dt-border));
+  --lumen-pill-foreground: #5145be;
+
+  /*
+   * Text hierarchy — fixed inks replacing the app's color-mix-derived tiers,
+   * for predictable contrast (asserted in test/contrast.test.ts).
+   */
+  --ui-text-primary: var(--theme-foreground);
+  --ui-text-secondary: #4f5863;
+  --ui-text-tertiary: #68737f;
+  --ui-text-quaternary: #737d89;
+  --conversation-scaffold-text: #59636f;
+  --conversation-scaffold-meta: #737d89;
+  --lumen-scaffold-gradient: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--lumen-accent) 74%, var(--ui-text-primary)) 0%,
+    var(--lumen-accent) 50%,
+    color-mix(in srgb, var(--lumen-accent) 58%, var(--ui-text-primary)) 100%
+  );
+
+  /*
+   * Stroke hierarchy.
+   */
+  --ui-stroke-primary: #7f8995;
+  --ui-stroke-secondary: #a7b0bb;
+  --ui-stroke-tertiary: #c1c8d0;
+  --ui-stroke-quaternary: #d5dae0;
+  --stroke-nous: color-mix(in srgb, var(--theme-foreground) 10%, transparent);
+
+  /*
+   * Inputs. Border strength is driven by a single alpha knob the app mixes
+   * into input borders (app styles.css); Lumen raises it for crisper fields.
+   */
+  --dt-input-border: 28%;
+  --dt-input-bg: 100%;
+  --dt-input-inset: none;
+
+  /*
+   * Surfaces — pinned to the palette seeds (background / sidebar / card /
+   * popover); --ui-bg-card and --ui-bg-input are authored refinements.
+   */
+  --ui-bg-chrome: var(--theme-background-seed);
+  --ui-bg-sidebar: var(--theme-sidebar-seed);
+  --ui-bg-editor: var(--theme-card-seed);
+  --ui-bg-elevated: var(--theme-elevated-seed);
+  --ui-bg-card: #f2f4f7;
+  --ui-bg-input: var(--theme-card-seed);
+  --ui-widget-surface-background: var(--theme-card-seed);
+
+  /*
+   * Interaction states.
+   */
+  --ui-row-hover-background: #e8ebf2;
+  --ui-row-active-background: #e3e0f8;
+  --ui-control-hover-background: #e8ebf2;
+  --ui-control-active-background: #e3e0f8;
+  --chrome-action-hover: #e8ebf2;
+
+  /*
+   * Misc.
+   */
+  --ui-selection-background: color-mix(in srgb, var(--dt-ring) 24%, transparent);
+  --ui-inline-code-background: #eceff4;
+  --ui-inline-code-foreground: #262b32;
+  --lumen-capabilities-readable-text: #59636f;
+  /* Embedded capability pickers keep a constant dark backdrop in both modes. */
+  --lumen-embed-background: #171a1f;
+}
+
+/* ==========================================================================
+   Dark mode
+   ========================================================================== */
+:root[data-hermes-theme='lumen'][data-hermes-mode='dark'] {
+  --lumen-accent: var(--dt-ring);
+  --lumen-control-border: var(--ui-stroke-primary);
+  --lumen-profile-rail-glyph: #d5dae1;
+
+  /*
+   * Forms. The dark field surface sits below the dark card (#252b32) so
+   * fields read as inset wells rather than as another card.
+   */
+  --lumen-field-surface: color-mix(in srgb, #1f252b 82%, var(--theme-sidebar-seed));
+  --lumen-field-hover-surface: color-mix(in srgb, var(--theme-card-seed) 84%, var(--theme-sidebar-seed));
+  --lumen-field-border: #424c58;
+  --lumen-field-hover-border: #596574;
+
+  /*
+   * Sidebar.
+   */
+  --lumen-sidebar-nav-surface: #272d34;
+  --lumen-sidebar-section-tint: color-mix(in srgb, var(--dt-ring) 9%, var(--theme-sidebar-seed));
+  --lumen-sidebar-divider: #3b444f;
+  --lumen-row-hover-outline: color-mix(in srgb, var(--dt-ring) 18%, var(--lumen-sidebar-divider));
+  --lumen-row-selected-outline: color-mix(in srgb, var(--dt-ring) 48%, transparent);
+
+  /*
+   * Kanban wells.
+   */
+  --lumen-scroll-well-background: #232a31;
+  --lumen-scroll-well-border: #3e4854;
+  --lumen-scroll-well-scrollbar: #667381;
+  --lumen-kanban-divider: var(--dt-border);
+
+  /*
+   * Purple metadata lozenges.
+   */
+  --lumen-pill-background: color-mix(in srgb, var(--dt-ring) 17%, #232a31);
+  --lumen-pill-border: color-mix(in srgb, var(--dt-ring) 38%, #3e4854);
+  --lumen-pill-foreground: #d6d0ff;
+
+  /*
+   * Text hierarchy.
+   */
+  --ui-text-primary: var(--theme-foreground);
+  --ui-text-secondary: #c2c8d0;
+  --ui-text-tertiary: #9da6b2;
+  --ui-text-quaternary: #858f9b;
+  --conversation-scaffold-text: #afb7c1;
+  --conversation-scaffold-meta: #858f9b;
+  --lumen-scaffold-gradient: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--lumen-accent) 74%, var(--ui-text-primary)) 0%,
+    var(--lumen-accent) 50%,
+    color-mix(in srgb, var(--lumen-accent) 58%, var(--ui-text-primary)) 100%
+  );
+
+  /*
+   * Stroke hierarchy.
+   */
+  --ui-stroke-primary: #717e8d;
+  --ui-stroke-secondary: #596574;
+  --ui-stroke-tertiary: #414a55;
+  --ui-stroke-quaternary: #353d46;
+  --stroke-nous: color-mix(in srgb, var(--theme-foreground) 12%, transparent);
+
+  /*
+   * Inputs.
+   */
+  --dt-input-border: 34%;
+  --dt-input-bg: 100%;
+  --dt-input-inset: none;
+
+  /*
+   * Surfaces.
+   */
+  --ui-bg-chrome: var(--theme-background-seed);
+  --ui-bg-sidebar: var(--theme-sidebar-seed);
+  --ui-bg-editor: var(--theme-card-seed);
+  --ui-bg-elevated: var(--theme-elevated-seed);
+  --ui-bg-card: #2a3038;
+  --ui-bg-input: #20262c;
+  --ui-widget-surface-background: var(--theme-card-seed);
+
+  /*
+   * Interaction.
+   */
+  --ui-row-hover-background: #2b323a;
+  --ui-row-active-background: #37334f;
+  --ui-control-hover-background: #303740;
+  --ui-control-active-background: #393653;
+  --chrome-action-hover: #303740;
+
+  /*
+   * Misc.
+   */
+  --ui-selection-background: color-mix(in srgb, var(--dt-ring) 30%, transparent);
+  --ui-inline-code-background: #2b323a;
+  --ui-inline-code-foreground: #e7eaf0;
+  --lumen-capabilities-readable-text: #b2bac4;
+  --lumen-embed-background: #171a1f;
+}

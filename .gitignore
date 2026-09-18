@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+
+# Local environment and compiler/tool caches.
+.env
+.env.*
+!.env.example
+.eslintcache
+*.tsbuildinfo

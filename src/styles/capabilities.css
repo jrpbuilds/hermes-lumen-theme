@@ -1,0 +1,70 @@
+/*
+ * Lumen clarity layer — capabilities surfaces (Skills / Toolsets / MCP /
+ * Plugins tabs) and embedded capability pickers.
+ *
+ * The tab group is located structurally via `data-tour` attributes; text
+ * contrast fixes target Tailwind opacity-variant utility classes, which are
+ * FRAGILE (see docs/COMPATIBILITY.md).
+ */
+
+/*
+ * Scope: the one section whose tab bar carries the capability tabs. All
+ * `:has()` predicates compound on the section itself, so the rules apply to
+ * every descendant regardless of the app's internal nesting depth under it.
+ */
+:root[data-hermes-theme='lumen']
+  section:has([data-tour='tab-skills']):has([data-tour='tab-toolsets']):has([data-tour='tab-mcp']):has(
+    [data-tour='tab-plugins']
+  )
+  :is(
+    [class~='text-muted-foreground/50'],
+    [class~='text-muted-foreground/60'],
+    [class~='text-muted-foreground/70'],
+    [class~='text-muted-foreground/80']
+  ) {
+  color: var(--lumen-capabilities-readable-text) !important;
+}
+
+:root[data-hermes-theme='lumen']
+  section:has([data-tour='tab-skills']):has([data-tour='tab-toolsets']):has([data-tour='tab-mcp']):has(
+    [data-tour='tab-plugins']
+  )
+  [class~='text-foreground/85'] {
+  color: var(--ui-text-primary) !important;
+}
+
+:root[data-hermes-theme='lumen']
+  section:has([data-tour='tab-skills']):has([data-tour='tab-toolsets']):has([data-tour='tab-mcp']):has(
+    [data-tour='tab-plugins']
+  )
+  .cm-editor
+  :is(.cm-content, .cm-content span) {
+  color: var(--ui-text-primary) !important;
+}
+
+:root[data-hermes-theme='lumen']
+  section:has([data-tour='tab-skills']):has([data-tour='tab-toolsets']):has([data-tour='tab-mcp']):has(
+    [data-tour='tab-plugins']
+  )
+  .cm-editor
+  .cm-gutters {
+  color: var(--lumen-capabilities-readable-text) !important;
+}
+
+/* ==========================================================================
+   Embedded capability picker
+   ========================================================================== */
+
+/*
+ * The picker keeps the three tab anchors it was validated with (no
+ * toolsets); same compound-on-the-section scoping as above.
+ */
+:root[data-hermes-theme='lumen']
+  section:has([data-tour='tab-skills']):has([data-tour='tab-mcp']):has([data-tour='tab-plugins'])
+  div:has(> iframe[src*='embed=picker']),
+:root[data-hermes-theme='lumen']
+  section:has([data-tour='tab-skills']):has([data-tour='tab-mcp']):has([data-tour='tab-plugins'])
+  iframe[src*='embed=picker'] {
+  background: var(--lumen-embed-background) !important;
+  color-scheme: dark;
+}
