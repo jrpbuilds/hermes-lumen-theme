@@ -2,7 +2,7 @@
  * The Lumen workspace layout contribution.
  *
  * This tree was extracted from the author's saved Lumen workspace preset and
- * validated against Hermes Desktop 0.20.3. It is registered through the same
+ * validated against Hermes Desktop v0.21.x. It is registered through the same
  * `layouts` contribution area as the app's built-in presets. The hermes-bots
  * panes remain in the tree intentionally; Hermes handles unavailable panes
  * through its normal layout adoption path.

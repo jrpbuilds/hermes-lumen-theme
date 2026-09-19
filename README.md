@@ -18,7 +18,7 @@ and a "clarity layer" that sharpens forms, the sessions sidebar, the composer,
 the Kanban drawer and the capabilities pages. It also ships a Lumen workspace
 layout for the app's layout picker.
 
-> Built and tested against Hermes Desktop **0.20.3** — see
+> Built and tested against Hermes Desktop **v0.21.x** — see
 > [COMPATIBILITY.md](./docs/COMPATIBILITY.md) for what that covers and what can
 > break on app updates.
 

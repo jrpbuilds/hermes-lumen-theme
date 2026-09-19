@@ -1,6 +1,6 @@
 /**
  * Mirrored theme model from NousResearch/hermes-agent
- * `apps/desktop/src/themes/types.ts` (v0.20.3).
+ * `apps/desktop/src/themes/types.ts` (v0.21.x).
  *
  * The real SDK is not published to npm, so the contract the theme data must
  * satisfy is vendored here for typechecking. Keep in sync with the app —

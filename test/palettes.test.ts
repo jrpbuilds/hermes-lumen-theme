@@ -13,7 +13,7 @@ import type { DesktopTerminalPalette, DesktopThemeColors } from '../src/types/de
 
 /**
  * Slug list mirrored from the app's built-in presets
- * (apps/desktop/src/themes/presets.ts @ 0.20.3). Contributed themes must not
+ * (apps/desktop/src/themes/presets.ts @ v0.21.x). Contributed themes must not
  * shadow a built-in name — the app drops such contributions silently.
  */
 const BUILTIN_THEME_NAMES = new Set([

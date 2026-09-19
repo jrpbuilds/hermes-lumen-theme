@@ -6,7 +6,7 @@ Hermes Desktop updates can change the anchor points even when Lumen's code is
 untouched. This file records what the current release was validated against
 and where the fragile anchors are, so an app update has a concrete checklist.
 
-**Validated against: Hermes Desktop 0.20.3** (hermes-agent `apps/desktop`).
+**Validated against: Hermes Desktop v0.21.x** (hermes-agent `apps/desktop`).
 
 ## Mirrored contracts (keep in sync)
 

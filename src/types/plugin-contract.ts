@@ -1,6 +1,6 @@
 /**
  * Mirrored plugin authoring contract from NousResearch/hermes-agent
- * `apps/desktop/src/contrib/types.ts` + `contrib/plugin.ts` (v0.20.3).
+ * `apps/desktop/src/contrib/types.ts` + `contrib/plugin.ts` (v0.21.x).
  *
  * Only the surface Lumen uses is mirrored; see docs/COMPATIBILITY.md for the
  * keep-in-sync policy.
