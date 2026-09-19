@@ -127,6 +127,14 @@ Ordered roughly by breakage likelihood:
     Kanban board shares the root chain but has no such children).
     Symptom: the pane reverts to the darker zone chrome, or the heading pills,
     row outlines, search-field surface and scrollbar stop applying.
+12. **Sessions section glyphs** (`src/behaviors/section-glyphs.ts` and
+    `src/styles/sidebar.css`) — anchors the direct section pills under
+    `[data-tour='sessions-sidebar'] [data-sessions-mode]`, the dither lead
+    selected by `span:first-child > .dither`, and the app's localized section
+    labels. Entered projects use `data-sessions-project` because their label
+    is the user-defined project name rather than a translatable string.
+    Symptom: section icons fall back to plain dither squares, or a renamed
+    section receives the wrong glyph.
 
 Stable-by-design anchors: `data-slot` component primitives
 (`input`, `textarea`, `select-trigger`, `select-content`, `select-item`,

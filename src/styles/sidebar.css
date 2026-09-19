@@ -191,6 +191,65 @@
   padding-inline: 0.0625rem;
 }
 
+/*
+ * Sections that carry their own glyph (messaging channels pass a platform
+ * avatar as the label icon) don't need the label's little dither square
+ * doubling it. Sections without one — Cron jobs — keep the square. The label
+ * span is the square's parent, and it is only ever not the header button's
+ * first child when a glyph precedes it.
+ */
+:root[data-hermes-theme='lumen']
+  [data-tour='sessions-sidebar']
+  [data-sessions-mode]
+  > [data-slot='sidebar-group']
+  > div:first-child
+  button
+  > span:not(:first-child)
+  > .dither {
+  display: none;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-tour='sessions-sidebar']
+  [data-sessions-mode]
+  > [data-slot='sidebar-group']
+  > div:first-child
+  button
+  > span:has(> .dither):not(:first-child) {
+  padding-left: 0;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-tour='sessions-sidebar']
+  [data-sessions-mode]
+  > [data-slot='sidebar-group']
+  > div:first-child
+  button
+  > span:has(> .lumen-section-glyph) {
+  padding-left: 0;
+}
+
+/*
+ * Icon-less sections (Pinned, Cron jobs, Sessions, …): the behavior layer
+ * injects a matching codicon into the label's dither square; this shapes the
+ * square into a chip the size of the platform avatars, tinted in the accent
+ * language the pill already speaks.
+ */
+:root[data-hermes-theme='lumen'] [data-tour='sessions-sidebar'] .lumen-section-glyph {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--lumen-accent) 14%, transparent);
+}
+
+:root[data-hermes-theme='lumen'] [data-tour='sessions-sidebar'] .lumen-section-glyph > .codicon {
+  font-size: 0.625rem;
+  color: var(--theme-primary);
+}
+
 :root[data-hermes-theme='lumen']
   [data-tour='sessions-sidebar']
   [data-sessions-mode]

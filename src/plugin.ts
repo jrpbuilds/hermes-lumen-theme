@@ -16,6 +16,7 @@
 
 import { THEMES_AREA } from '@hermes/plugin-sdk'
 
+import { installSectionGlyphs } from './behaviors/section-glyphs'
 import { installSidebarSearchFocus } from './behaviors/sidebar-search'
 import { layoutContribution } from './lumen-layout'
 import botsCss from './styles/bots.css'
@@ -80,6 +81,7 @@ export default {
   register(ctx) {
     installStyles(ctx)
 
+    installSectionGlyphs(ctx)
     installSidebarSearchFocus(ctx)
 
     ctx.register(themeContribution)
