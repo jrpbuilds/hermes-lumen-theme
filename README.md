@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/docs/lumen-banner.webp" alt="Lumen" width="100%">
+<a href="https://www.jrpbuilds.co.uk/projects/lumen/"><img src="https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/docs/lumen-banner.webp" alt="Lumen" width="100%"></a>
 
 **A brighter, clearer, more spacious theme for [Hermes Desktop](https://github.com/NousResearch/hermes-agent).**
 
