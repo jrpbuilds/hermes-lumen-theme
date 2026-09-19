@@ -93,6 +93,8 @@ available in the layout picker when you want to apply it.
   />
 </p>
 
+More screenshots viewable [here](https://www.jrpbuilds.co.uk/projects/lumen/#screenshots).
+
 ## Development
 
 ```

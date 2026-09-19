@@ -51,6 +51,30 @@
   padding-top: 0.875rem;
 }
 
+/*
+ * The comment composer's Comment button reads off-center inside its field.
+ * Two causes, both fixed here: the inline-level textarea leaves the
+ * wrapper's line-box strut (~6px) below it, so the button's offsets resolve
+ * against a wrapper taller than the field (block flow removes the strut);
+ * and the app pins the button `top-1 right-1`, which gaps 4.5/2 against the
+ * Lumen-scale field — center it instead, so it also rides the field's
+ * vertical center as the box grows with content.
+ * FRAGILE: anchors the drawer root and the button's exact utility combo.
+ */
+:root[data-hermes-theme='lumen']
+  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
+  div.relative:has(> textarea[data-slot='textarea'])
+  > textarea[data-slot='textarea'] {
+  display: block;
+}
+
+:root[data-hermes-theme='lumen']
+  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
+  button[class~='absolute'][class~='top-1'][class~='right-1'] {
+  top: 50%;
+  translate: 0 -50%;
+}
+
 /* ==========================================================================
    Board header count lozenge
    ========================================================================== */
