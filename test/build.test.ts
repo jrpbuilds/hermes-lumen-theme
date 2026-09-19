@@ -36,6 +36,7 @@ describe('built plugin.js', () => {
     for (const marker of [
       'composer-surface',
       'sessions-sidebar',
+      'bots-roster',
       'tab-skills',
       'overscroll-contain',
       'lumen-scaffold-gradient'

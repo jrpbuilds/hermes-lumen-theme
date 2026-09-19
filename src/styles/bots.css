@@ -1,0 +1,466 @@
+/*
+ * Lumen clarity layer — Bots sidebar (the hermes-bots plugin pane) and its
+ * group-chat room. The pane root has no background of its own, so the zone's
+ * chrome fill showed through a step darker than the sessions sidebar; this
+ * layer paints it with the sidebar surface and carries the sessions'
+ * section/row language onto the roster.
+ *
+ * Radix `asChild` triggers overwrite a row-button's own data-slot, so
+ * headings carry `tooltip-trigger` and rows carry `context-menu-trigger`
+ * (bot rows also `data-roster-key`) — never style roster children via
+ * `data-slot='row-button'`. See docs/COMPATIBILITY.md.
+ */
+
+/* ==========================================================================
+   Pane surface
+   ========================================================================== */
+
+/*
+ * Paint the pane root, not the zone: the zone is shared with the sessions
+ * tab. The surface token resolves to transparent under glass mode, so
+ * translucency survives. Anchor: the roster toolbar's title row, present in
+ * every roster state. FRAGILE: matches the toolbar's exact utility chain.
+ */
+:root[data-hermes-theme='lumen']
+  div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5) {
+  background: var(--ui-sidebar-surface-background);
+}
+
+/* ==========================================================================
+   Section headings — the sessions pill language
+   ========================================================================== */
+
+/*
+ * Foldable roster headings are the roster's only uppercase tracking-wider
+ * buttons; rows never are. The pill mirrors the sessions section header.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider {
+  /* Taller than the sessions pill floor: this pill also carries a glyph + caret. */
+  min-height: 1.875rem;
+  box-sizing: border-box;
+  /* Sessions pill label typography (SidebarPanelLabel). */
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  background: var(--lumen-sidebar-section-tint);
+  border-radius: 0.25rem;
+  /* !important beats the button's own px/py utilities. */
+  padding: 0.1875rem 0.375rem 0.1875rem 0.5625rem !important;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider:hover {
+  background: color-mix(in srgb, var(--lumen-accent) 10%, var(--ui-bg-sidebar));
+}
+
+/*
+ * Top-level headings — Group chats, each gateway bucket, and (in the flat
+ * shape) the user sections. `margin-top: 0` hands the vertical rhythm to the
+ * divider rule below.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] > div > div > button.uppercase.tracking-wider,
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  > div
+  > [data-slot='bots-section']
+  button.uppercase.tracking-wider {
+  margin-top: 0;
+  color: var(--theme-primary);
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 75%, transparent);
+}
+
+/* The gateway glyph ships its own muted color; let it read with the label. */
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  > div
+  > div
+  > button.uppercase.tracking-wider
+  [data-slot='connection-glyph'] {
+  color: inherit;
+}
+
+/*
+ * Sessions caret behavior: expanded sections reveal the caret on hover/focus;
+ * collapsed sections keep it visible so the expand affordance never hides.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider > .codicon-chevron-right {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button.uppercase.tracking-wider
+  > .codicon-chevron-right:not(.rotate-90) {
+  opacity: 0.75;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button.uppercase.tracking-wider:hover
+  > .codicon-chevron-right,
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button.uppercase.tracking-wider:focus-visible
+  > .codicon-chevron-right {
+  opacity: 1;
+}
+
+/*
+ * Sessions headers trail their caret right after the label; the roster
+ * renders it first. Reorder visually with `order` — the DOM (and so
+ * screen-reader) order is untouched.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider > .codicon-chevron-right {
+  order: 2;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider > span.min-w-0.flex-1 {
+  order: 3;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider > span.tabular-nums {
+  order: 4;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider > .codicon-debug-disconnect {
+  order: 5;
+}
+
+/* ==========================================================================
+   Section dividers
+   ========================================================================== */
+
+/*
+ * One hairline per top-level section, matching the sessions sidebar. In the
+ * flat shape the user sections ARE the top level, so they inherit the rule;
+ * sections nested inside a gateway bucket keep the drop zone's own left rail.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] > div > div {
+  border-top: 1px solid var(--lumen-sidebar-divider);
+  margin-top: 0.375rem;
+  padding-top: 0.375rem;
+}
+
+/*
+ * Match the sessions' ~9px header-to-content rhythm; top-level headers are
+ * the only buttons followed directly by their content grid.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] button.uppercase.tracking-wider + div.grid {
+  padding-top: 0.375rem;
+}
+
+/* ==========================================================================
+   Rows
+   ========================================================================== */
+
+/*
+ * Bot and group rows are exactly the `context-menu-trigger` buttons (bot rows
+ * also carry data-roster-key); headings and toolbar controls are
+ * tooltip-trigger stamps instead. The sessions rows' hover/selected language
+ * follows.
+ */
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger']) {
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger']):hover {
+  box-shadow: inset 0 0 0 1px var(--lumen-row-hover-outline);
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger'])[class*='bg-(--ui-row-active-background)'] {
+  box-shadow: inset 0 0 0 1px var(--lumen-row-selected-outline);
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger'])[class*='bg-(--ui-row-active-background)']:hover {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 52%, transparent);
+}
+
+/* Keep the selected row's title prominent without changing its metadata. */
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button[class*='bg-(--ui-row-active-background)']
+  [class*='text-[0.8125rem]'] {
+  font-weight: 600;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button[class*='bg-(--ui-row-active-background)']
+  .text-\(--ui-text-tertiary\),
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button[class*='bg-(--ui-row-active-background)']
+  .text-\(--ui-text-quaternary\) {
+  color: color-mix(in srgb, var(--ui-text-secondary) 92%, var(--ui-text-primary)) !important;
+}
+
+/* Titles rest muted and wake on hover/selection, like the sessions rows. */
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger'])
+  [class*='text-[0.8125rem]'] {
+  color: var(--ui-text-secondary);
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger']):hover
+  [class*='text-[0.8125rem]'],
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button[class*='bg-(--ui-row-active-background)']
+  [class*='text-[0.8125rem]'] {
+  color: var(--ui-text-primary);
+}
+
+/*
+ * Meta lines at the sessions' 0.625rem density; ages lift to tertiary ink.
+ * The selected-row bump above still wins on active rows via its !important.
+ */
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger'])
+  .text-\(--ui-text-tertiary\) {
+  font-size: 0.625rem;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  button:is([data-roster-key], [data-slot='context-menu-trigger'])
+  [class*='text-[0.6875rem]'] {
+  font-size: 0.625rem;
+  color: var(--ui-text-tertiary);
+}
+
+/*
+ * Group rows wrap their row button and move up/down column in a two-column
+ * grid, so lift the selected/hover band onto the wrapper (`:has()` on the
+ * button's state classes) and neutralize the button's own surface — the band
+ * then spans the full row, move controls included. Specificity ladder:
+ * hover < selected < selected-and-hovered, so no :not is needed.
+ */
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]'] {
+  border-radius: 0.375rem;
+  padding-inline-end: 0.375rem;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']
+  > button:is([data-roster-key], [data-slot='context-menu-trigger']) {
+  background: transparent;
+  /* Out-ranks the button's own selected and hovered rings. */
+  box-shadow: none;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']:hover {
+  box-shadow: inset 0 0 0 1px var(--lumen-row-hover-outline);
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']:has(> button[class*='bg-(--ui-row-active-background)']) {
+  background: var(--ui-row-active-background);
+  box-shadow: inset 0 0 0 1px var(--lumen-row-selected-outline);
+}
+
+:root[data-hermes-theme='lumen']
+  [data-slot='bots-roster']
+  div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']:has(> button[class*='bg-(--ui-row-active-background)']):hover {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 52%, transparent);
+}
+
+/* ==========================================================================
+   Search field
+   ========================================================================== */
+
+/*
+ * The toolbar's SearchField is the sessions primitive resting on the
+ * underline-only chrome variant; give it the sessions field surface so the
+ * two searches read as one control.
+ * FRAGILE: matches the toolbar row's exact utility chain.
+ */
+:root[data-hermes-theme='lumen']
+  div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
+  > div.flex.min-w-0.items-center.gap-1.px-2\.5.pb-1\.5
+  > div:has(> input[type='text']) {
+  box-sizing: border-box;
+  /* Flush with the roster rows' left content edge. */
+  min-height: 1.875rem;
+  margin-left: -0.25rem;
+  padding-inline: 0.5rem;
+  background: var(--lumen-field-surface);
+  border: 1px solid var(--lumen-field-border) !important;
+  border-radius: 0.375rem;
+  opacity: 0.92 !important;
+  box-shadow: none;
+  background-clip: padding-box;
+  cursor: text;
+}
+
+:root[data-hermes-theme='lumen']
+  div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
+  > div.flex.min-w-0.items-center.gap-1.px-2\.5.pb-1\.5
+  > div:has(> input[type='text']):focus-within {
+  border-color: var(--lumen-accent) !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, transparent);
+}
+
+:root[data-hermes-theme='lumen']
+  div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
+  > div.flex.min-w-0.items-center.gap-1.px-2\.5.pb-1\.5
+  > div:has(> input[type='text'])
+  svg {
+  color: var(--ui-text-tertiary);
+}
+
+:root[data-hermes-theme='lumen']
+  div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
+  > div.flex.min-w-0.items-center.gap-1.px-2\.5.pb-1\.5
+  > div:has(> input[type='text'])
+  input::placeholder {
+  color: var(--ui-text-tertiary);
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Group chat room
+   ========================================================================== */
+
+/*
+ * The log grid has no top padding, so the first message sat flush under the
+ * activity panel's hairline; the scroller anchor is the room's log grid.
+ * FRAGILE: matches the group-chat log grid's exact utility chain.
+ */
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] {
+  /* The app's gap-1.5 packs the log tight; open it up so messages breathe. */
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+/*
+ * Your own messages wear the sessions bubble recipe: the per-mode Lumen
+ * user-bubble seed (--dt-user-bubble), the bubble's 1px tertiary border and
+ * padding, with transcript ink. Anchored on the fill class — the only log
+ * row that carries one.
+ */
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']
+  > div[class*='bg-(--chrome-action-hover)'] {
+  background: var(--dt-user-bubble);
+  border: 1px solid var(--ui-stroke-tertiary);
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem !important;
+}
+
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']
+  > div[class*='bg-(--chrome-action-hover)']:hover {
+  border-color: var(--ui-stroke-secondary);
+}
+
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']
+  > div[class*='bg-(--chrome-action-hover)']
+  [data-slot='group-chat-message-content'] {
+  color: color-mix(in srgb, var(--ui-text-primary) 95%, transparent) !important;
+}
+
+/*
+ * Every thread's last message trails a "Reply in thread" link (or, once
+ * seated, the composer itself); render the links as quiet accent pills.
+ */
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']
+  > button[data-variant='link'] {
+  background: color-mix(in srgb, var(--lumen-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lumen-accent) 30%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.1875rem 0.5rem !important;
+  margin-bottom: 0.25rem;
+}
+
+/*
+ * The seated thread composer (kept present by src/behaviors/reply-thread.ts)
+ * sits below the thread's tail — no box of its own; the tail's accent rail
+ * marks the pairing. Drop the form's own px-2 so the field lines up flush
+ * with the message cards.
+ */
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']
+  > form.grid {
+  margin-top: 0.25rem;
+  padding-left: 0;
+}
+
+:root[data-hermes-theme='lumen']
+  div.relative.flex.h-full.flex-col
+  > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
+  > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']
+  > div.group:has(+ form.grid) {
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 60%, transparent);
+}
+
+/*
+ * The room's structural hairlines (activity panel's bottom rule, composer's
+ * top rule) ship a stroke a step brighter than the sessions sidebar's
+ * dividers; align them to --lumen-sidebar-divider instead of touching the
+ * token app-wide.
+ */
+:root[data-hermes-theme='lumen'] div.relative.flex.h-full.flex-col > div[class*='border-(--ui-stroke-secondary)'] {
+  border-color: var(--lumen-sidebar-divider);
+}
+
+/* ==========================================================================
+   Scrollbar
+   ========================================================================== */
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster']::-webkit-scrollbar {
+  width: var(--lumen-sidebar-scrollbar-width);
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster']::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster']::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ui-text-tertiary) 28%, transparent);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+:root[data-hermes-theme='lumen'] [data-slot='bots-roster']::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--ui-text-secondary) 42%, transparent);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}

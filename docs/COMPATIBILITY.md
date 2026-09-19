@@ -109,6 +109,24 @@ Ordered roughly by breakage likelihood:
     `[data-radix-select-item-text]` to stay aligned and clamp long options to
     two lines. If Hermes changes these Radix hooks, long options may widen again
     or lose their wrapping.
+11. **Bots sidebar** (`src/styles/bots.css`) — anchors the hermes-bots roster's
+    own hooks: the pane root via its toolbar title row
+    (`flex items-center justify-between gap-2 px-2.5 pt-2.5 pb-1.5`),
+    `data-slot='bots-roster'`, and the `uppercase tracking-wider` class pair on
+    the roster's section-heading buttons. Note the data-slot trap: Radix
+    `asChild` triggers overwrite the row-button's own `data-slot`, so headings
+    carry `tooltip-trigger` (Tip) and rows carry `context-menu-trigger`
+    (bot rows also carry `data-roster-key`) — never style roster children by
+    `data-slot='row-button'`. The search-field rules encode the toolbar row's
+    utility chain and the `div:has(> input[type='text'])` SearchField wrapper.
+    The group-chat room rules anchor the workspace root's
+    `relative flex h-full flex-col` chain plus the log grid's
+    `grid-cols-[minmax(0,1fr)] gap-1.5 px-2.5 pb-2` utility combo; the room
+    hairline recolor assumes only the room's own structural borders are direct
+    children of that root carrying `border-(--ui-stroke-secondary)` (the
+    Kanban board shares the root chain but has no such children).
+    Symptom: the pane reverts to the darker zone chrome, or the heading pills,
+    row outlines, search-field surface and scrollbar stop applying.
 
 Stable-by-design anchors: `data-slot` component primitives
 (`input`, `textarea`, `select-trigger`, `select-content`, `select-item`,
@@ -119,8 +137,9 @@ Stable-by-design anchors: `data-slot` component primitives
 
 1. Bump a dev install (`npm run dev`) against the new Hermes build.
 2. Walk the surfaces in the order above: chat + composer, forms/dropdowns,
-   sessions sidebar (search, sections, rows, rail, scrollbar), Kanban drawer,
-   capabilities tabs, embedded picker, light **and** dark.
+   sessions sidebar (search, sections, rows, rail, scrollbar), Bots sidebar
+   (surface, headings, rows, search, scrollbar), Kanban drawer, capabilities
+   tabs, embedded picker, light **and** dark.
 3. Check the mirror table for upstream contract changes and refresh the
    vendored types + built-ins fixture.
 4. Update the "Validated against" line.

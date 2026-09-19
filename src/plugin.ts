@@ -16,8 +16,10 @@
 
 import { THEMES_AREA } from '@hermes/plugin-sdk'
 
+import { installThreadComposerSeat } from './behaviors/reply-thread'
 import { installSidebarSearchFocus } from './behaviors/sidebar-search'
 import { layoutContribution } from './lumen-layout'
+import botsCss from './styles/bots.css'
 import capabilitiesCss from './styles/capabilities.css'
 import composerCss from './styles/composer.css'
 import conversationCss from './styles/conversation.css'
@@ -35,9 +37,17 @@ const STYLE_ID = `${THEME_NAME}-styles`
  * Concatenation order is cascade order: tokens first, then per-surface rules
  * in the original clarity-layer order.
  */
-const CSS = [tokensCss, conversationCss, formsCss, sidebarCss, composerCss, kanbanCss, capabilitiesCss, focusCss].join(
-  '\n'
-)
+const CSS = [
+  tokensCss,
+  conversationCss,
+  formsCss,
+  sidebarCss,
+  botsCss,
+  composerCss,
+  kanbanCss,
+  capabilitiesCss,
+  focusCss
+].join('\n')
 
 function installStyles(ctx: PluginContext): void {
   if (typeof document === 'undefined') {
@@ -72,6 +82,7 @@ export default {
     installStyles(ctx)
 
     installSidebarSearchFocus(ctx)
+    installThreadComposerSeat(ctx)
 
     ctx.register(themeContribution)
     ctx.register(layoutContribution)
