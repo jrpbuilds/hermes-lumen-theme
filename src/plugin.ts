@@ -16,7 +16,6 @@
 
 import { THEMES_AREA } from '@hermes/plugin-sdk'
 
-import { installThreadComposerSeat } from './behaviors/reply-thread'
 import { installSidebarSearchFocus } from './behaviors/sidebar-search'
 import { layoutContribution } from './lumen-layout'
 import botsCss from './styles/bots.css'
@@ -82,7 +81,6 @@ export default {
     installStyles(ctx)
 
     installSidebarSearchFocus(ctx)
-    installThreadComposerSeat(ctx)
 
     ctx.register(themeContribution)
     ctx.register(layoutContribution)

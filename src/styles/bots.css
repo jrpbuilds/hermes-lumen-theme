@@ -408,10 +408,9 @@
 }
 
 /*
- * The seated thread composer (kept present by src/behaviors/reply-thread.ts)
- * sits below the thread's tail — no box of its own; the tail's accent rail
- * marks the pairing. Drop the form's own px-2 so the field lines up flush
- * with the message cards.
+ * The seated thread composer sits below the thread's tail — no box of its
+ * own; the tail's accent rail marks the pairing. Drop the form's own px-2 so
+ * the field lines up flush with the message cards.
  */
 :root[data-hermes-theme='lumen']
   div.relative.flex.h-full.flex-col
