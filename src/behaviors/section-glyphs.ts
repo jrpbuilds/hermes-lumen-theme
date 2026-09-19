@@ -10,119 +10,127 @@
  * unless the sessions sidebar is showing an entered project.
  */
 
-import type { PluginContext } from '../types/plugin-contract'
+import type { PluginContext } from "../types/plugin-contract"
 
 /** Normalized section labels → codicon across the app's shipped locales. */
 export const SECTION_ICONS: Record<string, string> = {
-  results: 'search',
-  pinned: 'pin',
-  'cron jobs': 'watch',
-  sessions: 'comment-discussion',
-  projects: 'project',
-  النتائج: 'search',
-  المثبتة: 'pin',
-  'المهام المجدولة': 'watch',
-  الجلسات: 'comment-discussion',
-  المشاريع: 'project',
-  結果: 'search',
-  ピン留め: 'pin',
-  セッション: 'comment-discussion',
-  cronジョブ: 'watch',
-  プロジェクト: 'project',
-  результаты: 'search',
-  закреплённые: 'pin',
-  'cron-задачи': 'watch',
-  сеансы: 'comment-discussion',
-  проекты: 'project',
-  结果: 'search',
-  已置顶: 'pin',
-  会话: 'comment-discussion',
-  定时任务: 'watch',
-  项目: 'project',
-  已釘選: 'pin',
-  工作階段: 'comment-discussion',
-  排程任務: 'watch',
-  專案: 'project'
+    results: "search",
+    pinned: "pin",
+    "cron jobs": "watch",
+    sessions: "comment-discussion",
+    projects: "project",
+    النتائج: "search",
+    المثبتة: "pin",
+    "المهام المجدولة": "watch",
+    الجلسات: "comment-discussion",
+    المشاريع: "project",
+    結果: "search",
+    ピン留め: "pin",
+    セッション: "comment-discussion",
+    cronジョブ: "watch",
+    プロジェクト: "project",
+    результаты: "search",
+    закреплённые: "pin",
+    "cron-задачи": "watch",
+    сеансы: "comment-discussion",
+    проекты: "project",
+    结果: "search",
+    已置顶: "pin",
+    会话: "comment-discussion",
+    定时任务: "watch",
+    项目: "project",
+    已釘選: "pin",
+    工作階段: "comment-discussion",
+    排程任務: "watch",
+    專案: "project",
 }
 
 /** The section pill's label button — the only place a dither square leads. */
 export const SECTION_HEADER_BUTTON_SELECTOR =
-  "[data-tour='sessions-sidebar'] [data-sessions-mode] > [data-slot='sidebar-group'] > div:first-child button"
+    "[data-tour='sessions-sidebar'] [data-sessions-mode] > [data-slot='sidebar-group'] > div:first-child button"
 
-export const GLYPH_CLASS = 'lumen-section-glyph'
+export const GLYPH_CLASS = "lumen-section-glyph"
 
 /** Dressed sections count. Unknown or icon-led sections are left alone. */
 export function dressSectionGlyphs(root: Document | Element): number {
-  let dressed = 0
+    let dressed = 0
 
-  root.querySelectorAll(SECTION_HEADER_BUTTON_SELECTOR).forEach(button => {
-    // The label span is the header button's first child exactly when no icon
-    // precedes it, and the dither square is its lead child.
-    const glyph = button.querySelector(`:scope > span:first-child > .dither`)
+    root.querySelectorAll(SECTION_HEADER_BUTTON_SELECTOR).forEach(button => {
+        // The label span is the header button's first child exactly when no icon
+        // precedes it, and the dither square is its lead child.
+        const glyph = button.querySelector(`:scope > span:first-child > .dither`)
 
-    if (!(glyph instanceof HTMLElement) || glyph.classList.contains(GLYPH_CLASS)) {
-      return
-    }
+        if (!(glyph instanceof HTMLElement) || glyph.classList.contains(GLYPH_CLASS)) {
+            return
+        }
 
-    const label = (button.querySelector('.min-w-0.truncate')?.textContent ?? '').trim().toLowerCase()
-    const enteredProject = button.closest('[data-sessions-mode]')?.hasAttribute('data-sessions-project') ?? false
-    const icon = SECTION_ICONS[label] ?? (enteredProject ? 'project' : undefined)
+        const label = (button.querySelector(".min-w-0.truncate")?.textContent ?? "").trim().toLowerCase()
+        const enteredProject = button.closest("[data-sessions-mode]")?.hasAttribute("data-sessions-project") ?? false
+        const icon = Object.hasOwn(SECTION_ICONS, label) ? SECTION_ICONS[label] : enteredProject ? "project" : undefined
 
-    if (!icon) {
-      return
-    }
+        if (!icon) {
+            return
+        }
 
-    glyph.classList.add(GLYPH_CLASS)
-    glyph.textContent = ''
+        glyph.classList.add(GLYPH_CLASS)
+        glyph.textContent = ""
 
-    const codicon = document.createElement('i')
-    codicon.className = `codicon codicon-${icon}`
-    codicon.setAttribute('aria-hidden', 'true')
-    glyph.append(codicon)
-    dressed += 1
-  })
+        const codicon = document.createElement("i")
+        codicon.className = `codicon codicon-${icon}`
+        codicon.setAttribute("aria-hidden", "true")
+        glyph.append(codicon)
+        dressed += 1
+    })
 
-  return dressed
+    return dressed
 }
 
 /** Wire the dress pass; disposed with the plugin. */
 export function installSectionGlyphs(ctx: PluginContext): void {
-  if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') {
-    return
-  }
-
-  let scheduled: ReturnType<typeof setTimeout> | null = null
-
-  const run = (): void => {
-    scheduled = null
-    dressSectionGlyphs(document)
-  }
-
-  // Batches React re-renders into one pass per 100ms window.
-  const schedule = (): void => {
-    if (scheduled !== null) {
-      return
+    if (typeof document === "undefined" || typeof MutationObserver === "undefined" || !document.documentElement) {
+        return
     }
 
-    scheduled = setTimeout(run, 100)
-  }
+    let scheduled: ReturnType<typeof setTimeout> | null = null
 
-  const observer = new MutationObserver(schedule)
-  observer.observe(document.documentElement, { childList: true, subtree: true })
-
-  // Sections already rendered when the plugin (re)loads, plus a settle pass
-  // for the boot render the observer may have missed.
-  dressSectionGlyphs(document)
-  const settle = setTimeout(run, 250)
-
-  ctx.onDispose(() => {
-    observer.disconnect()
-
-    if (scheduled !== null) {
-      clearTimeout(scheduled)
-      scheduled = null
+    const dressSafely = (): void => {
+        try {
+            dressSectionGlyphs(document)
+        } catch (error) {
+            console.warn("[lumen] failed to dress sessions section glyphs", error)
+        }
     }
 
-    clearTimeout(settle)
-  })
+    const run = (): void => {
+        scheduled = null
+        dressSafely()
+    }
+
+    // Batches React re-renders into one pass per 100ms window.
+    const schedule = (): void => {
+        if (scheduled !== null) {
+            return
+        }
+
+        scheduled = setTimeout(run, 100)
+    }
+
+    const observer = new MutationObserver(schedule)
+    observer.observe(document.documentElement, { childList: true, subtree: true })
+
+    // Sections already rendered when the plugin (re)loads, plus a settle pass
+    // for the boot render the observer may have missed.
+    dressSafely()
+    const settle = setTimeout(run, 250)
+
+    ctx.onDispose(() => {
+        observer.disconnect()
+
+        if (scheduled !== null) {
+            clearTimeout(scheduled)
+            scheduled = null
+        }
+
+        clearTimeout(settle)
+    })
 }

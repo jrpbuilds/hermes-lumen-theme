@@ -1,7 +1,16 @@
 # Third-party notices
 
-Lumen is original work licensed under the MIT license (see `LICENSE`), with one
-attribution.
+Lumen is original work licensed under the MIT license (see `LICENSE`), with
+the attributions below.
+
+## Manrope (SIL Open Font License 1.1)
+
+- Source: <https://fonts.google.com/specimen/Manrope>
+- License: [`src/fonts/OFL.txt`](../src/fonts/OFL.txt)
+
+Lumen bundles unmodified Google Fonts Manrope variable-font subsets so the
+plugin works without a web-font request. The font remains under the SIL Open
+Font License; the full license text is included with the vendored assets.
 
 ## Minimalist Themes for Hermes by Miguel Euraque (MIT)
 

@@ -2,7 +2,7 @@
  * Lumen clarity layer — focus visibility.
  */
 
-:root[data-hermes-theme='lumen']
-  :is(input, textarea, button, [contenteditable='true'], [role='button'], [role='option']):focus-visible {
-  outline-color: var(--lumen-accent);
+:root[data-hermes-theme="lumen"]
+    :is(input, textarea, button, [contenteditable="true"], [role="button"], [role="option"]):focus-visible {
+    outline-color: var(--lumen-accent);
 }

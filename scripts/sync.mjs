@@ -6,18 +6,18 @@
  * Override the destination with LUMEN_INSTALL_DIR.
  */
 
-import { access, constants } from 'node:fs/promises'
+import { access, constants } from "node:fs/promises"
 
-import { ARTIFACT, syncArtifact } from './common.mjs'
+import { ARTIFACT, syncArtifact } from "./common.mjs"
 
 try {
-  await access(ARTIFACT, constants.F_OK)
+    await access(ARTIFACT, constants.F_OK)
 } catch {
-  console.error('[lumen] plugin.js not found — run `npm run build` first.')
+    console.error("[lumen] plugin.js not found — run `npm run build` first.")
 
-  process.exitCode = 1
+    process.exitCode = 1
 }
 
 if (!process.exitCode) {
-  await syncArtifact()
+    await syncArtifact()
 }

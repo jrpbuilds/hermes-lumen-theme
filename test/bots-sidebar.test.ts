@@ -13,25 +13,26 @@
  */
 
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from "vitest"
 
-const CSS = readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src/styles/bots.css'), 'utf8')
+const CSS = readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../src/styles/bots.css"), "utf8")
 
 /** Comment-free, whitespace-collapsed CSS text for presence checks. */
-const FLAT_CSS = CSS.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\s+/g, ' ')
+const normalizeCss = (value: string): string => value.replace(/["']/g, '"')
+const FLAT_CSS = normalizeCss(CSS.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\s+/g, " "))
 
 /** Every selector list in the stylesheet, ready to hand to querySelectorAll. */
 function selectors(): string[] {
-  return CSS.replace(/\/\*[\s\S]*?\*\//g, ' ')
-    .split('}')
-    .map(chunk => chunk.split('{')[0]?.trim() ?? '')
-    .filter(Boolean)
-    .map(selector => selector.replace(/\s+/g, ' '))
-    .filter(selector => !selector.includes('::'))
+    return CSS.replace(/\/\*[\s\S]*?\*\//g, " ")
+        .split("}")
+        .map(chunk => chunk.split("{")[0]?.trim() ?? "")
+        .filter(Boolean)
+        .map(selector => selector.replace(/\s+/g, " "))
+        .filter(selector => !selector.includes("::"))
 }
 
 /**
@@ -192,179 +193,182 @@ const ROOM_DOM = `
 `
 
 interface Expectation {
-  /** The rule as written in bots.css (minus the skin prefix). */
-  selector: string
-  gateway: number
-  flat: number
-  /** The group-chat workspace shape, when the rule targets it. */
-  room?: number
+    /** The rule as written in bots.css (minus the skin prefix). */
+    selector: string
+    gateway: number
+    flat: number
+    /** The group-chat workspace shape, when the rule targets it. */
+    room?: number
 }
 
 const EXPECTATIONS: Expectation[] = [
-  {
-    selector: 'div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\\.5.pt-2\\.5.pb-1\\.5)',
-    gateway: 1,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider",
-    gateway: 2,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] > div > div > button.uppercase.tracking-wider",
-    gateway: 2,
-    flat: 0
-  },
-  {
-    selector: "[data-slot='bots-roster'] > div > [data-slot='bots-section'] button.uppercase.tracking-wider",
-    gateway: 0,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] > div > div > button.uppercase.tracking-wider [data-slot='connection-glyph']",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider > .codicon-chevron-right",
-    gateway: 2,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] > div > div",
-    gateway: 2,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger'])",
-    gateway: 3,
-    flat: 1
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger'])[class*='bg-(--ui-row-active-background)']",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger']) [class*='text-[0.8125rem]']",
-    gateway: 3,
-    flat: 1
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger']) .text-\\(--ui-text-tertiary\\)",
-    gateway: 2,
-    flat: 0
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger']) [class*='text-[0.6875rem]']",
-    gateway: 3,
-    flat: 0
-  },
-  {
-    selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider > span.min-w-0.flex-1",
-    gateway: 2,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider > span.tabular-nums",
-    gateway: 2,
-    flat: 1
-  },
-  {
-    selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider + div.grid",
-    gateway: 2,
-    flat: 0
-  },
-  {
-    selector: "[data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]'] > button:is([data-roster-key], [data-slot='context-menu-trigger'])",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']:has(> button[class*='bg-(--ui-row-active-background)'])",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector: "[data-slot='bots-roster'] button[class*='bg-(--ui-row-active-background)'] [class*='text-[0.8125rem]']",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector:
-      "[data-slot='bots-roster'] button[class*='bg-(--ui-row-active-background)'] .text-\\(--ui-text-tertiary\\)",
-    gateway: 1,
-    flat: 0
-  },
-  {
-    selector:
-      "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']",
-    gateway: 0,
-    flat: 0,
-    room: 1
-  },
-  {
-    selector:
-      "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)']",
-    gateway: 0,
-    flat: 0,
-    room: 1
-  },
-  {
-    selector:
-      "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)'] [data-slot='group-chat-message-content']",
-    gateway: 0,
-    flat: 0,
-    room: 1
-  },
-  {
-    selector: "div.relative.flex.h-full.flex-col textarea[data-slot='textarea']",
-    gateway: 0,
-    flat: 0,
-    room: 1
-  }
+    {
+        selector:
+            "div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\\.5.pt-2\\.5.pb-1\\.5)",
+        gateway: 1,
+        flat: 1,
+    },
+    {
+        selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider",
+        gateway: 2,
+        flat: 1,
+    },
+    {
+        selector: "[data-slot='bots-roster'] > div > div > button.uppercase.tracking-wider",
+        gateway: 2,
+        flat: 0,
+    },
+    {
+        selector: "[data-slot='bots-roster'] > div > [data-slot='bots-section'] button.uppercase.tracking-wider",
+        gateway: 0,
+        flat: 1,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] > div > div > button.uppercase.tracking-wider [data-slot='connection-glyph']",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider > .codicon-chevron-right",
+        gateway: 2,
+        flat: 1,
+    },
+    {
+        selector: "[data-slot='bots-roster'] > div > div",
+        gateway: 2,
+        flat: 1,
+    },
+    {
+        selector: "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger'])",
+        gateway: 3,
+        flat: 1,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger'])[class*='bg-(--ui-row-active-background)']",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger']) [class*='text-[0.8125rem]']",
+        gateway: 3,
+        flat: 1,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger']) .text-\\(--ui-text-tertiary\\)",
+        gateway: 2,
+        flat: 0,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] button:is([data-roster-key], [data-slot='context-menu-trigger']) [class*='text-[0.6875rem]']",
+        gateway: 3,
+        flat: 0,
+    },
+    {
+        selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider > span.min-w-0.flex-1",
+        gateway: 2,
+        flat: 1,
+    },
+    {
+        selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider > span.tabular-nums",
+        gateway: 2,
+        flat: 1,
+    },
+    {
+        selector: "[data-slot='bots-roster'] button.uppercase.tracking-wider + div.grid",
+        gateway: 2,
+        flat: 0,
+    },
+    {
+        selector: "[data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]'] > button:is([data-roster-key], [data-slot='context-menu-trigger'])",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] div.grid[class*='grid-cols-[minmax(0,1fr)_auto]']:has(> button[class*='bg-(--ui-row-active-background)'])",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] button[class*='bg-(--ui-row-active-background)'] [class*='text-[0.8125rem]']",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector:
+            "[data-slot='bots-roster'] button[class*='bg-(--ui-row-active-background)'] .text-\\(--ui-text-tertiary\\)",
+        gateway: 1,
+        flat: 0,
+    },
+    {
+        selector:
+            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']",
+        gateway: 0,
+        flat: 0,
+        room: 1,
+    },
+    {
+        selector:
+            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)']",
+        gateway: 0,
+        flat: 0,
+        room: 1,
+    },
+    {
+        selector:
+            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)'] [data-slot='group-chat-message-content']",
+        gateway: 0,
+        flat: 0,
+        room: 1,
+    },
+    {
+        selector: "div.relative.flex.h-full.flex-col textarea[data-slot='textarea']",
+        gateway: 0,
+        flat: 0,
+        room: 1,
+    },
 ]
 
-describe('bots.css selectors', () => {
-  beforeEach(() => {
-    document.body.innerHTML = ''
-  })
+describe("bots.css selectors", () => {
+    beforeEach(() => {
+        document.body.innerHTML = ""
+    })
 
-  it('parses every rule that jsdom can evaluate', () => {
-    document.body.innerHTML = GATEWAY_DOM
+    it("parses every rule that jsdom can evaluate", () => {
+        document.body.innerHTML = GATEWAY_DOM
 
-    for (const selector of selectors()) {
-      expect(() => document.querySelectorAll(selector), selector).not.toThrow()
-    }
-  })
+        for (const selector of selectors()) {
+            expect(() => document.querySelectorAll(selector), selector).not.toThrow()
+        }
+    })
 
-  it.each(EXPECTATIONS.map(expectation => [expectation.selector, expectation] as const))(
-    'matches the intended elements for %s',
-    (selector, expectation) => {
-      expect(FLAT_CSS).toContain(selector)
+    it.each(EXPECTATIONS.map(expectation => [expectation.selector, expectation] as const))(
+        "matches the intended elements for %s",
+        (selector, expectation) => {
+            expect(FLAT_CSS).toContain(normalizeCss(selector))
 
-      document.body.innerHTML = GATEWAY_DOM
-      expect(document.querySelectorAll(selector)).toHaveLength(expectation.gateway)
+            document.body.innerHTML = GATEWAY_DOM
+            expect(document.querySelectorAll(selector)).toHaveLength(expectation.gateway)
 
-      document.body.innerHTML = FLAT_DOM
-      expect(document.querySelectorAll(selector)).toHaveLength(expectation.flat)
+            document.body.innerHTML = FLAT_DOM
+            expect(document.querySelectorAll(selector)).toHaveLength(expectation.flat)
 
-      if (expectation.room !== undefined) {
-        document.body.innerHTML = ROOM_DOM
-        expect(document.querySelectorAll(selector)).toHaveLength(expectation.room)
-      }
-    }
-  )
+            if (expectation.room !== undefined) {
+                document.body.innerHTML = ROOM_DOM
+                expect(document.querySelectorAll(selector)).toHaveLength(expectation.room)
+            }
+        },
+    )
 })

@@ -8,6 +8,10 @@ and where the fragile anchors are, so an app update has a concrete checklist.
 
 **Validated against: Hermes Desktop v0.21.x** (hermes-agent `apps/desktop`).
 
+**Bots integration:** validated against the hermes-bots DOM installed alongside
+that Desktop build; hermes-bots is separately versioned and is not vendored in
+this repository.
+
 ## Mirrored contracts (keep in sync)
 
 | Vendored here                             | Mirrored from                                            | Notes                                            |
@@ -30,9 +34,10 @@ Runtime seams the build relies on:
   vars, so palette edits in `src/palettes.ts` flow through automatically.
 - The app stamps `data-hermes-theme` / `data-hermes-mode` on `:root`; every
   clarity-layer rule is scoped to those attributes.
-- Theme typography loads the configured `fontUrl` once and uses `fontSans` as
-  the fallback stack; if Google Fonts is unavailable, Manrope falls back to the
-  local system and emoji fonts declared by Lumen.
+- Theme typography uses the self-hosted Manrope faces embedded in the clarity
+  layer and `fontSans` as the fallback stack; no font network request is needed.
+  `fontMono` relies on the JetBrains Mono faces bundled by Hermes Desktop, then
+  falls back to the local system mono stack.
 - Layout presets are ordinary `area: 'layouts'` contributions. The Lumen card
   is filtered by the app's `isLayoutNode` validator and applied through the
   app's own `applyTree` / `markActivePreset` path when selected.
@@ -46,8 +51,10 @@ Ordered roughly by breakage likelihood:
    `[class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']`
    and descendants (`w-[26rem]`, `overscroll-contain`, `nth-child(2)`,
    `bg-(--ui-bg-quaternary)`, `data-selectable-text`). A utility rename here
-   silently un-styles the drawer. Symptom: drawer back to 26rem, plain wells,
-   default lozenges.
+   silently un-styles the drawer. The width guard is viewport-based, so verify
+   it again when the workspace pane is narrower than the window. Symptom:
+   drawer back to 26rem, plain wells, default lozenges, or overflow into an
+   adjacent pane.
 2. **Session rows** (`src/styles/sidebar.css`) — matches
    `.row-hover[class*='bg-(--ui-row-active-background)']`, the title hook
    `.hover-marquee`, and the escaped arbitrary-value classes
@@ -85,7 +92,8 @@ Ordered roughly by breakage likelihood:
 7. **App token overrides** (`src/styles/tokens.css`) — pins
    `--ui-text-*`, `--ui-stroke-*`, `--ui-bg-*`, `--ui-row-*`/`--ui-control-*`,
    `--ui-selection-background`, `--ui-inline-code-*`, `--stroke-nous`,
-   `--conversation-scaffold-*`, `--chrome-action-hover`, and the
+   `--conversation-scaffold-*`, `--chrome-action-hover`,
+   `--ui-sidebar-surface-background`, and the
    `--dt-input-border`/`--dt-input-bg`/`--dt-input-inset` knobs (percentages
    consumed by `color-mix` in the app's `styles.css`). These are internal
    app tokens — a token rename makes an override inert (harmless) but should
@@ -93,7 +101,9 @@ Ordered roughly by breakage likelihood:
    additionally anchors the app's `.text-(--conversation-scaffold-text)`
    utility class under `[data-conversation-scaffold]` (with a
    `background-clip: text` `@supports` guard); if either is renamed, the
-   transcript's tool/activity lines revert to the app's flat ink.
+   transcript's tool/activity lines revert to the app's flat ink. Read-only
+   app-provided values also include `--dt-accent-foreground` and
+   `--theme-bubble-seed`.
 8. **Global scale** — `font-size: 18px !important` on the skin `:root` (app
    native root is 16px). All rem-based sizing in the app scales with it; if
    the app moves away from rem sizing for a surface, that surface stops
@@ -124,7 +134,15 @@ Ordered roughly by breakage likelihood:
     `grid-cols-[minmax(0,1fr)] gap-1.5 px-2.5 pb-2` utility combo; the room
     hairline recolor assumes only the room's own structural borders are direct
     children of that root carrying `border-(--ui-stroke-secondary)` (the
-    Kanban board shares the root chain but has no such children).
+    Kanban board shares the root chain but has no such children). Other room
+    behavior anchors include the own-message fill class
+    `bg-(--chrome-action-hover)`, reply links (`data-variant='link'`), the
+    seated composer `form.grid`, its adjacent `div.group`, and message content
+    marked `data-slot='group-chat-message-content'`. Roster styling also reads
+    `data-slot='bots-section'`, `data-slot='connection-glyph'`, heading child
+    spans (`min-w-0 flex-1`, `tabular-nums`) and the roster typography size
+    utilities. These hooks belong to the separately versioned hermes-bots
+    plugin and should be revalidated after either app/plugin update.
     Symptom: the pane reverts to the darker zone chrome, or the heading pills,
     row outlines, search-field surface and scrollbar stop applying.
 12. **Sessions section glyphs** (`src/behaviors/section-glyphs.ts` and
@@ -132,7 +150,9 @@ Ordered roughly by breakage likelihood:
     `[data-tour='sessions-sidebar'] [data-sessions-mode]`, the dither lead
     selected by `span:first-child > .dither`, and the app's localized section
     labels. Entered projects use `data-sessions-project` because their label
-    is the user-defined project name rather than a translatable string.
+    is the user-defined project name rather than a translatable string. The
+    behavior also assumes Hermes' app-wide codicon stylesheet and font remain
+    available for the injected `codicon-*` element.
     Symptom: section icons fall back to plain dither squares, or a renamed
     section receives the wrong glyph.
 

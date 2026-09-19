@@ -6,16 +6,16 @@
  * into a coloured block.
  */
 
-:root[data-hermes-theme='lumen'] [data-conversation-scaffold] .text-\(--conversation-scaffold-text\) {
-  color: var(--conversation-scaffold-text);
+:root[data-hermes-theme="lumen"] [data-conversation-scaffold] .text-\(--conversation-scaffold-text\) {
+    color: var(--conversation-scaffold-text);
 }
 
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  :root[data-hermes-theme='lumen'] [data-conversation-scaffold] .text-\(--conversation-scaffold-text\) {
-    background-image: var(--lumen-scaffold-gradient);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
+    :root[data-hermes-theme="lumen"] [data-conversation-scaffold] .text-\(--conversation-scaffold-text\) {
+        background-image: var(--lumen-scaffold-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
 }

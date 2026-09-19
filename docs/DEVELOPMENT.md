@@ -27,7 +27,7 @@ edits to `src/` appear in the running app within a couple of seconds.
 | `src/theme.ts`          | The `DesktopTheme` contribution (palette selection + typography)                    |
 | `src/palettes.ts`       | Light/dark color sets and terminal ANSI palettes — single source of truth for color |
 | `src/lumen-layout.ts`   | The workspace layout tree contributed to the `layouts` area                         |
-| `src/behaviors/`        | DOM behaviors (sidebar-search click-to-focus)                                       |
+| `src/behaviors/`        | DOM behaviors (sidebar search focus and section glyph injection)                    |
 | `src/styles/tokens.css` | Design tokens; every value scoped to `[data-hermes-theme='lumen']`                  |
 | `src/styles/*.css`      | Per-surface clarity layer (sidebar, forms, kanban, …)                               |
 | `src/types/`            | Vendored mirrors of the app's plugin/theme/layout contracts                         |
@@ -36,15 +36,15 @@ edits to `src/` appear in the running app within a couple of seconds.
 
 ## Scripts
 
-| Script           | What it does                                                      |
-| ---------------- | ----------------------------------------------------------------- |
-| `./install.sh`   | Build + install in one step (flags in the README Install section) |
-| `npm run build`  | Bundle `src/` into the committed root `plugin.js`                 |
-| `npm run dev`    | `build --watch`, copying each build into the install dir          |
-| `npm run format` | Prettier-write the repo (artifact + lockfile are ignored)         |
-| `npm run sync`   | Copy the committed artifact into the install dir                  |
-| `npm run check`  | format + lint + typecheck + tests + artifact-parity gate          |
-| `npm run test`   | Vitest (palette, layout, WCAG contrast, behavior, artifact)       |
+| Script           | What it does                                                              |
+| ---------------- | ------------------------------------------------------------------------- |
+| `./install.sh`   | Build + install in one step (flags in the README Install section)         |
+| `npm run build`  | Bundle `src/` into the committed root `plugin.js`                         |
+| `npm run dev`    | `build --watch`, copying each build into the install dir                  |
+| `npm run format` | Prettier-write the repo (artifact + lockfile are ignored)                 |
+| `npm run sync`   | Copy the committed artifact into the install dir                          |
+| `npm run check`  | format + lint + typecheck + tests + artifact-parity gate                  |
+| `npm run test`   | Vitest (palette, layout, WCAG contrast, sidebar/Bots behaviors, artifact) |
 
 ## Why a committed build artifact
 
@@ -66,12 +66,15 @@ the committed artifact drifts from `src/`.
   style stays consistent with the app this plugin targets.
 - **typecheck** — `tsc --noEmit` in strict mode against the vendored
   contracts in `src/types/`.
-- **test** — five Vitest suites:
-  - `palettes.test.ts` — full-palette contract and no built-in-name collision
-  - `contrast.test.ts` — WCAG floors for core and meta text in both modes
-  - `lumen-layout.test.ts` — the layout tree satisfies the app's validator
-  - `sidebar-search.test.ts` — the search focus behavior, under jsdom
-  - `build.test.ts` — sanity markers on the committed artifact
+- **test** — eight Vitest suites:
+    - `palettes.test.ts` — full-palette contract and no built-in-name collision
+    - `contrast.test.ts` — WCAG floors for core and meta text in both modes
+    - `lumen-layout.test.ts` — the layout tree satisfies the app's validator
+    - `sidebar-search.test.ts` — the search focus behavior, under jsdom
+    - `bots-sidebar.test.ts` — Bots pane selector contracts, under jsdom
+    - `section-glyphs.test.ts` — localized sessions section glyphs, under jsdom
+    - `plugin.test.ts` — entry-point registration and optional-layer containment
+    - `build.test.ts` — sanity markers on the committed artifact
 - **artifact parity** — the committed `plugin.js` must byte-match a fresh
   build; rebuild and re-commit after any `src/` change.
 

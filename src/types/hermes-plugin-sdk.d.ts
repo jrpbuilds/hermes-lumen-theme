@@ -8,7 +8,7 @@
  * are declared; extend here when adopting more of the SDK.
  */
 
-declare module '@hermes/plugin-sdk' {
-  /** Registry area id for theme contributions (`'themes'`). */
-  export const THEMES_AREA: 'themes'
+declare module "@hermes/plugin-sdk" {
+    /** Registry area id for theme contributions (`'themes'`). */
+    export const THEMES_AREA: "themes"
 }

@@ -11,36 +11,36 @@
  * the CSS layer, inlined as strings) is bundled into one self-contained file.
  */
 
-import esbuild from 'esbuild'
+import esbuild from "esbuild"
 
-import { ARTIFACT, buildOptions, syncArtifact } from './common.mjs'
+import { ARTIFACT, buildOptions, syncArtifact } from "./common.mjs"
 
-const watch = process.argv.includes('--watch')
-const sync = process.argv.includes('--sync')
+const watch = process.argv.includes("--watch")
+const sync = process.argv.includes("--sync")
 
 const syncOnEnd = {
-  name: 'lumen-sync',
-  setup(build) {
-    build.onEnd(async result => {
-      if (result.errors.length > 0 || !sync) {
-        return
-      }
+    name: "lumen-sync",
+    setup(build) {
+        build.onEnd(async result => {
+            if (result.errors.length > 0 || !sync) {
+                return
+            }
 
-      await syncArtifact()
-    })
-  }
+            await syncArtifact()
+        })
+    },
 }
 
 if (watch) {
-  const context = await esbuild.context({ ...buildOptions(ARTIFACT), plugins: [syncOnEnd] })
+    const context = await esbuild.context({ ...buildOptions(ARTIFACT), plugins: [syncOnEnd] })
 
-  await context.watch()
+    await context.watch()
 
-  console.log('[lumen] watching for changes…')
+    console.log("[lumen] watching for changes…")
 } else {
-  await esbuild.build({ ...buildOptions(ARTIFACT), plugins: sync ? [syncOnEnd] : [] })
+    await esbuild.build({ ...buildOptions(ARTIFACT), plugins: sync ? [syncOnEnd] : [] })
 
-  if (!sync) {
-    console.log('[lumen] built plugin.js — run `npm run sync` to install it')
-  }
+    if (!sync) {
+        console.log("[lumen] built plugin.js — run `npm run sync` to install it")
+    }
 }

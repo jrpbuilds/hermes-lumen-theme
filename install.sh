@@ -18,13 +18,13 @@ done_message() {
 # Piped execution has no script file (BASH_SOURCE is empty): install the
 # committed artifact directly.
 if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
-  ARTIFACT_URL="https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/plugin.js"
-  INSTALL_DIR=""
+  ARTIFACT_URL="${LUMEN_ARTIFACT_URL:-https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/v1.0.0/plugin.js}"
+  INSTALL_DIR="${LUMEN_INSTALL_DIR:-}"
 
   while [ $# -gt 0 ]; do
     case "$1" in
       --dir)
-        [ $# -ge 2 ] || { printf 'error: --dir requires a path\n' >&2; exit 1; }
+        [ $# -ge 2 ] && [ -n "$2" ] || { printf 'error: --dir requires a non-empty path\n' >&2; exit 1; }
         INSTALL_DIR="$2"
         shift
         ;;
@@ -56,8 +56,10 @@ if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
   fi
 
   printf '[lumen] downloading plugin.js...\n'
-  TMP_FILE="$(mktemp)"
-  if ! curl --fail --silent --show-error --location "$ARTIFACT_URL" -o "$TMP_FILE"; then
+  mkdir -p "$TARGET"
+  TMP_FILE="$(mktemp "$TARGET/.plugin.js.XXXXXX")"
+  if ! curl --fail --silent --show-error --location --retry 3 --retry-delay 1 \
+    --connect-timeout 10 --max-time 120 "$ARTIFACT_URL" -o "$TMP_FILE"; then
     rm -f "$TMP_FILE"
     printf 'error: download failed\n' >&2
     exit 1
@@ -70,8 +72,8 @@ if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
     exit 1
   fi
 
-  mkdir -p "$TARGET"
-  mv "$TMP_FILE" "$TARGET/plugin.js"
+  chmod 0644 "$TMP_FILE"
+  mv -f "$TMP_FILE" "$TARGET/plugin.js"
   printf '[lumen] installed %s\n' "$TARGET/plugin.js"
   done_message
   exit 0
@@ -95,7 +97,7 @@ while [ $# -gt 0 ]; do
       NO_BUILD=1
       ;;
     --dir)
-      [ $# -ge 2 ] || { printf 'error: --dir requires a path\n' >&2; exit 1; }
+      [ $# -ge 2 ] && [ -n "$2" ] || { printf 'error: --dir requires a non-empty path\n' >&2; exit 1; }
       export LUMEN_INSTALL_DIR="$2"
       shift
       ;;
@@ -111,6 +113,11 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+if [ ! -f "$ROOT/package.json" ] || [ ! -d "$ROOT/src" ]; then
+  printf 'error: checkout mode must run from the Lumen repository; pipe install.sh to bash for a standalone install\n' >&2
+  exit 1
+fi
+
 if ! command -v node >/dev/null 2>&1; then
   printf 'error: node is required but was not found on PATH\n' >&2
   exit 1
@@ -122,7 +129,7 @@ if ! command -v npm >/dev/null 2>&1; then
 fi
 
 NODE_VERSION="$(node -p 'process.versions.node')"
-if [ "$(printf '%s\n22.22.2\n' "$NODE_VERSION" | sort -V | head -1)" != "22.22.2" ]; then
+if ! node -e 'const [major, minor, patch] = process.versions.node.split(".").map(Number); const supported = major > 22 || (major === 22 && (minor > 22 || (minor === 22 && patch >= 2))); process.exit(supported ? 0 : 1)'; then
   printf 'warning: node %s found; node >= 22.22.2 is expected\n' "$NODE_VERSION" >&2
 fi
 

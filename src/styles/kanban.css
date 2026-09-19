@@ -25,15 +25,15 @@
  * never completely swallowed on a smaller application window.
  */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20'][class~='w-[26rem]'] {
-  width: min(39rem, calc(100vw - 12rem)) !important;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"][class~="w-[26rem]"] {
+    width: min(39rem, calc(100vw - 12rem)) !important;
 }
 
 /* Keep the drawer's task header legible against the scrolling detail pane in
    both modes without changing its spacing or height. */
-:root[data-hermes-theme='lumen'] [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20'] > header {
-  border-bottom: 1px solid var(--lumen-kanban-divider);
+:root[data-hermes-theme="lumen"] [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"] > header {
+    border-bottom: 1px solid var(--lumen-kanban-divider);
 }
 
 /*
@@ -43,12 +43,12 @@
  * FRAGILE: anchors the app's `grid-cols-[6rem_...]` arbitrary utility (see
  * docs/COMPATIBILITY.md).
  */
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  > div[class~='min-h-0'][class~='flex-1'][class~='overflow-y-auto']
-  > div[class~='flex'][class~='flex-col']
-  > div[class~='grid'][class~='grid-cols-[6rem_minmax(0,1fr)]'] {
-  padding-top: 0.875rem;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    > div[class~="min-h-0"][class~="flex-1"][class~="overflow-y-auto"]
+    > div[class~="flex"][class~="flex-col"]
+    > div[class~="grid"][class~="grid-cols-[6rem_minmax(0,1fr)]"] {
+    padding-top: 0.875rem;
 }
 
 /*
@@ -61,18 +61,18 @@
  * vertical center as the box grows with content.
  * FRAGILE: anchors the drawer root and the button's exact utility combo.
  */
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  div.relative:has(> textarea[data-slot='textarea'])
-  > textarea[data-slot='textarea'] {
-  display: block;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    div.relative:has(> textarea[data-slot="textarea"])
+    > textarea[data-slot="textarea"] {
+    display: block;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  button[class~='absolute'][class~='top-1'][class~='right-1'] {
-  top: 50%;
-  translate: 0 -50%;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    button[class~="absolute"][class~="top-1"][class~="right-1"] {
+    top: 50%;
+    translate: 0 -50%;
 }
 
 /* ==========================================================================
@@ -86,187 +86,187 @@
  * docs/COMPATIBILITY.md). Painted with the shared purple metadata lozenge
  * tokens, which are mode-aware. The pill shape and padding stay as shipped.
  */
-:root[data-hermes-theme='lumen']
-  span[class~='rounded-full'][class~='bg-(--ui-bg-quaternary)'][class~='py-px'][class~='tabular-nums'] {
-  background: var(--lumen-pill-background) !important;
-  border: 1px solid var(--lumen-pill-border) !important;
-  color: var(--lumen-pill-foreground) !important;
-  font-weight: 500;
-  box-shadow: none;
+:root[data-hermes-theme="lumen"]
+    span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {
+    background: var(--lumen-pill-background) !important;
+    border: 1px solid var(--lumen-pill-border) !important;
+    color: var(--lumen-pill-foreground) !important;
+    font-weight: 500;
+    box-shadow: none;
 }
 
 /* ==========================================================================
    Drawer section separation
    ========================================================================== */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  > div[class~='min-h-0'][class~='flex-1'][class~='overflow-y-auto']
-  > div[class~='flex'][class~='flex-col']
-  > section {
-  position: relative;
-  padding-top: 0.875rem;
-  border-top: 1px solid var(--lumen-kanban-divider);
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    > div[class~="min-h-0"][class~="flex-1"][class~="overflow-y-auto"]
+    > div[class~="flex"][class~="flex-col"]
+    > section {
+    position: relative;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--lumen-kanban-divider);
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  > div[class~='min-h-0'][class~='flex-1'][class~='overflow-y-auto']
-  > div[class~='flex'][class~='flex-col']
-  > section
-  + section {
-  margin-top: 0.125rem;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    > div[class~="min-h-0"][class~="flex-1"][class~="overflow-y-auto"]
+    > div[class~="flex"][class~="flex-col"]
+    > section
+    + section {
+    margin-top: 0.125rem;
 }
 
 /* ==========================================================================
    Scroll wells
    ========================================================================== */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain'] {
-  box-sizing: border-box;
-  padding: 0.625rem 0.75rem 0.625rem 0.625rem;
-  background: var(--lumen-scroll-well-background) !important;
-  border: 1px solid var(--lumen-scroll-well-border);
-  border-radius: 0.625rem;
-  background-clip: padding-box;
-  scrollbar-gutter: stable;
-  scrollbar-color: var(--lumen-scroll-well-scrollbar) transparent;
-  scrollbar-width: thin;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"] {
+    box-sizing: border-box;
+    padding: 0.625rem 0.75rem 0.625rem 0.625rem;
+    background: var(--lumen-scroll-well-background) !important;
+    border: 1px solid var(--lumen-scroll-well-border);
+    border-radius: 0.625rem;
+    background-clip: padding-box;
+    scrollbar-gutter: stable;
+    scrollbar-color: var(--lumen-scroll-well-scrollbar) transparent;
+    scrollbar-width: thin;
 }
 
 /*
  * Worker Log gets the larger inspection area.
  */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']:has(
-    > [data-selectable-text='true'][class~='font-mono'][class~='whitespace-pre-wrap']
-  ) {
-  max-height: 22rem !important;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]:has(
+        > [data-selectable-text="true"][class~="font-mono"][class~="whitespace-pre-wrap"]
+    ) {
+    max-height: 22rem !important;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']
-  > [data-selectable-text='true'][class~='font-mono'][class~='whitespace-pre-wrap'] {
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]
+    > [data-selectable-text="true"][class~="font-mono"][class~="whitespace-pre-wrap"] {
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']
-  > ul {
-  background: transparent;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]
+    > ul {
+    background: transparent;
 }
 
 /* ==========================================================================
    Dependency IDs
    ========================================================================== */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  button[class~='font-mono'][class~='bg-(--ui-bg-quaternary)'] {
-  padding: 0.125rem 0.4375rem !important;
-  background: var(--lumen-pill-background) !important;
-  border: 1px solid var(--lumen-pill-border) !important;
-  border-radius: 0.375rem !important;
-  color: var(--lumen-pill-foreground) !important;
-  font-weight: 500;
-  box-shadow: none;
-  transition:
-    background-color 100ms ease,
-    border-color 100ms ease,
-    color 100ms ease;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    button[class~="font-mono"][class~="bg-(--ui-bg-quaternary)"] {
+    padding: 0.125rem 0.4375rem !important;
+    background: var(--lumen-pill-background) !important;
+    border: 1px solid var(--lumen-pill-border) !important;
+    border-radius: 0.375rem !important;
+    color: var(--lumen-pill-foreground) !important;
+    font-weight: 500;
+    box-shadow: none;
+    transition:
+        background-color 100ms ease,
+        border-color 100ms ease,
+        color 100ms ease;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  button[class~='font-mono'][class~='bg-(--ui-bg-quaternary)']:hover {
-  background: color-mix(in srgb, var(--lumen-accent) 24%, var(--lumen-pill-background)) !important;
-  border-color: color-mix(in srgb, var(--lumen-accent) 58%, var(--lumen-pill-border)) !important;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    button[class~="font-mono"][class~="bg-(--ui-bg-quaternary)"]:hover {
+    background: color-mix(in srgb, var(--lumen-accent) 24%, var(--lumen-pill-background)) !important;
+    border-color: color-mix(in srgb, var(--lumen-accent) 58%, var(--lumen-pill-border)) !important;
 }
 
 /* ==========================================================================
    Run status lozenges
    ========================================================================== */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']
-  [data-slot='badge'] {
-  padding: 0.125rem 0.4375rem !important;
-  background: var(--lumen-pill-background) !important;
-  border: 1px solid var(--lumen-pill-border) !important;
-  border-radius: 0.375rem !important;
-  color: var(--lumen-pill-foreground) !important;
-  font-weight: 500;
-  box-shadow: none !important;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]
+    [data-slot="badge"] {
+    padding: 0.125rem 0.4375rem !important;
+    background: var(--lumen-pill-background) !important;
+    border: 1px solid var(--lumen-pill-border) !important;
+    border-radius: 0.375rem !important;
+    color: var(--lumen-pill-foreground) !important;
+    font-weight: 500;
+    box-shadow: none !important;
 }
 
 /* ==========================================================================
    Nested scrollbars
    ========================================================================== */
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']::-webkit-scrollbar-button {
-  display: none;
-  width: 0;
-  height: 0;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']::-webkit-scrollbar-track {
-  background: transparent;
-  margin-block: 0.375rem;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 0.375rem;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']::-webkit-scrollbar-thumb {
-  background: var(--lumen-scroll-well-scrollbar);
-  border: 2px solid transparent;
-  border-radius: 999px;
-  background-clip: padding-box;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-thumb {
+    background: var(--lumen-scroll-well-scrollbar);
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--lumen-scroll-well-scrollbar) 80%, var(--ui-text-secondary));
-  border: 2px solid transparent;
-  background-clip: padding-box;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--lumen-scroll-well-scrollbar) 80%, var(--ui-text-secondary));
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
-:root[data-hermes-theme='lumen']
-  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
-  section
-  > div:nth-child(2)[class~='overflow-y-auto'][class~='overscroll-contain']::-webkit-scrollbar-corner {
-  background: transparent;
+:root[data-hermes-theme="lumen"]
+    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
+    section
+    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-corner {
+    background: transparent;
 }

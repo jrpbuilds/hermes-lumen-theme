@@ -1,21 +1,37 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+    push:
+        branches: [main]
+        tags: ["v*"]
+    pull_request:
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22.22.2
+                  cache: npm
 
-      - run: npm ci
+            - run: npm ci
 
-      - run: npm run check
+            - run: npm run check
+
+            - name: Validate installer syntax
+              run: bash -n install.sh
+
+            - name: Smoke-test checkout installer
+              run: |
+                  target="$(mktemp -d)"
+                  ./install.sh --no-build --dir "$target"
+                  test -s "$target/plugin.js"
+
+            - name: Smoke-test piped installer
+              run: |
+                  target="$(mktemp -d)"
+                  cat install.sh | LUMEN_ARTIFACT_URL="file://${GITHUB_WORKSPACE}/plugin.js" bash -s -- --dir "$target"
+                  test -s "$target/plugin.js"

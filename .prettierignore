@@ -2,3 +2,4 @@
 # break the byte-parity gate in scripts/check-artifact.mjs.
 plugin.js
 package-lock.json
+src/fonts/OFL.txt

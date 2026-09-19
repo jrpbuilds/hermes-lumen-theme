@@ -9,7 +9,7 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/jrpbuilds/hermes-lumen-theme/ci.yml?branch=main&label=CI)](https://github.com/jrpbuilds/hermes-lumen-theme/actions/workflows/ci.yml)
 [![Hermes Desktop](https://img.shields.io/badge/Hermes%20Desktop-theme-6558D9)](https://github.com/NousResearch/hermes-agent)
-[![Manrope](https://img.shields.io/badge/typography-Manrope-444)](https://fonts.google.com/specimen/Manrope)
+[![Manrope](<https://img.shields.io/badge/typography-Manrope%20(self--hosted)-444>)](https://fonts.google.com/specimen/Manrope)
 
 </div>
 
@@ -38,6 +38,10 @@ Pass `--dir PATH` for a custom install location:
 curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash -s -- --dir PATH
 ```
 
+Set `LUMEN_INSTALL_DIR` instead when the destination comes from your shell
+environment. The tagged artifact is downloaded, so piped installs do not need
+Node or a checkout.
+
 Already have a checkout? The same script builds from source (needs
 Node >= 22.22.2) or installs the committed `plugin.js` as-is:
 
@@ -63,24 +67,25 @@ available in the layout picker when you want to apply it.
 - **Palette** — hand-tuned light and dark color sets (no synthesized variants)
   with hand-tuned ANSI palettes for the integrated terminal.
 - **Clarity layer** — CSS overrides scoped to `[data-hermes-theme='lumen']`:
-  - readable default type scale (18px root) and strengthened form-field
-    borders
-  - Manrope as the main UI font, with local system and emoji fallbacks
-  - sharpened text/stroke hierarchies (`--ui-text-*`, `--ui-stroke-*`,
-    `--ui-bg-*`)
-  - restyled sidebar search, section tints, session-row selection states
-  - sessions-parity Bots panels: the pane rides the sidebar surface with
-    sessions-style section pill headers, row hover/selection rings and a
-    matching search field; group-chat rooms get Lumen user-message bubbles
-    and sidebar-divider hairlines
-  - a wider Kanban task drawer (26rem → 39rem, viewport-guarded) with padded
-    scroll wells and restyled dependency/status lozenges
-  - readable muted text on the capabilities pages
-  - standard dropdowns that match their trigger width and wrap long options to
-    two lines
-  - accent-tinted focus rings and slim overlay scrollbars
+    - readable default type scale (18px root) and strengthened form-field
+      borders
+    - self-hosted Manrope as the main UI font, with local system and emoji fallbacks
+    - sharpened text/stroke hierarchies (`--ui-text-*`, `--ui-stroke-*`,
+      `--ui-bg-*`)
+    - restyled sidebar search, section tints, session-row selection states
+    - sessions-parity Bots panels: the pane rides the sidebar surface with
+      sessions-style section pill headers, row hover/selection rings and a
+      matching search field; group-chat rooms get Lumen user-message bubbles
+      and sidebar-divider hairlines
+    - a wider Kanban task drawer (26rem → 39rem, viewport-guarded) with padded
+      scroll wells and restyled dependency/status lozenges
+    - readable muted text on the capabilities pages
+    - standard dropdowns that match their trigger width and wrap long options to
+      two lines
+    - accent-tinted focus rings and slim overlay scrollbars
 - **Behavior** — the painted sidebar-search rectangle is clickable and focuses
-  the input (not just the field itself).
+  the input (not just the field itself); sessions section pills receive
+  localized codicons, including dynamic entered-project labels.
 - **Workspace layout** — a Lumen layout template is available in the layout
   picker, including the saved sessions, terminal, workspace, files and review
   arrangement.
