@@ -24,15 +24,28 @@ layout for the app's layout picker.
 
 ## Install
 
-One command — build from source and install into `~/.hermes/desktop-plugins/lumen/`:
+One line — downloads the committed `plugin.js` straight from the repo and
+installs it into `~/.hermes/desktop-plugins/lumen/`. No clone, no build — it
+needs only `curl` and respects `HERMES_HOME` (defaults to `~/.hermes`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash
+```
+
+Pass `--dir PATH` for a custom install location:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash -s -- --dir PATH
+```
+
+Already have a checkout? The same script builds from source (needs
+Node >= 22.22.2) or installs the committed `plugin.js` as-is:
 
 ```
 ./install.sh             # build + install
 ./install.sh --no-build  # install the committed plugin.js as-is
 ./install.sh --dir PATH  # custom install location
 ```
-
-It respects `HERMES_HOME` (defaults to `~/.hermes`) and needs Node >= 22.22.2.
 
 Alternatively, from the Hermes Desktop plugin catalog UI, or:
 
