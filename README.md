@@ -14,9 +14,9 @@
 </div>
 
 High-contrast light and dark palettes, a tuned integrated-terminal ANSI set,
-and a "clarity layer" that sharpens forms, the sessions sidebar, the composer,
-the Kanban drawer and the capabilities pages. It also ships a Lumen workspace
-layout for the app's layout picker.
+and a "clarity layer" that sharpens forms, the sessions sidebar, the Bots
+panels, the composer, the Kanban drawer and the capabilities pages. It also
+ships a Lumen workspace layout for the app's layout picker.
 
 > Built and tested against Hermes Desktop **v0.21.x** — see
 > [COMPATIBILITY.md](./docs/COMPATIBILITY.md) for what that covers and what can
@@ -69,14 +69,18 @@ available in the layout picker when you want to apply it.
   - sharpened text/stroke hierarchies (`--ui-text-*`, `--ui-stroke-*`,
     `--ui-bg-*`)
   - restyled sidebar search, section tints, session-row selection states
+  - sessions-parity Bots panels: the pane rides the sidebar surface with
+    sessions-style section pill headers, row hover/selection rings and a
+    matching search field; group-chat rooms get Lumen user-message bubbles
+    and sidebar-divider hairlines
   - a wider Kanban task drawer (26rem → 39rem, viewport-guarded) with padded
     scroll wells and restyled dependency/status lozenges
   - readable muted text on the capabilities pages
   - standard dropdowns that match their trigger width and wrap long options to
     two lines
   - accent-tinted focus rings and slim overlay scrollbars
-- **Behavior** — the whole painted sidebar-search rectangle is clickable and
-  focuses the input (not just the field itself).
+- **Behavior** — the painted sidebar-search rectangle is clickable and focuses
+  the input (not just the field itself).
 - **Workspace layout** — a Lumen layout template is available in the layout
   picker, including the saved sessions, terminal, workspace, files and review
   arrangement.
