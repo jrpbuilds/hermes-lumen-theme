@@ -30,6 +30,47 @@
   width: min(39rem, calc(100vw - 12rem)) !important;
 }
 
+/* Keep the drawer's task header legible against the scrolling detail pane in
+   both modes without changing its spacing or height. */
+:root[data-hermes-theme='lumen'] [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20'] > header {
+  border-bottom: 1px solid var(--lumen-kanban-divider);
+}
+
+/*
+ * The task metadata grid (Assignee / Priority / Workspace / Model) is the
+ * first detail block but is a plain div, not a <section>, so it receives none
+ * of the section padding-top and sat flush against the header divider above.
+ * FRAGILE: anchors the app's `grid-cols-[6rem_...]` arbitrary utility (see
+ * docs/COMPATIBILITY.md).
+ */
+:root[data-hermes-theme='lumen']
+  [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
+  > div[class~='min-h-0'][class~='flex-1'][class~='overflow-y-auto']
+  > div[class~='flex'][class~='flex-col']
+  > div[class~='grid'][class~='grid-cols-[6rem_minmax(0,1fr)]'] {
+  padding-top: 0.875rem;
+}
+
+/* ==========================================================================
+   Board header count lozenge
+   ========================================================================== */
+
+/*
+ * The task-count pill in the board page header ("Kanban ⟨62⟩ ⏱"). FRAGILE:
+ * anchors the lozenge's exact utility combo — `rounded-full` + `tabular-nums`
+ * + `py-px` + `bg-(--ui-bg-quaternary)` is unique to it in the app today (see
+ * docs/COMPATIBILITY.md). Painted with the shared purple metadata lozenge
+ * tokens, which are mode-aware. The pill shape and padding stay as shipped.
+ */
+:root[data-hermes-theme='lumen']
+  span[class~='rounded-full'][class~='bg-(--ui-bg-quaternary)'][class~='py-px'][class~='tabular-nums'] {
+  background: var(--lumen-pill-background) !important;
+  border: 1px solid var(--lumen-pill-border) !important;
+  color: var(--lumen-pill-foreground) !important;
+  font-weight: 500;
+  box-shadow: none;
+}
+
 /* ==========================================================================
    Drawer section separation
    ========================================================================== */
