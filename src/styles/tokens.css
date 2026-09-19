@@ -42,7 +42,7 @@
      span the same box as the section content (see styles/sidebar.css). */
   --lumen-sidebar-scrollbar-width: 10px;
   --lumen-sidebar-nav-surface: #f8f9fb;
-  --lumen-sidebar-section-tint: color-mix(in srgb, var(--dt-ring) 7%, var(--theme-sidebar-seed));
+  --lumen-sidebar-section-tint: color-mix(in srgb, var(--dt-ring) 15%, var(--theme-sidebar-seed));
   --lumen-sidebar-divider: #c9d0d8;
   --lumen-row-hover-outline: color-mix(in srgb, var(--dt-ring) 14%, var(--lumen-sidebar-divider));
   --lumen-row-selected-outline: color-mix(in srgb, var(--dt-ring) 38%, transparent);
@@ -126,6 +126,12 @@
   --lumen-capabilities-readable-text: #59636f;
   /* Embedded capability pickers keep a constant dark backdrop in both modes. */
   --lumen-embed-background: #171a1f;
+}
+
+/* Light user-message bubbles use Lumen's authored lavender instead of the
+   app's neutral light-mode card mix. Dark mode keeps the app's existing mix. */
+:root[data-hermes-theme='lumen']:not([data-hermes-mode='dark']) {
+  --dt-user-bubble: var(--theme-bubble-seed);
 }
 
 /* ==========================================================================
