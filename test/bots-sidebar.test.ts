@@ -179,6 +179,15 @@ const ROOM_DOM = `
         </div>
       </div>
     </div>
+    <div class="border-t border-(--ui-stroke-secondary) p-2">
+      <form class="grid gap-0">
+        <div class="flex items-center gap-1.5">
+          <div class="relative min-w-0 flex-1"><textarea data-slot="textarea"></textarea></div>
+          <button class="shrink-0" type="button"></button>
+          <button class="px-2.5 py-1" type="submit">New Thread</button>
+        </div>
+      </form>
+    </div>
   </div>
 `
 
@@ -316,6 +325,12 @@ const EXPECTATIONS: Expectation[] = [
   {
     selector:
       "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)'] [data-slot='group-chat-message-content']",
+    gateway: 0,
+    flat: 0,
+    room: 1
+  },
+  {
+    selector: "div.relative.flex.h-full.flex-col textarea[data-slot='textarea']",
     gateway: 0,
     flat: 0,
     room: 1

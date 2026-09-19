@@ -430,6 +430,20 @@
 }
 
 /*
+ * The room's mention textarea rides high against its buttons for two
+ * compounding reasons, both fixed here: inline-level flow puts the baseline
+ * at the box's bottom edge (overflow-y: auto), so the wrapper's strut parks
+ * ~6px below it and the buttons center lower than the input — block flow
+ * removes the strut. And `min-h-9` outruns `field-sizing: content`'s
+ * one-line box, leaving the line high inside — split that slack into the
+ * padding instead.
+ */
+:root[data-hermes-theme='lumen'] div.relative.flex.h-full.flex-col textarea[data-slot='textarea'] {
+  display: block;
+  padding-block: calc((2.25rem - 2px - 1rem) / 2);
+}
+
+/*
  * The room's structural hairlines (activity panel's bottom rule, composer's
  * top rule) ship a stroke a step brighter than the sessions sidebar's
  * dividers; align them to --lumen-sidebar-divider instead of touching the
