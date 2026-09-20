@@ -17,6 +17,8 @@ import { ARTIFACT, buildOptions, syncArtifact } from "./common.mjs"
 
 const watch = process.argv.includes("--watch")
 const sync = process.argv.includes("--sync")
+const installer = process.env.LUMEN_INSTALLER === "1"
+const logLevel = installer ? "warning" : "info"
 
 const syncOnEnd = {
     name: "lumen-sync",
@@ -32,15 +34,15 @@ const syncOnEnd = {
 }
 
 if (watch) {
-    const context = await esbuild.context({ ...buildOptions(ARTIFACT), plugins: [syncOnEnd] })
+    const context = await esbuild.context({ ...buildOptions(ARTIFACT), logLevel, plugins: [syncOnEnd] })
 
     await context.watch()
 
     console.log("[lumen] watching for changes…")
 } else {
-    await esbuild.build({ ...buildOptions(ARTIFACT), plugins: sync ? [syncOnEnd] : [] })
+    await esbuild.build({ ...buildOptions(ARTIFACT), logLevel, plugins: sync ? [syncOnEnd] : [] })
 
-    if (!sync) {
+    if (!sync && !installer) {
         console.log("[lumen] built plugin.js — run `npm run sync` to install it")
     }
 }

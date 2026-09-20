@@ -8,11 +8,78 @@ set -euo pipefail
 # - From a checkout: builds from source by default; flags: --no-build,
 #   --dir PATH, -h/--help — see ./install.sh --help.
 
+COLOR_ENABLED=0
+if [ -t 1 ] && [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ] && command -v tput >/dev/null 2>&1; then
+  TERM_COLORS="$(tput colors 2>/dev/null || printf '0')"
+  if [ "$TERM_COLORS" -ge 8 ] 2>/dev/null; then
+    COLOR_ENABLED=1
+  fi
+fi
+
+if [ "$COLOR_ENABLED" -eq 1 ]; then
+  RESET="$(tput sgr0)"
+  BOLD="$(tput bold)"
+  PURPLE="$(tput setaf 5)"
+  SUCCESS="$(tput setaf 2)"
+  if [ "$TERM_COLORS" -ge 16 ] 2>/dev/null; then
+    LILAC="$(tput setaf 13)"
+  else
+    LILAC="${BOLD}${PURPLE}"
+  fi
+else
+  RESET=''
+  BOLD=''
+  PURPLE=''
+  LILAC=''
+  SUCCESS=''
+fi
+
+EMOJI_ENABLED=0
+case "${LUMEN_EMOJI:-auto}" in
+  always)
+    EMOJI_ENABLED=1
+    ;;
+  never)
+    ;;
+  auto | *)
+    if [ "${LUMEN_EMOJI:-auto}" != "auto" ]; then
+      printf 'warning: LUMEN_EMOJI must be auto, always, or never; using auto\n' >&2
+    fi
+    case "${TERM_PROGRAM:-}" in
+      Apple_Terminal | Hyper | iTerm.app | vscode | WarpTerminal | WezTerm) EMOJI_ENABLED=1 ;;
+    esac
+    if [ -n "${ALACRITTY_LOG:-}" ] || [ -n "${GHOSTTY_RESOURCES_DIR:-}" ] || [ -n "${KITTY_WINDOW_ID:-}" ] || [ -n "${KONSOLE_VERSION:-}" ] || [ -n "${VTE_VERSION:-}" ] || [ -n "${WEZTERM_EXECUTABLE:-}" ] || [ -n "${WT_SESSION:-}" ]; then
+      EMOJI_ENABLED=1
+    fi
+    ;;
+esac
+
+if [ "$EMOJI_ENABLED" -eq 1 ]; then
+  MOON='🌙'
+  STEP_MARK='⚡'
+else
+  MOON='☾'
+  STEP_MARK='●'
+fi
+
+welcome_message() {
+  printf '\n  %s%s%s  L U M E N%s\n' "$BOLD" "$PURPLE" "$MOON" "$RESET"
+  printf '  %sA brighter, clearer Hermes Desktop experience%s\n\n' "$LILAC" "$RESET"
+}
+
+step_message() {
+  printf '  %s%s%s %s\n' "$PURPLE" "$STEP_MARK" "$RESET" "$1"
+}
+
 done_message() {
-  printf 'Done. Choose Lumen in the theme picker (Cmd/Ctrl-K, Appearance, or /skin) if not already active;\n'
-  printf 'the Lumen workspace layout is available in the layout picker. The desktop hot-reloads this file on change.\n'
-  printf 'Set appearance mode to System to follow your\n'
-  printf 'OS light/dark setting.\n'
+  printf '\n  %s╭─%s %s%sLumen installed%s\n' "$PURPLE" "$RESET" "$BOLD" "$SUCCESS" "$RESET"
+  printf '  %s│%s\n' "$PURPLE" "$RESET"
+  printf '  %s│%s  %sPlugin%s  %s\n' "$PURPLE" "$RESET" "$LILAC" "$RESET" "$1"
+  printf '  %s│%s\n' "$PURPLE" "$RESET"
+  printf '  %s│%s  Choose %sLumen%s in the theme picker (Cmd/Ctrl-K, Appearance, or /skin).\n' "$PURPLE" "$RESET" "$BOLD" "$RESET"
+  printf '  %s│%s  The Lumen workspace layout is ready in the layout picker.\n' "$PURPLE" "$RESET"
+  printf '  %s│%s\n' "$PURPLE" "$RESET"
+  printf '  %s╰─%s Set Appearance to System to follow OS light/dark mode.\n' "$PURPLE" "$RESET"
 }
 
 # Piped execution has no script file (BASH_SOURCE is empty): install the
@@ -55,7 +122,8 @@ if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
     TARGET="${HERMES_HOME:-$HOME/.hermes}/desktop-plugins/lumen"
   fi
 
-  printf '[lumen] downloading plugin.js...\n'
+  welcome_message
+  step_message 'Downloading plugin.js…'
   mkdir -p "$TARGET"
   TMP_FILE="$(mktemp "$TARGET/.plugin.js.XXXXXX")"
   if ! curl --fail --silent --show-error --location --retry 3 --retry-delay 1 \
@@ -72,10 +140,10 @@ if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
     exit 1
   fi
 
+  step_message 'Installing plugin…'
   chmod 0644 "$TMP_FILE"
   mv -f "$TMP_FILE" "$TARGET/plugin.js"
-  printf '[lumen] installed %s\n' "$TARGET/plugin.js"
-  done_message
+  done_message "$TARGET/plugin.js"
   exit 0
 fi
 
@@ -133,9 +201,11 @@ if ! node -e 'const [major, minor, patch] = process.versions.node.split(".").map
   printf 'warning: node %s found; node >= 22.22.2 is expected\n' "$NODE_VERSION" >&2
 fi
 
+welcome_message
+
 if [ "$NO_BUILD" -eq 0 ]; then
   if [ ! -x "$ROOT/node_modules/.bin/esbuild" ]; then
-    printf '[lumen] installing dev dependencies...\n'
+    step_message 'Installing development dependencies…'
     if [ -f "$ROOT/package-lock.json" ]; then
       (cd "$ROOT" && npm ci --no-fund --no-audit)
     else
@@ -143,8 +213,8 @@ if [ "$NO_BUILD" -eq 0 ]; then
     fi
   fi
 
-  printf '[lumen] building...\n'
-  (cd "$ROOT" && npm run --silent build)
+  step_message 'Building Lumen…'
+  (cd "$ROOT" && LUMEN_INSTALLER=1 npm run --silent build)
 else
   if [ ! -f "$ROOT/plugin.js" ]; then
     printf 'error: plugin.js not found — run without --no-build\n' >&2
@@ -152,7 +222,7 @@ else
   fi
 fi
 
-printf '[lumen] installing...\n'
-(cd "$ROOT" && node scripts/sync.mjs)
+step_message 'Installing plugin…'
+(cd "$ROOT" && node scripts/sync.mjs >/dev/null)
 
-done_message
+done_message "${LUMEN_INSTALL_DIR:-${HERMES_HOME:-$HOME/.hermes}/desktop-plugins/lumen}/plugin.js"
