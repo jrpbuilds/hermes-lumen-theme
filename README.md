@@ -13,10 +13,9 @@
 
 </div>
 
-High-contrast light and dark palettes, a tuned integrated-terminal ANSI set,
-and a "clarity layer" that sharpens forms, the sessions sidebar, the Bots
-panels, the composer, the Kanban drawer and the capabilities pages. It also
-ships a Lumen workspace layout for the app's layout picker.
+Lumen makes Hermes Desktop easier to scan: clearer surfaces, readable controls
+and thoughtfully tuned light and dark palettes, without changing how Hermes
+works.
 
 > Built and tested against Hermes Desktop **v0.21.x** — see
 > [COMPATIBILITY.md](./docs/COMPATIBILITY.md) for what that covers and what can
@@ -24,94 +23,50 @@ ships a Lumen workspace layout for the app's layout picker.
 
 ## Install
 
-One line — downloads the committed `plugin.js` straight from the repo and
-installs it into `~/.hermes/desktop-plugins/lumen/`. No clone, no build — it
-needs only `curl` and respects `HERMES_HOME` (defaults to `~/.hermes`):
+Run this command:
+
+```bash
+hermes plugins install jrpbuilds/hermes-lumen-theme
+```
+
+Or install it with curl:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash
 ```
 
-Pass `--dir PATH` for a custom install location:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash -s -- --dir PATH
-```
-
-Set `LUMEN_INSTALL_DIR` instead when the destination comes from your shell
-environment. The tagged artifact is downloaded, so piped installs do not need
-Node or a checkout.
-
-Already have a checkout? The same script builds from source (needs
-Node >= 22.22.2) or installs the committed `plugin.js` as-is:
-
-```
-./install.sh             # build + install
-./install.sh --no-build  # install the committed plugin.js as-is
-./install.sh --dir PATH  # custom install location
-```
-
-Alternatively, from the Hermes Desktop plugin catalog UI, or:
-
-```
-hermes plugins install jrpbuilds/hermes-lumen-theme
-```
+> **Note:** To choose a custom location, set `--dir` to its path.
 
 Then pick **Lumen** in the theme picker (Cmd/Ctrl-K → theme, Appearance settings,
 or `/skin`). The clarity layer activates automatically whenever the Lumen skin
-is active and stays inert otherwise. The bundled Lumen workspace layout is
-available in the layout picker when you want to apply it.
+is active and stays inert otherwise. You can also choose the bundled Lumen
+workspace layout in the layout picker.
 
 ## What it changes
 
-- **Palette** — hand-tuned light and dark color sets (no synthesized variants)
-  with hand-tuned ANSI palettes for the integrated terminal.
-- **Clarity layer** — CSS overrides scoped to `[data-hermes-theme='lumen']`:
-    - readable default type scale (18px root) and strengthened form-field
-      borders
-    - self-hosted Manrope as the main UI font, with local system and emoji fallbacks
-    - sharpened text/stroke hierarchies (`--ui-text-*`, `--ui-stroke-*`,
-      `--ui-bg-*`)
-    - restyled sidebar search, section tints, session-row selection states
-    - sessions-parity Bots panels: the pane rides the sidebar surface with
-      sessions-style section pill headers, row hover/selection rings and a
-      matching search field; group-chat rooms get Lumen user-message bubbles
-      and sidebar-divider hairlines
-    - a wider Kanban task drawer (26rem → 39rem, viewport-guarded) with padded
-      scroll wells and restyled dependency/status lozenges
-    - readable muted text on the capabilities pages
-    - standard dropdowns that match their trigger width and wrap long options to
-      two lines
-    - accent-tinted focus rings and slim overlay scrollbars
-- **Behavior** — the painted sidebar-search rectangle is clickable and focuses
-  the input (not just the field itself); sessions section pills receive
-  localized codicons, including dynamic entered-project labels.
-- **Workspace layout** — a Lumen layout template is available in the layout
-  picker, including the saved sessions, terminal, workspace, files and review
-  arrangement.
+- **Clearer visual hierarchy** — tuned palettes, terminal ANSI colours,
+  stronger text contrast and a readable 18px type scale.
+- **Better dense-work surfaces** — refined sessions and Bots panels, sidebar
+  search, controls, capability pages, Kanban task drawer and worker logs.
+- **Useful interaction polish** — visible focus states, better dropdowns and a
+  full clickable area for sidebar search.
+- **A ready-to-use workspace** — a Lumen layout in the layout picker for
+  sessions, terminal, workspace, files and review.
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/docs/screenshot.webp"
-    alt="Lumen running in Hermes Desktop"
-    width="800"
+    src="https://www.jrpbuilds.co.uk/images/projects/lumen/screenshots/bot-session-dark.webp"
+    alt="Lumen Bots view in Hermes Desktop"
+    width="49%"
+  />
+  <img
+    src="https://www.jrpbuilds.co.uk/images/projects/lumen/screenshots/kanban-dark.webp"
+    alt="Lumen Kanban board in Hermes Desktop"
+    width="49%"
   />
 </p>
 
-More screenshots viewable [here](https://www.jrpbuilds.co.uk/projects/lumen/#screenshots).
-
-## Development
-
-```
-npm install
-npm run dev     # build --watch, synced into ~/.hermes/desktop-plugins/lumen
-```
-
-Hermes Desktop hot-reloads the plugin on save, so edits to `src/` appear in
-the running app within a couple of seconds. For the project map, the full
-script table, the test suite, and the committed-artifact policy, see
-[docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md); for what can break on Hermes
-Desktop updates, see [docs/COMPATIBILITY.md](./docs/COMPATIBILITY.md).
+See [more screenshots on the Lumen website](https://www.jrpbuilds.co.uk/projects/lumen/#screenshots).
 
 ## License
 

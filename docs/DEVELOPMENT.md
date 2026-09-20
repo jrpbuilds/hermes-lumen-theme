@@ -9,6 +9,37 @@ Hermes Desktop updates, see [COMPATIBILITY.md](./COMPATIBILITY.md).
 - A Hermes Desktop install to test against (`~/.hermes` by default; override
   with `HERMES_HOME`)
 
+## Install options
+
+The README intentionally shows only the standard user install. The full
+installer behaviour is documented here for maintainers and local development.
+
+When it is piped from GitHub, `install.sh` downloads the committed `plugin.js`
+and installs it into `$HERMES_HOME/desktop-plugins/lumen` (or
+`~/.hermes/desktop-plugins/lumen` when `HERMES_HOME` is unset). It needs only
+`curl`, not Node or a checkout. Override the complete destination with either
+`--dir PATH` or `LUMEN_INSTALL_DIR`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash -s -- --dir PATH
+curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | LUMEN_INSTALL_DIR=PATH bash
+```
+
+From a checkout, the same script builds and installs by default. It requires
+Node >= 22.22.2; `--no-build` instead installs the committed artifact:
+
+```bash
+./install.sh
+./install.sh --no-build
+./install.sh --dir PATH
+```
+
+Hermes can also install this repository from its plugin catalog or with:
+
+```bash
+hermes plugins install jrpbuilds/hermes-lumen-theme
+```
+
 ## Getting started
 
 ```
@@ -38,7 +69,7 @@ edits to `src/` appear in the running app within a couple of seconds.
 
 | Script           | What it does                                                              |
 | ---------------- | ------------------------------------------------------------------------- |
-| `./install.sh`   | Build + install in one step (flags in the README Install section)         |
+| `./install.sh`   | Build + install in one step (see Install options above for flags)         |
 | `npm run build`  | Bundle `src/` into the committed root `plugin.js`                         |
 | `npm run dev`    | `build --watch`, copying each build into the install dir                  |
 | `npm run format` | Prettier-write the repo (artifact + lockfile are ignored)                 |
