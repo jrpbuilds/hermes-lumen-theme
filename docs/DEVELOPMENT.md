@@ -97,7 +97,7 @@ the committed artifact drifts from `src/`.
   style stays consistent with the app this plugin targets.
 - **typecheck** — `tsc --noEmit` in strict mode against the vendored
   contracts in `src/types/`.
-- **test** — eight Vitest suites:
+- **test** — nine Vitest suites:
     - `palettes.test.ts` — full-palette contract and no built-in-name collision
     - `contrast.test.ts` — WCAG floors for core and meta text in both modes
     - `lumen-layout.test.ts` — the layout tree satisfies the app's validator
@@ -106,6 +106,10 @@ the committed artifact drifts from `src/`.
     - `section-glyphs.test.ts` — localized sessions section glyphs, under jsdom
     - `plugin.test.ts` — entry-point registration and optional-layer containment
     - `build.test.ts` — sanity markers on the committed artifact
+    - `theme-contracts.test.ts` — Lumen-only CSS scoping, representative
+      sidebar/composer/Kanban/capabilities selector fixtures, and unreleased
+      package/changelog version parity. This is a fast compatibility guard,
+      not a rendered-pixel or real Hermes Desktop test.
 - **artifact parity** — the committed `plugin.js` must byte-match a fresh
   build; rebuild and re-commit after any `src/` change.
 
