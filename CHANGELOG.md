@@ -2,6 +2,12 @@
 
 All notable Lumen releases are documented here.
 
+## [1.1.0]
+
+### Fixed
+
+- Restore native sessions-sidebar glyphs when switching from Lumen to another theme.
+
 ## [1.0.0] - 2026-09-19
 
 ### Added

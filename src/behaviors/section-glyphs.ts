@@ -51,8 +51,29 @@ export const SECTION_HEADER_BUTTON_SELECTOR =
 
 export const GLYPH_CLASS = "lumen-section-glyph"
 
+function isLumenActive(): boolean {
+    return document.documentElement?.getAttribute("data-hermes-theme") === "lumen"
+}
+
+/** Remove Lumen's DOM-only decoration so another theme gets its native dither square back. */
+export function undressSectionGlyphs(root: Document | Element): number {
+    let undressed = 0
+
+    root.querySelectorAll<HTMLElement>(`.${GLYPH_CLASS}`).forEach(glyph => {
+        glyph.querySelectorAll(":scope > .codicon").forEach(codicon => codicon.remove())
+        glyph.classList.remove(GLYPH_CLASS)
+        undressed += 1
+    })
+
+    return undressed
+}
+
 /** Dressed sections count. Unknown or icon-led sections are left alone. */
 export function dressSectionGlyphs(root: Document | Element): number {
+    if (!isLumenActive()) {
+        return undressSectionGlyphs(root)
+    }
+
     let dressed = 0
 
     root.querySelectorAll(SECTION_HEADER_BUTTON_SELECTOR).forEach(button => {
@@ -73,8 +94,6 @@ export function dressSectionGlyphs(root: Document | Element): number {
         }
 
         glyph.classList.add(GLYPH_CLASS)
-        glyph.textContent = ""
-
         const codicon = document.createElement("i")
         codicon.className = `codicon codicon-${icon}`
         codicon.setAttribute("aria-hidden", "true")
@@ -93,7 +112,7 @@ export function installSectionGlyphs(ctx: PluginContext): void {
 
     let scheduled: ReturnType<typeof setTimeout> | null = null
 
-    const dressSafely = (): void => {
+    const updateSafely = (): void => {
         try {
             dressSectionGlyphs(document)
         } catch (error) {
@@ -103,7 +122,7 @@ export function installSectionGlyphs(ctx: PluginContext): void {
 
     const run = (): void => {
         scheduled = null
-        dressSafely()
+        updateSafely()
     }
 
     // Batches React re-renders into one pass per 100ms window.
@@ -116,15 +135,21 @@ export function installSectionGlyphs(ctx: PluginContext): void {
     }
 
     const observer = new MutationObserver(schedule)
-    observer.observe(document.documentElement, { childList: true, subtree: true })
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-hermes-theme"],
+        childList: true,
+        subtree: true,
+    })
 
     // Sections already rendered when the plugin (re)loads, plus a settle pass
     // for the boot render the observer may have missed.
-    dressSafely()
+    updateSafely()
     const settle = setTimeout(run, 250)
 
     ctx.onDispose(() => {
         observer.disconnect()
+        undressSectionGlyphs(document)
 
         if (scheduled !== null) {
             clearTimeout(scheduled)

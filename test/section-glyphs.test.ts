@@ -130,6 +130,7 @@ describe("SECTION_ICONS", () => {
 describe("dressSectionGlyphs", () => {
     beforeEach(() => {
         document.body.innerHTML = ""
+        document.documentElement.setAttribute("data-hermes-theme", "lumen")
         vi.useFakeTimers()
     })
 
@@ -194,6 +195,17 @@ describe("dressSectionGlyphs", () => {
         expect(dressSectionGlyphs(document)).toBe(2)
         expect(dressSectionGlyphs(document)).toBe(0)
     })
+
+    it("restores native dither squares when Lumen is inactive", () => {
+        buildSidebarDom()
+        dressSectionGlyphs(document)
+
+        document.documentElement.setAttribute("data-hermes-theme", "other")
+
+        expect(dressSectionGlyphs(document)).toBe(2)
+        expect(document.querySelectorAll(`.${GLYPH_CLASS}`)).toHaveLength(0)
+        expect(document.querySelectorAll(".dither > .codicon")).toHaveLength(0)
+    })
 })
 
 describe("installSectionGlyphs", () => {
@@ -201,6 +213,7 @@ describe("installSectionGlyphs", () => {
 
     beforeEach(() => {
         document.body.innerHTML = ""
+        document.documentElement.setAttribute("data-hermes-theme", "lumen")
         vi.useFakeTimers()
     })
 
@@ -228,6 +241,20 @@ describe("installSectionGlyphs", () => {
         vi.advanceTimersByTime(100)
 
         expect(document.querySelectorAll(`.${GLYPH_CLASS}`)).toHaveLength(2)
+    })
+
+    it("removes custom glyphs after a theme change", async () => {
+        buildSidebarDom()
+        installSectionGlyphs(fakeCtx as never)
+        vi.advanceTimersByTime(300)
+        expect(document.querySelectorAll(`.${GLYPH_CLASS}`)).toHaveLength(2)
+
+        document.documentElement.setAttribute("data-hermes-theme", "dark")
+        await Promise.resolve()
+        vi.advanceTimersByTime(100)
+
+        expect(document.querySelectorAll(`.${GLYPH_CLASS}`)).toHaveLength(0)
+        expect(document.querySelectorAll(".dither > .codicon")).toHaveLength(0)
     })
 
     it("clears pending work and stops observing after dispose", async () => {

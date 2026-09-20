@@ -50,7 +50,22 @@ var SECTION_ICONS = {
 };
 var SECTION_HEADER_BUTTON_SELECTOR = "[data-tour='sessions-sidebar'] [data-sessions-mode] > [data-slot='sidebar-group'] > div:first-child button";
 var GLYPH_CLASS = "lumen-section-glyph";
+function isLumenActive() {
+  return document.documentElement?.getAttribute("data-hermes-theme") === "lumen";
+}
+function undressSectionGlyphs(root) {
+  let undressed = 0;
+  root.querySelectorAll(`.${GLYPH_CLASS}`).forEach((glyph) => {
+    glyph.querySelectorAll(":scope > .codicon").forEach((codicon) => codicon.remove());
+    glyph.classList.remove(GLYPH_CLASS);
+    undressed += 1;
+  });
+  return undressed;
+}
 function dressSectionGlyphs(root) {
+  if (!isLumenActive()) {
+    return undressSectionGlyphs(root);
+  }
   let dressed = 0;
   root.querySelectorAll(SECTION_HEADER_BUTTON_SELECTOR).forEach((button) => {
     const glyph = button.querySelector(`:scope > span:first-child > .dither`);
@@ -64,7 +79,6 @@ function dressSectionGlyphs(root) {
       return;
     }
     glyph.classList.add(GLYPH_CLASS);
-    glyph.textContent = "";
     const codicon = document.createElement("i");
     codicon.className = `codicon codicon-${icon}`;
     codicon.setAttribute("aria-hidden", "true");
@@ -78,7 +92,7 @@ function installSectionGlyphs(ctx) {
     return;
   }
   let scheduled = null;
-  const dressSafely = () => {
+  const updateSafely = () => {
     try {
       dressSectionGlyphs(document);
     } catch (error) {
@@ -87,7 +101,7 @@ function installSectionGlyphs(ctx) {
   };
   const run = () => {
     scheduled = null;
-    dressSafely();
+    updateSafely();
   };
   const schedule = () => {
     if (scheduled !== null) {
@@ -96,11 +110,17 @@ function installSectionGlyphs(ctx) {
     scheduled = setTimeout(run, 100);
   };
   const observer = new MutationObserver(schedule);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-  dressSafely();
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-hermes-theme"],
+    childList: true,
+    subtree: true
+  });
+  updateSafely();
   const settle = setTimeout(run, 250);
   ctx.onDispose(() => {
     observer.disconnect();
+    undressSectionGlyphs(document);
     if (scheduled !== null) {
       clearTimeout(scheduled);
       scheduled = null;
