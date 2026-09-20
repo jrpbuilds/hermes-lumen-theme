@@ -268,7 +268,7 @@
    ========================================================================== */
 
 /*
- * FRAGILE: matches the app's Tailwind utility classes, including the escaped
+ * FRAGILE FALLBACK — matches the app's Tailwind utility classes, including the escaped
  * arbitrary-value classes `.text-(--ui-text-tertiary)` / quaternary. Re-verify
  * these after every Hermes Desktop update (see docs/COMPATIBILITY.md).
  */
@@ -320,11 +320,13 @@
    ========================================================================== */
 
 /*
- * FRAGILE: matches the grab-handle / disabled profile buttons by utility
- * class (`.rounded-[3px]`, `.text-[0.5625rem]`, `.opacity-35`).
+ * FRAGILE FALLBACK — profile rail controls. Hermes exposes the stable
+ * `profile-rail` root but not separate hooks for its draggable and disabled
+ * squares, so the utility predicates remain contained beneath that root.
  */
 
 :root[data-hermes-theme="lumen"]
+    [data-slot="profile-rail"]
     :is(
         button.cursor-grab.touch-none.rounded-\[3px\].text-\[0\.5625rem\][aria-pressed],
         button.opacity-35.rounded-\[3px\].text-\[0\.5625rem\]

@@ -19,7 +19,8 @@
  * Paint the pane root, not the zone: the zone is shared with the sessions
  * tab. The surface token resolves to transparent under glass mode, so
  * translucency survives. Anchor: the roster toolbar's title row, present in
- * every roster state. FRAGILE: matches the toolbar's exact utility chain.
+ * every roster state. FRAGILE FALLBACK — the toolbar has no semantic hook, so
+ * this remains tied to its exact utility chain.
  */
 :root[data-hermes-theme="lumen"]
     div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5) {
@@ -293,7 +294,8 @@
  * The toolbar's SearchField is the sessions primitive resting on the
  * underline-only chrome variant; give it the sessions field surface so the
  * two searches read as one control.
- * FRAGILE: matches the toolbar row's exact utility chain.
+ * FRAGILE FALLBACK — matches the toolbar row's exact utility chain because
+ * the SearchField wrapper has no semantic hook.
  */
 :root[data-hermes-theme="lumen"]
     div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
@@ -346,7 +348,8 @@
 /*
  * The log grid has no top padding, so the first message sat flush under the
  * activity panel's hairline; the scroller anchor is the room's log grid.
- * FRAGILE: matches the group-chat log grid's exact utility chain.
+ * FRAGILE FALLBACK — matches the group-chat log grid's exact utility chain;
+ * the workspace root has no Bots-specific semantic hook.
  */
 :root[data-hermes-theme="lumen"]
     div.relative.flex.h-full.flex-col

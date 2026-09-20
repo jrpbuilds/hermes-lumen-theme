@@ -161,6 +161,15 @@ Stable-by-design anchors: `data-slot` component primitives
 `composer-surface`, `sidebar-content`, `sidebar-group`, `badge`),
 `data-sidebar='menu-button'`, and the `data-hermes-*` skin attributes.
 
+## Fragile selector inventory
+
+| Surface       | Stable anchor used by Lumen                                                                                                              | Contained fallback                                                                                                                              | Failure symptom                                                   |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Kanban drawer | `data-slot='badge'`, `textarea`, `data-selectable-text`                                                                                  | The drawer root and its layout nodes have no drawer-specific data hook, so the exact TaskDrawer utility chain remains in `kanban.css`.          | Drawer width, wells, lozenges, or scrollbar treatment reverts.    |
+| Bots pane     | `data-slot='bots-roster'`, `bots-section`, `bots-section-heading`, `connection-glyph`, `data-roster-key`, and group-chat message content | Toolbar, heading typography, and group-chat log geometry retain their documented utility chains beneath the Bots roots.                         | Bot rows, headings, search, or group-chat spacing reverts.        |
+| Session rows  | `data-tour='sessions-sidebar'` and `data-row-actions`                                                                                    | Hermes exposes no semantic selected-row, title, or metadata hook, so the row state and title utility classes remain under the sessions sidebar. | Selected-row outline, title weight, or metadata contrast reverts. |
+| Profile rail  | `data-slot='profile-rail'`                                                                                                               | Drag and disabled square states have no individual hooks; their utility predicates are now contained under the profile-rail root.               | Rail control glyphs return to the app's muted treatment.          |
+
 ## Update checklist
 
 1. Bump a dev install (`npm run dev`) against the new Hermes build.

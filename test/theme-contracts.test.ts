@@ -29,6 +29,21 @@ const STYLE_FILES = [
 
 const LUMEN_SCOPE = ':root[data-hermes-theme="lumen"]'
 
+const FRAGILE_FALLBACKS = [
+    { cssFile: "kanban.css", marker: "FRAGILE FALLBACK — TaskDrawer", stableAnchor: "data-slot='badge'" },
+    { cssFile: "bots.css", marker: "FRAGILE FALLBACK —", stableAnchor: "data-slot='bots-roster'" },
+    {
+        cssFile: "sidebar.css",
+        marker: "FRAGILE FALLBACK — matches the app's Tailwind",
+        stableAnchor: "data-tour='sessions-sidebar'",
+    },
+    {
+        cssFile: "sidebar.css",
+        marker: "FRAGILE FALLBACK — profile rail controls",
+        stableAnchor: "data-slot='profile-rail'",
+    },
+] as const
+
 function readSource(relativePath: string): string {
     return readFileSync(path.join(ROOT, relativePath), "utf8")
 }
@@ -121,8 +136,12 @@ const SIDEBAR_DOM = `
       <div class="row-hover bg-(--ui-row-active-background)">
         <span class="hover-marquee"></span>
       </div>
+      <div data-slot="profile-rail">
+        <button aria-pressed="true" class="cursor-grab touch-none rounded-[3px] text-[0.5625rem]"></button>
+      </div>
     </div>
   </aside>
+  <button id="unrelated-profile-control" aria-pressed="true" class="cursor-grab touch-none rounded-[3px] text-[0.5625rem]"></button>
 `
 
 const KANBAN_DOM = `
@@ -167,6 +186,15 @@ describe("Lumen theme contracts", () => {
         }
     })
 
+    it("documents every retained utility fallback with its owning stable anchor", () => {
+        const compatibility = readSource("docs/COMPATIBILITY.md")
+
+        for (const { cssFile, marker, stableAnchor } of FRAGILE_FALLBACKS) {
+            expect(readSource(`src/styles/${cssFile}`), cssFile).toContain(marker)
+            expect(compatibility, stableAnchor).toContain(stableAnchor)
+        }
+    })
+
     it("targets the sessions sidebar search, section, and selected-row contracts", () => {
         document.body.innerHTML = SIDEBAR_DOM
 
@@ -189,6 +217,18 @@ describe("Lumen theme contracts", () => {
             expect(() => document.querySelectorAll(current), current).not.toThrow()
             expect(document.querySelectorAll(current), current).not.toHaveLength(0)
         }
+    })
+
+    it("contains profile-rail fallbacks beneath Hermes' stable rail hook", () => {
+        document.body.innerHTML = SIDEBAR_DOM
+
+        const profileRailControl = selector(
+            "sidebar.css",
+            `${LUMEN_SCOPE} [data-slot="profile-rail"] :is(button.cursor-grab.touch-none.rounded-\\[3px\\].text-\\[0\\.5625rem\\][aria-pressed], button.opacity-35.rounded-\\[3px\\].text-\\[0\\.5625rem\\])`,
+        )
+
+        expect(document.querySelectorAll(profileRailControl)).toHaveLength(1)
+        expect(document.querySelector("#unrelated-profile-control")?.matches(profileRailControl)).toBe(false)
     })
 
     it("targets the composer surface and light-mode voice control", () => {

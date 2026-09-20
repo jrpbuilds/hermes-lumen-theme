@@ -1,7 +1,8 @@
 /*
  * Lumen clarity layer — Kanban task drawer.
  *
- * FRAGILE: every selector in this file anchors on the TaskDrawer's exact
+ * FRAGILE FALLBACK — TaskDrawer. Hermes v0.21.x exposes no drawer-specific
+ * data attribute, so every selector in this file anchors on the exact
  * utility-class chain
  *
  *   [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
