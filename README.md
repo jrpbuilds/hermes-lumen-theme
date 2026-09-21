@@ -40,23 +40,6 @@ hermes plugins update lumen
 
 Then restart Hermes Desktop so it loads the updated Desktop package half.
 
-The curl installer remains a standalone fallback. It will be repointed to the
-versioned 1.1.0 artifact immediately after this release is tagged:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash
-```
-
-> **Migrating from curl?** Move the old standalone plugin aside before your
-> first managed install, then restart Hermes Desktop:
->
-> ```bash
-> mv ~/.hermes/desktop-plugins/lumen ~/.hermes/desktop-plugins/lumen.legacy
-> ```
->
-> Hermes will not overwrite that folder automatically, so it can preserve a
-> user's standalone plugin installation.
-
 Managed Lumen installs use the release-only `stable` branch. If you installed
 an earlier managed copy while it tracked `main`, reinstall it after the
 repository default changes so later `hermes plugins update lumen` commands
