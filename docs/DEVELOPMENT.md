@@ -14,7 +14,8 @@ Hermes Desktop updates, see [COMPATIBILITY.md](./COMPATIBILITY.md).
 The README intentionally shows only the standard user install. The full
 installer behaviour is documented here for maintainers and local development.
 
-When it is piped from GitHub, `install.sh` downloads the committed `plugin.js`
+After a release tag is published, the piped `install.sh` downloads that
+release's committed `desktop/plugin.js`
 and installs it into `$HERMES_HOME/desktop-plugins/lumen` (or
 `~/.hermes/desktop-plugins/lumen` when `HERMES_HOME` is unset). It needs only
 `curl`, not Node or a checkout. Override the complete destination with either
@@ -34,11 +35,24 @@ Node >= 22.22.2; `--no-build` instead installs the committed artifact:
 ./install.sh --dir PATH
 ```
 
-Hermes can also install this repository from its plugin catalog or with:
+Hermes can install the unified package directly from GitHub:
 
 ```bash
 hermes plugins install jrpbuilds/hermes-lumen-theme
 ```
+
+That clone is placed under `~/.hermes/plugins/lumen`. Hermes Desktop copies its
+`desktop/` half into the app-level plugin root and registers it after a restart.
+Because Lumen is a custom source rather than a catalog entry, the CLI asks the
+user to review and approve its security scan during installation. Noninteractive
+automation must make that trust decision explicitly with `--force`.
+Once the release-only `stable` branch is the repository default, update it
+with `hermes plugins update lumen`. A managed install made while the default
+branch was `main` must be reinstalled to switch update tracks.
+
+The curl path remains a standalone fallback. A user moving from it to the
+managed package must move `~/.hermes/desktop-plugins/lumen` aside first; a
+marker-less standalone folder intentionally blocks package materialization.
 
 ## Getting started
 
@@ -70,7 +84,7 @@ edits to `src/` appear in the running app within a couple of seconds.
 | Script           | What it does                                                              |
 | ---------------- | ------------------------------------------------------------------------- |
 | `./install.sh`   | Build + install in one step (see Install options above for flags)         |
-| `npm run build`  | Bundle `src/` into the committed root `plugin.js`                         |
+| `npm run build`  | Bundle `src/` into the committed `desktop/plugin.js`                      |
 | `npm run dev`    | `build --watch`, copying each build into the install dir                  |
 | `npm run format` | Prettier-write the repo (artifact + lockfile are ignored)                 |
 | `npm run sync`   | Copy the committed artifact into the install dir                          |
@@ -81,7 +95,7 @@ edits to `src/` appear in the running app within a couple of seconds.
 
 Hermes Desktop evaluates a desktop plugin as a single self-contained ES module
 that may only import `@hermes/plugin-sdk` and `react*` — so multi-file sources
-require bundling. Committing the built `plugin.js` means `hermes plugins
+require bundling. Committing the built `desktop/plugin.js` means `hermes plugins
 install` works straight from this repo with no build step on the consumer
 side; `scripts/check-artifact.mjs` (run by `npm run check` and CI) fails if
 the committed artifact drifts from `src/`.
@@ -90,14 +104,14 @@ the committed artifact drifts from `src/`.
 
 `npm run check` runs the full gate used by CI:
 
-- **format** — Prettier parity across the repo. `plugin.js` and
+- **format** — Prettier parity across the repo. `desktop/plugin.js` and
   `package-lock.json` are ignored (reformatting the artifact would break
   byte parity with esbuild's output).
 - **lint** — ESLint with the Hermes workspace's shared rule set, so source
   style stays consistent with the app this plugin targets.
 - **typecheck** — `tsc --noEmit` in strict mode against the vendored
   contracts in `src/types/`.
-- **test** — nine Vitest suites:
+- **test** — ten Vitest suites:
     - `palettes.test.ts` — full-palette contract and no built-in-name collision
     - `contrast.test.ts` — WCAG floors for core and meta text in both modes
     - `lumen-layout.test.ts` — the layout tree satisfies the app's validator
@@ -110,7 +124,9 @@ the committed artifact drifts from `src/`.
       sidebar/composer/Kanban/capabilities selector fixtures, and unreleased
       package/changelog version parity. This is a fast compatibility guard,
       not a rendered-pixel or real Hermes Desktop test.
-- **artifact parity** — the committed `plugin.js` must byte-match a fresh
+    - `package.test.ts` — managed package manifest fields, version parity, and
+      the required Desktop package half.
+- **artifact parity** — the committed `desktop/plugin.js` must byte-match a fresh
   build; rebuild and re-commit after any `src/` change.
 
 ## Updating against a new Hermes Desktop

@@ -8,7 +8,8 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-export const ARTIFACT = path.join(ROOT, "plugin.js")
+/** The Desktop half of Lumen's unified Hermes package. */
+export const ARTIFACT = path.join(ROOT, "desktop", "plugin.js")
 export const ENTRY = path.join(ROOT, "src/plugin.ts")
 
 /** Where Hermes Desktop loads the plugin from.
@@ -29,7 +30,7 @@ export const BANNER = `/*!
  * Lumen — a brighter, clearer, more spacious theme for Hermes Desktop.
  *
  * Generated artifact — built from src/ by scripts/build.mjs. Do not edit.
- * The committed plugin.js must match a fresh \`npm run build\`;
+ * The committed desktop/plugin.js must match a fresh \`npm run build\`;
  * scripts/check-artifact.mjs guards this.
  *
  * SPDX-License-Identifier: MIT

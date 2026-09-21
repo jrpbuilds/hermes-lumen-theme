@@ -1,7 +1,7 @@
 /**
  * Build the Lumen plugin artifact.
  *
- *   node scripts/build.mjs            — one-shot build to ./plugin.js
+ *   node scripts/build.mjs            — one-shot build to ./desktop/plugin.js
  *   node scripts/build.mjs --sync     — build, then copy to the install dir
  *   node scripts/build.mjs --watch    — rebuild on change
  *   node scripts/build.mjs --watch --sync — `npm run dev`
@@ -43,6 +43,6 @@ if (watch) {
     await esbuild.build({ ...buildOptions(ARTIFACT), logLevel, plugins: sync ? [syncOnEnd] : [] })
 
     if (!sync && !installer) {
-        console.log("[lumen] built plugin.js — run `npm run sync` to install it")
+        console.log("[lumen] built desktop/plugin.js — run `npm run sync` to install it")
     }
 }

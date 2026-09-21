@@ -2,7 +2,7 @@
  * Lumen — a brighter, clearer, more spacious theme for Hermes Desktop.
  *
  * Generated artifact — built from src/ by scripts/build.mjs. Do not edit.
- * The committed plugin.js must match a fresh `npm run build`;
+ * The committed desktop/plugin.js must match a fresh `npm run build`;
  * scripts/check-artifact.mjs guards this.
  *
  * SPDX-License-Identifier: MIT

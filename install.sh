@@ -216,8 +216,8 @@ if [ "$NO_BUILD" -eq 0 ]; then
   step_message 'Building Lumen…'
   (cd "$ROOT" && LUMEN_INSTALLER=1 npm run --silent build)
 else
-  if [ ! -f "$ROOT/plugin.js" ]; then
-    printf 'error: plugin.js not found — run without --no-build\n' >&2
+  if [ ! -f "$ROOT/desktop/plugin.js" ]; then
+    printf 'error: desktop/plugin.js not found — run without --no-build\n' >&2
     exit 1
   fi
 fi

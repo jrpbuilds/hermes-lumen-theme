@@ -4,6 +4,10 @@ All notable Lumen releases are documented here.
 
 ## [1.1.0]
 
+### Added
+
+- Unified Hermes package support for managed installation and stable-channel updates.
+
 ### Fixed
 
 - Restore native sessions-sidebar glyphs when switching from Lumen to another theme.
@@ -21,4 +25,4 @@ All notable Lumen releases are documented here.
 ### Compatibility
 
 - Validated against Hermes Desktop v0.21.x and the current hermes-bots DOM contracts.
-- The committed `plugin.js` remains the consumer-facing artifact and is checked for byte parity in CI.
+- The committed `desktop/plugin.js` remains the consumer-facing artifact and is checked for byte parity in CI.

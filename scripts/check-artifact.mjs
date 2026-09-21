@@ -1,5 +1,5 @@
 /**
- * Drift guard: the committed plugin.js must byte-match a fresh build.
+ * Drift guard: the committed desktop/plugin.js must byte-match a fresh build.
  * Exits 1 (with a hint) when they differ; CI runs this as part of `npm run check`.
  */
 
@@ -20,13 +20,13 @@ try {
 
     if (!committed.equals(fresh)) {
         console.error(
-            "[lumen] plugin.js is out of date with src/.\n" +
+            "[lumen] desktop/plugin.js is out of date with src/.\n" +
                 "        Run `npm run build` and commit the refreshed artifact.",
         )
 
         process.exitCode = 1
     } else {
-        console.log("[lumen] plugin.js matches a fresh build")
+        console.log("[lumen] desktop/plugin.js matches a fresh build")
     }
 } finally {
     await rm(tempDir, { recursive: true, force: true })

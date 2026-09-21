@@ -13,7 +13,7 @@ import { ARTIFACT, syncArtifact } from "./common.mjs"
 try {
     await access(ARTIFACT, constants.F_OK)
 } catch {
-    console.error("[lumen] plugin.js not found — run `npm run build` first.")
+    console.error("[lumen] desktop/plugin.js not found — run `npm run build` first.")
 
     process.exitCode = 1
 }

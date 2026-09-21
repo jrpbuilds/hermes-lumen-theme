@@ -10,12 +10,12 @@ import { fileURLToPath } from "node:url"
 
 import { describe, expect, it } from "vitest"
 
-const ARTIFACT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../plugin.js")
+const ARTIFACT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../desktop/plugin.js")
 
 const artifact = await readFile(ARTIFACT, "utf8")
 const readableArtifact = artifact.replace(/\\"/g, '"')
 
-describe("built plugin.js", () => {
+describe("built desktop/plugin.js", () => {
     it("keeps the SDK import for the runtime loader to rewrite", () => {
         expect(artifact).toContain("@hermes/plugin-sdk")
     })

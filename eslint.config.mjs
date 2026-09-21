@@ -15,7 +15,7 @@ import tseslint from "typescript-eslint"
 
 export default [
     {
-        ignores: ["**/node_modules/**", "**/dist/**", "**/coverage/**", "plugin.js"],
+        ignores: ["**/node_modules/**", "**/dist/**", "**/coverage/**", "desktop/plugin.js"],
     },
     js.configs.recommended,
     {

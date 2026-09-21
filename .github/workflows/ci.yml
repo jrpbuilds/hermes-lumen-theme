@@ -2,7 +2,7 @@ name: CI
 
 on:
     push:
-        branches: [main]
+        branches: [main, stable]
         tags: ["v*"]
     pull_request:
 
@@ -33,5 +33,5 @@ jobs:
             - name: Smoke-test piped installer
               run: |
                   target="$(mktemp -d)"
-                  cat install.sh | LUMEN_ARTIFACT_URL="file://${GITHUB_WORKSPACE}/plugin.js" bash -s -- --dir "$target"
+                  cat install.sh | LUMEN_ARTIFACT_URL="file://${GITHUB_WORKSPACE}/desktop/plugin.js" bash -s -- --dir "$target"
                   test -s "$target/plugin.js"
