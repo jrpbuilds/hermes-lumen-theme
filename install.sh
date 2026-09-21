@@ -85,7 +85,7 @@ done_message() {
 # Piped execution has no script file (BASH_SOURCE is empty): install the
 # committed artifact directly.
 if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
-  ARTIFACT_URL="${LUMEN_ARTIFACT_URL:-https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/v1.0.0/plugin.js}"
+  ARTIFACT_URL="${LUMEN_ARTIFACT_URL:-https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/v1.1.0/desktop/plugin.js}"
   INSTALL_DIR="${LUMEN_INSTALL_DIR:-}"
 
   while [ $# -gt 0 ]; do
