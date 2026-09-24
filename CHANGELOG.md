@@ -2,6 +2,16 @@
 
 All notable Lumen releases are documented here.
 
+## [1.2.0]
+
+### Changed
+
+- Remove obsolete Kanban drawer styling and use Hermes Desktop’s native, large task dialog.
+- Give the Activity, Runs and Worker log panels inset surfaces and muted run badges a purple tint, without changing their native heights.
+- Paint the task dialog feed tabs’ active pill in the theme purple in dark mode.
+- Restore the purple count lozenge on the Kanban board header in both modes.
+- Extend the light-mode purple composer primary control to its Send and Stop states, so the streaming Stop button no longer stays black next to the purple voice button.
+
 ## [1.1.0]
 
 ### Added

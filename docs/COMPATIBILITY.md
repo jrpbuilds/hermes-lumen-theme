@@ -6,7 +6,7 @@ Hermes Desktop updates can change the anchor points even when Lumen's code is
 untouched. This file records what the current release was validated against
 and where the fragile anchors are, so an app update has a concrete checklist.
 
-**Validated against: Hermes Desktop v0.21.x** (hermes-agent `apps/desktop`).
+**Core theme contracts validated against: Hermes Desktop v0.21.x** (hermes-agent `apps/desktop`). The native Kanban task dialog was inspected in local Hermes Agent source at commit `074349fb27`.
 
 **Bots integration:** validated against the hermes-bots DOM installed alongside
 that Desktop build; hermes-bots is separately versioned and is not vendored in
@@ -34,6 +34,10 @@ Runtime seams the build relies on:
   vars, so palette edits in `src/palettes.ts` flow through automatically.
 - The app stamps `data-hermes-theme` / `data-hermes-mode` on `:root`; every
   clarity-layer rule is scoped to those attributes.
+- Hermes owns the Kanban board and centered task dialog. Its native dialog
+  width is `min(62rem, 94vw)`; the shared 18px root scale makes that cap
+  about 1116px. Lumen only colors the Activity, Runs, and Worker log feed
+  surfaces and muted run badges; it does not change native dimensions.
 - Theme typography uses the self-hosted Manrope faces embedded in the clarity
   layer and `fontSans` as the fallback stack; no font network request is needed.
   `fontMono` relies on the JetBrains Mono faces bundled by Hermes Desktop, then
@@ -46,15 +50,18 @@ Runtime seams the build relies on:
 
 Ordered roughly by breakage likelihood:
 
-1. **Kanban drawer** (`src/styles/kanban.css`) — every rule anchors on the
-   TaskDrawer's exact Tailwind utility chain
-   `[class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']`
-   and descendants (`w-[26rem]`, `overscroll-contain`, `nth-child(2)`,
-   `bg-(--ui-bg-quaternary)`, `data-selectable-text`). A utility rename here
-   silently un-styles the drawer. The width guard is viewport-based, so verify
-   it again when the workspace pane is narrower than the window. Symptom:
-   drawer back to 26rem, plain wells, default lozenges, or overflow into an
-   adjacent pane.
+1. **Kanban feed accents** (`src/styles/kanban.css`) — the native task
+   dialog has `data-slot='dialog-content'` but no Kanban-specific hook. Lumen
+   identifies its unique `w-[min(62rem,94vw)]` class, then the feed
+   section and `FadeScroll` utility classes. Only Activity, Runs, and
+   Worker log have that scroll wrapper; Comments does not. The dark-mode
+   active tab pill also anchors the `SegmentedControl` track utilities
+   (`inline-grid` + `auto-cols-fr`) — the only `aria-pressed` control in the
+   dialog. The board header count lozenge anchors its exact utility combo
+   (`rounded-full` + `bg-(--ui-bg-quaternary)` + `py-px` + `tabular-nums`),
+   unique to it in the app today. If these hooks change, the inset fill,
+   purple muted run badge, dark active-tab tint, or purple lozenge reverts.
+   Heights and scrolling remain app-owned.
 2. **Session rows** (`src/styles/sidebar.css`) — matches
    `.row-hover[class*='bg-(--ui-row-active-background)']`, the title hook
    `.hover-marquee`, and the escaped arbitrary-value classes
@@ -158,24 +165,25 @@ Ordered roughly by breakage likelihood:
 
 Stable-by-design anchors: `data-slot` component primitives
 (`input`, `textarea`, `select-trigger`, `select-content`, `select-item`,
-`composer-surface`, `sidebar-content`, `sidebar-group`, `badge`),
+`dialog-content`, `badge`,
+`composer-surface`, `sidebar-content`, `sidebar-group`),
 `data-sidebar='menu-button'`, and the `data-hermes-*` skin attributes.
 
 ## Fragile selector inventory
 
-| Surface       | Stable anchor used by Lumen                                                                                                              | Contained fallback                                                                                                                              | Failure symptom                                                   |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Kanban drawer | `data-slot='badge'`, `textarea`, `data-selectable-text`                                                                                  | The drawer root and its layout nodes have no drawer-specific data hook, so the exact TaskDrawer utility chain remains in `kanban.css`.          | Drawer width, wells, lozenges, or scrollbar treatment reverts.    |
-| Bots pane     | `data-slot='bots-roster'`, `bots-section`, `bots-section-heading`, `connection-glyph`, `data-roster-key`, and group-chat message content | Toolbar, heading typography, and group-chat log geometry retain their documented utility chains beneath the Bots roots.                         | Bot rows, headings, search, or group-chat spacing reverts.        |
-| Session rows  | `data-tour='sessions-sidebar'` and `data-row-actions`                                                                                    | Hermes exposes no semantic selected-row, title, or metadata hook, so the row state and title utility classes remain under the sessions sidebar. | Selected-row outline, title weight, or metadata contrast reverts. |
-| Profile rail  | `data-slot='profile-rail'`                                                                                                               | Drag and disabled square states have no individual hooks; their utility predicates are now contained under the profile-rail root.               | Rail control glyphs return to the app's muted treatment.          |
+| Surface      | Stable anchor used by Lumen                                                                                                              | Contained fallback                                                                                                                              | Failure symptom                                                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Kanban feed  | `data-slot='dialog-content'` and `badge`                                                                                                 | The modal width class and feed `FadeScroll` utilities identify the three tab panels; the header lozenge keeps its exact utility combo.          | Activity, Runs, or Worker log fill, run badge tint, header lozenge, or dark tab tint reverts. |
+| Bots pane    | `data-slot='bots-roster'`, `bots-section`, `bots-section-heading`, `connection-glyph`, `data-roster-key`, and group-chat message content | Toolbar, heading typography, and group-chat log geometry retain their documented utility chains beneath the Bots roots.                         | Bot rows, headings, search, or group-chat spacing reverts.                                    |
+| Session rows | `data-tour='sessions-sidebar'` and `data-row-actions`                                                                                    | Hermes exposes no semantic selected-row, title, or metadata hook, so the row state and title utility classes remain under the sessions sidebar. | Selected-row outline, title weight, or metadata contrast reverts.                             |
+| Profile rail | `data-slot='profile-rail'`                                                                                                               | Drag and disabled square states have no individual hooks; their utility predicates are now contained under the profile-rail root.               | Rail control glyphs return to the app's muted treatment.                                      |
 
 ## Update checklist
 
 1. Bump a dev install (`npm run dev`) against the new Hermes build.
 2. Walk the surfaces in the order above: chat + composer, forms/dropdowns,
    sessions sidebar (search, sections, rows, rail, scrollbar), Bots sidebar
-   (surface, headings, rows, search, scrollbar), Kanban drawer, capabilities
+   (surface, headings, rows, search, scrollbar), Kanban feed tabs and native task dialog, capabilities
    tabs, embedded picker, light **and** dark.
 3. Check the mirror table for upstream contract changes and refresh the
    vendored types + built-ins fixture.

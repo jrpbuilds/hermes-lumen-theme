@@ -1,273 +1,94 @@
 /*
- * Lumen clarity layer — Kanban task drawer.
- *
- * FRAGILE FALLBACK — TaskDrawer. Hermes v0.21.x exposes no drawer-specific
- * data attribute, so every selector in this file anchors on the exact
- * utility-class chain
- *
- *   [class~='absolute'][class~='inset-y-0'][class~='right-0'][class~='z-20']
- *
- * plus descendant utility classes. Targeting that exact combination ensures no
- * other right-hand sidebar, pane, modal, inspector or plugin drawer is caught,
- * but it breaks if the app's Tailwind classes change. Re-verify after every
- * Hermes Desktop update (see docs/COMPATIBILITY.md).
+ * Lumen accents for the current Hermes Kanban UI: the board header count
+ * lozenge and the native task dialog feed.
+ * FRAGILE FALLBACK — task dialog feed: Hermes has no Kanban-specific dialog
+ * hook, so the native 62rem width class identifies this dialog. The feed
+ * structure below is only used by Activity, Runs, and Worker log. Native
+ * dialog widths, feed heights, and scroll behavior are unchanged.
  */
-
-/* ==========================================================================
-   Task drawer width
-   ========================================================================== */
-
-/*
- * Hermes' Kanban TaskDrawer is specifically:
- *
- *   absolute inset-y-0 right-0 z-20 w-[26rem]
- *
- * 26rem -> 39rem = exactly 50% wider. The viewport guard ensures the board is
- * never completely swallowed on a smaller application window.
- */
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"][class~="w-[26rem]"] {
-    width: min(39rem, calc(100vw - 12rem)) !important;
-}
-
-/* Keep the drawer's task header legible against the scrolling detail pane in
-   both modes without changing its spacing or height. */
-:root[data-hermes-theme="lumen"] [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"] > header {
-    border-bottom: 1px solid var(--lumen-kanban-divider);
-}
-
-/*
- * The task metadata grid (Assignee / Priority / Workspace / Model) is the
- * first detail block but is a plain div, not a <section>, so it receives none
- * of the section padding-top and sat flush against the header divider above.
- * FRAGILE: anchors the app's `grid-cols-[6rem_...]` arbitrary utility (see
- * docs/COMPATIBILITY.md).
- */
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    > div[class~="min-h-0"][class~="flex-1"][class~="overflow-y-auto"]
-    > div[class~="flex"][class~="flex-col"]
-    > div[class~="grid"][class~="grid-cols-[6rem_minmax(0,1fr)]"] {
-    padding-top: 0.875rem;
-}
-
-/*
- * The comment composer's Comment button reads off-center inside its field.
- * Two causes, both fixed here: the inline-level textarea leaves the
- * wrapper's line-box strut (~6px) below it, so the button's offsets resolve
- * against a wrapper taller than the field (block flow removes the strut);
- * and the app pins the button `top-1 right-1`, which gaps 4.5/2 against the
- * Lumen-scale field — center it instead, so it also rides the field's
- * vertical center as the box grows with content.
- * FRAGILE: anchors the drawer root and the button's exact utility combo.
- */
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    div.relative:has(> textarea[data-slot="textarea"])
-    > textarea[data-slot="textarea"] {
-    display: block;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    button[class~="absolute"][class~="top-1"][class~="right-1"] {
-    top: 50%;
-    translate: 0 -50%;
-}
 
 /* ==========================================================================
    Board header count lozenge
    ========================================================================== */
 
 /*
- * The task-count pill in the board page header ("Kanban ⟨62⟩ ⏱"). FRAGILE:
- * anchors the lozenge's exact utility combo — `rounded-full` + `tabular-nums`
- * + `py-px` + `bg-(--ui-bg-quaternary)` is unique to it in the app today (see
- * docs/COMPATIBILITY.md). Painted with the shared purple metadata lozenge
- * tokens, which are mode-aware. The pill shape and padding stay as shipped.
+ * The task-count pill in the board page header ("Kanban ⟨294⟩"). FRAGILE:
+ * anchors the lozenge's exact utility combo — `rounded-full` +
+ * `bg-(--ui-bg-quaternary)` + `py-px` + `tabular-nums` is unique to it in the
+ * app today (see docs/COMPATIBILITY.md). Painted with the same purple
+ * language as the dialog's run badges, mode-aware; pill shape and padding
+ * stay as shipped.
  */
-:root[data-hermes-theme="lumen"]
+:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])
     span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {
-    background: var(--lumen-pill-background) !important;
-    border: 1px solid var(--lumen-pill-border) !important;
-    color: var(--lumen-pill-foreground) !important;
-    font-weight: 500;
-    box-shadow: none;
+    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));
+    color: #5145be;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));
 }
 
-/* ==========================================================================
-   Drawer section separation
-   ========================================================================== */
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    > div[class~="min-h-0"][class~="flex-1"][class~="overflow-y-auto"]
-    > div[class~="flex"][class~="flex-col"]
-    > section {
-    position: relative;
-    padding-top: 0.875rem;
-    border-top: 1px solid var(--lumen-kanban-divider);
+:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]
+    span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {
+    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);
+    color: #d6d0ff;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);
 }
 
 :root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    > div[class~="min-h-0"][class~="flex-1"][class~="overflow-y-auto"]
-    > div[class~="flex"][class~="flex-col"]
-    > section
-    + section {
-    margin-top: 0.125rem;
+    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]
+    section.flex.flex-col.gap-3
+    > div.flex.flex-col.gap-4:has(> div.overflow-y-auto.overscroll-contain) {
+    background-color: var(--lumen-field-surface);
+    border-radius: 0.375rem;
+    box-shadow: 0 0 0 1px var(--lumen-field-border);
 }
 
-/* ==========================================================================
-   Scroll wells
-   ========================================================================== */
-
 :root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"] {
+    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]
+    section.flex.flex-col.gap-3
+    > div.flex.flex-col.gap-4
+    > div.overflow-y-auto.overscroll-contain {
     box-sizing: border-box;
-    padding: 0.625rem 0.75rem 0.625rem 0.625rem;
-    background: var(--lumen-scroll-well-background) !important;
-    border: 1px solid var(--lumen-scroll-well-border);
-    border-radius: 0.625rem;
-    background-clip: padding-box;
-    scrollbar-gutter: stable;
-    scrollbar-color: var(--lumen-scroll-well-scrollbar) transparent;
-    scrollbar-width: thin;
+    padding: 0.375rem 0.5rem;
+}
+
+/* Keep failed run badges red; tint only the native muted status badge. */
+:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])
+    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]
+    section.flex.flex-col.gap-3
+    > div.flex.flex-col.gap-4
+    > div.overflow-y-auto.overscroll-contain
+    > ul
+    [data-slot="badge"].bg-muted {
+    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));
+    color: #5145be;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));
+}
+
+:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]
+    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]
+    section.flex.flex-col.gap-3
+    > div.flex.flex-col.gap-4
+    > div.overflow-y-auto.overscroll-contain
+    > ul
+    [data-slot="badge"].bg-muted {
+    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);
+    color: #d6d0ff;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);
 }
 
 /*
- * Worker Log gets the larger inspection area.
+ * In dark mode the feed tabs' raised active pill is the app's near-black
+ * `bg-background` and reads as mud on the tinted track; paint it with the
+ * same purple language as the run badges instead. Light mode keeps the
+ * native white-on-gray pill.
+ * FRAGILE: anchors the SegmentedControl's track utilities — the only
+ * aria-pressed control inside the task dialog (see docs/COMPATIBILITY.md).
  */
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]:has(
-        > [data-selectable-text="true"][class~="font-mono"][class~="whitespace-pre-wrap"]
-    ) {
-    max-height: 22rem !important;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]
-    > [data-selectable-text="true"][class~="font-mono"][class~="whitespace-pre-wrap"] {
-    padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]
-    > ul {
-    background: transparent;
-}
-
-/* ==========================================================================
-   Dependency IDs
-   ========================================================================== */
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    button[class~="font-mono"][class~="bg-(--ui-bg-quaternary)"] {
-    padding: 0.125rem 0.4375rem !important;
-    background: var(--lumen-pill-background) !important;
-    border: 1px solid var(--lumen-pill-border) !important;
-    border-radius: 0.375rem !important;
-    color: var(--lumen-pill-foreground) !important;
-    font-weight: 500;
-    box-shadow: none;
-    transition:
-        background-color 100ms ease,
-        border-color 100ms ease,
-        color 100ms ease;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    button[class~="font-mono"][class~="bg-(--ui-bg-quaternary)"]:hover {
-    background: color-mix(in srgb, var(--lumen-accent) 24%, var(--lumen-pill-background)) !important;
-    border-color: color-mix(in srgb, var(--lumen-accent) 58%, var(--lumen-pill-border)) !important;
-}
-
-/* ==========================================================================
-   Run status lozenges
-   ========================================================================== */
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]
-    [data-slot="badge"] {
-    padding: 0.125rem 0.4375rem !important;
-    background: var(--lumen-pill-background) !important;
-    border: 1px solid var(--lumen-pill-border) !important;
-    border-radius: 0.375rem !important;
-    color: var(--lumen-pill-foreground) !important;
-    font-weight: 500;
-    box-shadow: none !important;
-}
-
-/* ==========================================================================
-   Nested scrollbars
-   ========================================================================== */
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-button {
-    display: none;
-    width: 0;
-    height: 0;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-track {
-    background: transparent;
-    margin-block: 0.375rem;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-thumb {
-    background: var(--lumen-scroll-well-scrollbar);
-    border: 2px solid transparent;
-    border-radius: 999px;
-    background-clip: padding-box;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--lumen-scroll-well-scrollbar) 80%, var(--ui-text-secondary));
-    border: 2px solid transparent;
-    background-clip: padding-box;
-}
-
-:root[data-hermes-theme="lumen"]
-    [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"]
-    section
-    > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"]::-webkit-scrollbar-corner {
-    background: transparent;
+:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]
+    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]
+    div[class~="inline-grid"][class~="auto-cols-fr"]
+    > button[aria-pressed="true"] {
+    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);
+    color: #d6d0ff;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);
 }

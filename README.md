@@ -55,7 +55,7 @@ workspace layout in the layout picker.
 - **Clearer visual hierarchy** — tuned palettes, terminal ANSI colours,
   stronger text contrast and a readable 18px type scale.
 - **Better dense-work surfaces** — refined sessions and Bots panels, sidebar
-  search, controls, capability pages, Kanban task drawer and worker logs.
+  search, controls and capability pages.
 - **Useful interaction polish** — visible focus states, better dropdowns and a
   full clickable area for sidebar search.
 - **A ready-to-use workspace** — a Lumen layout in the layout picker for

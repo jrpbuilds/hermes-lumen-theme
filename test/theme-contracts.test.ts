@@ -30,7 +30,11 @@ const STYLE_FILES = [
 const LUMEN_SCOPE = ':root[data-hermes-theme="lumen"]'
 
 const FRAGILE_FALLBACKS = [
-    { cssFile: "kanban.css", marker: "FRAGILE FALLBACK — TaskDrawer", stableAnchor: "data-slot='badge'" },
+    {
+        cssFile: "kanban.css",
+        marker: "FRAGILE FALLBACK — task dialog feed",
+        stableAnchor: "data-slot='dialog-content'",
+    },
     { cssFile: "bots.css", marker: "FRAGILE FALLBACK —", stableAnchor: "data-slot='bots-roster'" },
     {
         cssFile: "sidebar.css",
@@ -144,21 +148,6 @@ const SIDEBAR_DOM = `
   <button id="unrelated-profile-control" aria-pressed="true" class="cursor-grab touch-none rounded-[3px] text-[0.5625rem]"></button>
 `
 
-const KANBAN_DOM = `
-  <aside class="absolute inset-y-0 right-0 z-20 w-[26rem]">
-    <header></header>
-    <div class="min-h-0 flex-1 overflow-y-auto">
-      <div class="flex flex-col">
-        <div class="grid grid-cols-[6rem_minmax(0,1fr)]"></div>
-        <section>
-          <div></div>
-          <div class="overflow-y-auto overscroll-contain"><span data-slot="badge"></span></div>
-        </section>
-      </div>
-    </div>
-  </aside>
-`
-
 const CAPABILITIES_DOM = `
   <section>
     <button data-tour="tab-skills"></button>
@@ -168,6 +157,54 @@ const CAPABILITIES_DOM = `
     <p class="text-muted-foreground/70"></p>
     <div class="cm-editor"><div class="cm-gutters"></div></div>
   </section>
+`
+
+/*
+ * Mirrors the native Kanban task dialog's feed structure (Hermes Desktop
+ * plugins/kanban/drawer.tsx at commit 074349fb27): the SegmentedControl tab
+ * row, an Activity/Runs/Worker-log feed wrapped in FadeScroll, a
+ * Comments-shaped feed without one, plus a plain dialog that lacks the
+ * identifying width class. The board header count lozenge sits outside the
+ * dialog, next to a near-miss counter span that must never be caught.
+ */
+const KANBAN_DIALOG_DOM = `
+  <header>
+    <h1>Kanban</h1>
+    <span class="rounded-full bg-(--ui-bg-quaternary) px-1.5 py-px text-[0.625rem] tabular-nums">294</span>
+    <span class="rounded bg-(--ui-bg-quinary) px-1 py-px text-[0.6rem] tabular-nums leading-3.5">7</span>
+  </header>
+  <div data-slot="dialog-content" class="w-[min(62rem,94vw)] max-w-none">
+    <section class="flex flex-col gap-3">
+      <div class="flex items-center justify-between gap-2">
+        <div class="inline-grid auto-cols-fr grid-flow-col gap-0.5 rounded-[5px] bg-(--ui-bg-tertiary) p-0.5">
+          <button aria-pressed="false" class="text-muted-foreground">Comments · 0</button>
+          <button aria-pressed="true" class="bg-background text-foreground shadow-sm">Activity · 37</button>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4">
+        <div class="overflow-y-auto overscroll-contain">
+          <ul class="flex flex-col gap-1.5">
+            <li>
+              <div class="flex items-center gap-2"><span data-slot="badge" class="bg-muted">running</span></div>
+            </li>
+            <li>
+              <div class="flex items-center gap-2"><span data-slot="badge" class="bg-destructive">failed</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4">
+        <ul class="flex flex-col gap-3"><li>comment</li></ul>
+      </div>
+    </section>
+  </div>
+  <div data-slot="dialog-content" class="max-w-none">
+    <section class="flex flex-col gap-3">
+      <div class="flex flex-col gap-4">
+        <div class="overflow-y-auto overscroll-contain"></div>
+      </div>
+    </section>
+  </div>
 `
 
 describe("Lumen theme contracts", () => {
@@ -231,16 +268,22 @@ describe("Lumen theme contracts", () => {
         expect(document.querySelector("#unrelated-profile-control")?.matches(profileRailControl)).toBe(false)
     })
 
-    it("targets the composer surface and light-mode voice control", () => {
+    it("targets the composer surface and every light-mode primary control state", () => {
         document.documentElement.removeAttribute("data-hermes-mode")
-        document.body.innerHTML =
-            '<div data-slot="composer-surface"><button class="bg-foreground"><svg></svg></button></div>'
+        document.body.innerHTML = `
+          <div data-slot="composer-surface">
+            <button class="bg-foreground"><svg></svg></button>
+            <button class="bg-foreground"><span class="codicon codicon-arrow-up"></span></button>
+            <button class="bg-foreground"><span class="block size-2.5 rounded-[0.1875rem] bg-current"></span></button>
+            <button class="bg-foreground" disabled><span class="block size-2.5 rounded-[0.1875rem] bg-current"></span></button>
+          </div>
+        `
 
         const selectors = [
             selector("composer.css", `${LUMEN_SCOPE} [data-slot="composer-surface"]`),
             selector(
                 "composer.css",
-                `${LUMEN_SCOPE}:not([data-hermes-mode="dark"]) [data-slot="composer-surface"] button.bg-foreground:has(svg):not(:disabled)`,
+                `${LUMEN_SCOPE}:not([data-hermes-mode="dark"]) [data-slot="composer-surface"] button.bg-foreground:not(:disabled)`,
             ),
         ]
 
@@ -248,30 +291,19 @@ describe("Lumen theme contracts", () => {
             expect(() => document.querySelectorAll(current), current).not.toThrow()
             expect(document.querySelectorAll(current), current).not.toHaveLength(0)
         }
-    })
 
-    it("targets the Kanban drawer's guarded structural hooks", () => {
-        document.body.innerHTML = KANBAN_DOM
+        // The hover rule is a static contract: it must stay in the file and
+        // parse, but nothing is hovered under jsdom so it matches nothing.
+        const hoverSelector = selector(
+            "composer.css",
+            `${LUMEN_SCOPE}:not([data-hermes-mode="dark"]) [data-slot="composer-surface"] button.bg-foreground:not(:disabled):hover`,
+        )
 
-        const selectors = [
-            selector(
-                "kanban.css",
-                `${LUMEN_SCOPE} [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"][class~="w-[26rem]"]`,
-            ),
-            selector(
-                "kanban.css",
-                `${LUMEN_SCOPE} [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"] > header`,
-            ),
-            selector(
-                "kanban.css",
-                `${LUMEN_SCOPE} [class~="absolute"][class~="inset-y-0"][class~="right-0"][class~="z-20"] section > div:nth-child(2)[class~="overflow-y-auto"][class~="overscroll-contain"] [data-slot="badge"]`,
-            ),
-        ]
+        expect(() => document.querySelectorAll(hoverSelector)).not.toThrow()
 
-        for (const current of selectors) {
-            expect(() => document.querySelectorAll(current), current).not.toThrow()
-            expect(document.querySelectorAll(current), current).not.toHaveLength(0)
-        }
+        // Voice (inline svg), Send (Codicon glyph), and Stop (square span)
+        // all take the purple fill; the disabled dimmed state stays native.
+        expect(document.querySelectorAll(selectors[1])).toHaveLength(3)
     })
 
     it("targets the capabilities tab set and readable editor tiers", () => {
@@ -291,6 +323,71 @@ describe("Lumen theme contracts", () => {
             expect(() => document.querySelectorAll(current), current).not.toThrow()
             expect(document.querySelectorAll(current), current).not.toHaveLength(0)
         }
+    })
+
+    it("targets the Kanban task dialog feed, muted badges, and dark active tab", () => {
+        document.documentElement.removeAttribute("data-hermes-mode")
+        document.body.innerHTML = KANBAN_DIALOG_DOM
+
+        const dialogAnchor = `[data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]`
+        const feedChain = `section.flex.flex-col.gap-3 > div.flex.flex-col.gap-4`
+
+        const selectors = {
+            feedWrapper: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE} ${dialogAnchor} ${feedChain}:has(> div.overflow-y-auto.overscroll-contain)`,
+            ),
+            scrollContainer: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE} ${dialogAnchor} ${feedChain} > div.overflow-y-auto.overscroll-contain`,
+            ),
+            lightBadge: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE}:not([data-hermes-mode="dark"]) ${dialogAnchor} ${feedChain} > div.overflow-y-auto.overscroll-contain > ul [data-slot="badge"].bg-muted`,
+            ),
+            darkBadge: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE}[data-hermes-mode="dark"] ${dialogAnchor} ${feedChain} > div.overflow-y-auto.overscroll-contain > ul [data-slot="badge"].bg-muted`,
+            ),
+            darkActiveTab: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE}[data-hermes-mode="dark"] ${dialogAnchor} div[class~="inline-grid"][class~="auto-cols-fr"] > button[aria-pressed="true"]`,
+            ),
+            lightLozenge: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE}:not([data-hermes-mode="dark"]) span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"]`,
+            ),
+            darkLozenge: selector(
+                "kanban.css",
+                `${LUMEN_SCOPE}[data-hermes-mode="dark"] span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"]`,
+            ),
+        }
+
+        // Only the scroll-wrapped feed matches; the Comments-shaped feed and
+        // the width-class-less dialog stay native.
+        expect(document.querySelectorAll(selectors.feedWrapper)).toHaveLength(1)
+        expect(document.querySelectorAll(selectors.scrollContainer)).toHaveLength(1)
+
+        // Light mode tints only the muted badge; failed badges stay red.
+        expect(document.querySelectorAll(selectors.lightBadge)).toHaveLength(1)
+        expect(document.querySelector(selectors.lightBadge)?.textContent).toBe("running")
+
+        // The board header count lozenge is caught; the near-miss counter
+        // (rounded, quinary background) next to it is not.
+        expect(document.querySelectorAll(selectors.lightLozenge)).toHaveLength(1)
+        expect(document.querySelector(selectors.lightLozenge)?.textContent).toBe("294")
+
+        // Dark-only rules stay inert while no mode is set.
+        expect(document.querySelectorAll(selectors.darkBadge)).toHaveLength(0)
+        expect(document.querySelectorAll(selectors.darkActiveTab)).toHaveLength(0)
+        expect(document.querySelectorAll(selectors.darkLozenge)).toHaveLength(0)
+
+        document.documentElement.setAttribute("data-hermes-mode", "dark")
+        expect(document.querySelectorAll(selectors.darkBadge)).toHaveLength(1)
+        expect(document.querySelectorAll(selectors.darkActiveTab)).toHaveLength(1)
+        expect(document.querySelector(selectors.darkActiveTab)?.textContent).toContain("Activity")
+        expect(document.querySelectorAll(selectors.darkLozenge)).toHaveLength(1)
+        expect(document.querySelectorAll(selectors.lightLozenge)).toHaveLength(0)
     })
 })
 

@@ -48,21 +48,6 @@
     --lumen-row-selected-outline: color-mix(in srgb, var(--dt-ring) 38%, transparent);
 
     /*
-   * Kanban nested scroll wells.
-   */
-    --lumen-scroll-well-background: var(--theme-sidebar-seed);
-    --lumen-scroll-well-border: #c4cbd4;
-    --lumen-scroll-well-scrollbar: #96a1ae;
-    --lumen-kanban-divider: var(--dt-border);
-
-    /*
-   * Purple metadata lozenges.
-   */
-    --lumen-pill-background: color-mix(in srgb, var(--dt-ring) 13%, var(--theme-card-seed));
-    --lumen-pill-border: color-mix(in srgb, var(--dt-ring) 32%, var(--dt-border));
-    --lumen-pill-foreground: #5145be;
-
-    /*
    * Text hierarchy — fixed inks replacing the app's color-mix-derived tiers,
    * for predictable contrast (asserted in test/contrast.test.ts).
    */
@@ -159,21 +144,6 @@
     --lumen-sidebar-divider: #3b444f;
     --lumen-row-hover-outline: color-mix(in srgb, var(--dt-ring) 18%, var(--lumen-sidebar-divider));
     --lumen-row-selected-outline: color-mix(in srgb, var(--dt-ring) 48%, transparent);
-
-    /*
-   * Kanban wells.
-   */
-    --lumen-scroll-well-background: #232a31;
-    --lumen-scroll-well-border: #3e4854;
-    --lumen-scroll-well-scrollbar: #667381;
-    --lumen-kanban-divider: var(--dt-border);
-
-    /*
-   * Purple metadata lozenges.
-   */
-    --lumen-pill-background: color-mix(in srgb, var(--dt-ring) 17%, #232a31);
-    --lumen-pill-border: color-mix(in srgb, var(--dt-ring) 38%, #3e4854);
-    --lumen-pill-foreground: #d6d0ff;
 
     /*
    * Text hierarchy.

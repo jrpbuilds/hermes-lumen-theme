@@ -20,23 +20,27 @@
 }
 
 /*
- * Light-mode voice CTA: the composer primary button with an SVG is the
- * start-voice control; Send/Stop use Codicon or a span and remain unchanged.
+ * Light-mode composer primary control. The app renders Send, Stop, and
+ * start-voice as one slot that swaps contents per state (PRIMARY_ICON_BTN):
+ * start-voice carries an inline SVG, Send a Codicon glyph, and Stop a plain
+ * square span — so the fill is matched on the shared `bg-foreground` utility
+ * rather than on any one child. The purple is the lighter primary (#6558d9 in
+ * Lumen light mode); the disabled state keeps the app's dimmed treatment, and
+ * dark mode keeps the native white-on-black CTA.
  * Tip's asChild trigger replaces Button's data-slot with tooltip-trigger, so
- * this intentionally targets the native button element instead.
- * Keep the existing text color intact — only the standard surface becomes the
- * lighter primary purple (#6558d9 in Lumen light mode). The darker hover
- * surface below is intentionally unchanged.
+ * this intentionally targets the native button element instead. The darker
+ * hover surface below intentionally deepens the app's own `hover:`
+ * foreground mix.
  */
 :root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])
     [data-slot="composer-surface"]
-    button.bg-foreground:has(svg):not(:disabled) {
+    button.bg-foreground:not(:disabled) {
     background: var(--theme-primary) !important;
 }
 
 :root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])
     [data-slot="composer-surface"]
-    button.bg-foreground:has(svg):not(:disabled):hover {
+    button.bg-foreground:not(:disabled):hover {
     background: color-mix(in srgb, var(--dt-accent-foreground) 90%, #000) !important;
 }
 

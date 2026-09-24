@@ -74,7 +74,7 @@ edits to `src/` appear in the running app within a couple of seconds.
 | `src/lumen-layout.ts`   | The workspace layout tree contributed to the `layouts` area                         |
 | `src/behaviors/`        | DOM behaviors (sidebar search focus and section glyph injection)                    |
 | `src/styles/tokens.css` | Design tokens; every value scoped to `[data-hermes-theme='lumen']`                  |
-| `src/styles/*.css`      | Per-surface clarity layer (sidebar, forms, kanban, …)                               |
+| `src/styles/*.css`      | Per-surface clarity layer (sidebar, forms, Bots, Kanban feed, …)                    |
 | `src/types/`            | Vendored mirrors of the app's plugin/theme/layout contracts                         |
 | `test/`                 | Vitest suites (see below)                                                           |
 | `scripts/`              | build / sync / check-artifact plumbing                                              |
