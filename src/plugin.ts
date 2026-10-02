@@ -27,6 +27,7 @@ import conversationCss from "./styles/conversation.css"
 import focusCss from "./styles/focus.css"
 import formsCss from "./styles/forms.css"
 import kanbanCss from "./styles/kanban.css"
+import reviewCss from "./styles/review.css"
 import sidebarCss from "./styles/sidebar.css"
 import tokensCss from "./styles/tokens.css"
 import { theme, THEME_NAME } from "./theme"
@@ -47,6 +48,7 @@ const CSS = [
     botsCss,
     composerCss,
     kanbanCss,
+    reviewCss,
     capabilitiesCss,
     focusCss,
 ].join("\n")
