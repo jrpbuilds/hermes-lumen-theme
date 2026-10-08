@@ -2,6 +2,20 @@
 
 All notable Lumen releases are documented here.
 
+## [1.3.0]
+
+### Added
+
+- Paint the raised active pill of every SegmentedControl tab group (review scope tabs, Kanban task dialog, settings pages, Bots dialogs, command center) in the theme purple, in light and dark.
+- Equalize the sessions-sidebar section header pills: header action controls (the "+" and filter menu) are capped to the pill's content box so icon-bearing headers like Projects match the compact Pinned header height.
+
+### Changed
+
+- Retire the review scope-chip layer: Hermes Desktop moved the Review pane's scope tabs to their own row, so the old anchors went dark; the shared SegmentedControl rule now covers that pane.
+- Drop the 2px accent rail from the sessions-sidebar section header pills.
+- Give the capabilities scope divider breathing room on the Skills, Toolsets and Connectors tabs: the "Configuring:" row's divider keeps its place but no longer hugs the tab content — air on both sides, while the Connectors search divider stays put.
+- Soften that same scope divider to a quiet stroke (a color-mix of the secondary stroke toward transparent) so the line above the Connectors, Skills and Toolsets content no longer reads as a heavy rule.
+
 ## [1.2.0]
 
 ### Changed

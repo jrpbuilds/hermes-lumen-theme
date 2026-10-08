@@ -167,11 +167,29 @@
     background: var(--lumen-sidebar-section-tint);
     border: 0;
     border-radius: 0.25rem;
-    /* Same accent language as the selected session row: a crisp 2px inset rail
-     clipped by the card radius, not a floating rounded pseudo-element. */
-    box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 75%, transparent);
     margin-bottom: 0;
     padding: 0.1875rem 0.375rem 0.1875rem 0.5625rem !important;
+}
+
+/*
+ * FRAGILE FALLBACK — a section header's trailing action cluster (the "+" and
+ * filter-menu controls,
+ * apps/desktop/src/app/chat/sidebar/index.tsx) renders the app's `size-6`
+ * (1.5rem) buttons, which outgrow the pill's 1.25rem content box and stretch
+ * icon-bearing headers (Projects) taller than icon-less ones (Pinned). Cap the
+ * cluster's controls to the pill's content box so every section header matches.
+ * The cluster is the header's last child and the only one that holds buttons.
+ * See docs/COMPATIBILITY.md.
+ */
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child
+    > :last-child:has(button)
+    :is(button, [class~="size-6"]) {
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 /*

@@ -777,7 +777,7 @@ var bots_default = `/*
 `;
 
 // src/styles/capabilities.css
-var capabilities_default = '/*\n * Lumen clarity layer \u2014 capabilities surfaces (Skills / Toolsets / MCP /\n * Plugins tabs) and embedded capability pickers.\n *\n * The tab group is located structurally via `data-tour` attributes; text\n * contrast fixes target Tailwind opacity-variant utility classes, which are\n * FRAGILE (see docs/COMPATIBILITY.md).\n */\n\n/*\n * Scope: the one section whose tab bar carries the capability tabs. All\n * `:has()` predicates compound on the section itself, so the rules apply to\n * every descendant regardless of the app\'s internal nesting depth under it.\n */\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(\n        [data-tour="tab-plugins"]\n    )\n    :is(\n        [class~="text-muted-foreground/50"],\n        [class~="text-muted-foreground/60"],\n        [class~="text-muted-foreground/70"],\n        [class~="text-muted-foreground/80"]\n    ) {\n    color: var(--lumen-capabilities-readable-text) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(\n        [data-tour="tab-plugins"]\n    )\n    [class~="text-foreground/85"] {\n    color: var(--ui-text-primary) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(\n        [data-tour="tab-plugins"]\n    )\n    .cm-editor\n    :is(.cm-content, .cm-content span) {\n    color: var(--ui-text-primary) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(\n        [data-tour="tab-plugins"]\n    )\n    .cm-editor\n    .cm-gutters {\n    color: var(--lumen-capabilities-readable-text) !important;\n}\n\n/* ==========================================================================\n   Embedded capability picker\n   ========================================================================== */\n\n/*\n * The picker keeps the three tab anchors it was validated with (no\n * toolsets); same compound-on-the-section scoping as above.\n */\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-mcp"]):has([data-tour="tab-plugins"])\n    div:has(> iframe[src*="embed=picker"]),\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-mcp"]):has([data-tour="tab-plugins"])\n    iframe[src*="embed=picker"] {\n    background: var(--lumen-embed-background) !important;\n    color-scheme: dark;\n}\n';
+var capabilities_default = '/*\n * Lumen clarity layer \u2014 capabilities surfaces (Skills / Toolsets /\n * Connectors / Plugins tabs) and embedded capability pickers.\n *\n * The tab group is located structurally via `data-tour` attributes; text\n * contrast fixes target Tailwind opacity-variant utility classes, which are\n * FRAGILE (see docs/COMPATIBILITY.md).\n */\n\n/*\n * Scope: the one section whose tab bar carries the capability tabs. All\n * `:has()` predicates compound on the section itself, so the rules apply to\n * every descendant regardless of the app\'s internal nesting depth under it.\n */\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(\n        [data-tour="tab-plugins"]\n    )\n    :is(\n        [class~="text-muted-foreground/50"],\n        [class~="text-muted-foreground/60"],\n        [class~="text-muted-foreground/70"],\n        [class~="text-muted-foreground/80"]\n    ) {\n    color: var(--lumen-capabilities-readable-text) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(\n        [data-tour="tab-plugins"]\n    )\n    [class~="text-foreground/85"] {\n    color: var(--ui-text-primary) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(\n        [data-tour="tab-plugins"]\n    )\n    .cm-editor\n    :is(.cm-content, .cm-content span) {\n    color: var(--ui-text-primary) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(\n        [data-tour="tab-plugins"]\n    )\n    .cm-editor\n    .cm-gutters {\n    color: var(--lumen-capabilities-readable-text) !important;\n}\n\n/* ==========================================================================\n   Capabilities scope divider \u2014 breathing room\n   ========================================================================== */\n\n/*\n * The scope selector ("Configuring: \u2026") row closes with a divider above\n * the Skills, Toolsets and Connectors tab content. Give the divider air\n * on both sides \u2014 the selector row\'s bottom padding grows and the tab\n * content wrapper gains top padding, the latter only while the divider\n * is actually above it (the Plugins tab and single-profile setups render\n * no scope row) \u2014 and soften the divider itself so it reads as a quiet\n * separator rather than a full-strength rule on every tab that shows it.\n * The Connectors search divider (tertiary token) is deliberately left\n * alone.\n * FRAGILE FALLBACK \u2014 capabilities scope divider: the scope row is\n * identified by its `border-(--ui-stroke-secondary)` + `py-2` tokens and\n * the tab wrapper by the shell\'s content chain. Stable anchor:\n * data-tour="tab-skills"/"tab-toolsets".\n */\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"])\n    [class~="border-(--ui-stroke-secondary)"][class~="py-2"] {\n    border-bottom-color: color-mix(in srgb, var(--ui-stroke-secondary) 55%, transparent);\n    padding-bottom: 0.75rem;\n}\n\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"])\n    > div:last-child\n    > div:first-child:has(> div:first-child[class~="border-(--ui-stroke-secondary)"][class~="py-2"])\n    > div:last-child {\n    padding-top: 0.75rem;\n}\n\n/* ==========================================================================\n   Embedded capability picker\n   ========================================================================== */\n\n/*\n * The picker keeps the three tab anchors it was validated with (no\n * toolsets); same compound-on-the-section scoping as above.\n */\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])\n    div:has(> iframe[src*="embed=picker"]),\n:root[data-hermes-theme="lumen"]\n    section:has([data-tour="tab-skills"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])\n    iframe[src*="embed=picker"] {\n    background: var(--lumen-embed-background) !important;\n    color-scheme: dark;\n}\n';
 
 // src/styles/composer.css
 var composer_default = '/*\n * Lumen clarity layer \u2014 composer surface.\n */\n\n:root[data-hermes-theme="lumen"] [data-slot="composer-surface"] {\n    background: color-mix(in srgb, var(--ui-bg-input) 94%, var(--ui-bg-editor));\n    border-color: var(--ui-stroke-secondary) !important;\n    border-top-color: color-mix(in srgb, var(--ui-stroke-secondary) 88%, transparent) !important;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-stroke-secondary) 70%, transparent);\n    transition:\n        border-color 120ms ease,\n        box-shadow 120ms ease,\n        background-color 120ms ease;\n}\n\n:root[data-hermes-theme="lumen"] [data-slot="composer-surface"]:focus-within {\n    box-shadow:\n        inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 58%, transparent),\n        0 0 0 1px color-mix(in srgb, var(--lumen-accent) 22%, transparent);\n}\n\n/*\n * Light-mode composer primary control. The app renders Send, Stop, and\n * start-voice as one slot that swaps contents per state (PRIMARY_ICON_BTN):\n * start-voice carries an inline SVG, Send a Codicon glyph, and Stop a plain\n * square span \u2014 so the fill is matched on the shared `bg-foreground` utility\n * rather than on any one child. The purple is the lighter primary (#6558d9 in\n * Lumen light mode); the disabled state keeps the app\'s dimmed treatment, and\n * dark mode keeps the native white-on-black CTA.\n * Tip\'s asChild trigger replaces Button\'s data-slot with tooltip-trigger, so\n * this intentionally targets the native button element instead. The darker\n * hover surface below intentionally deepens the app\'s own `hover:`\n * foreground mix.\n */\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    [data-slot="composer-surface"]\n    button.bg-foreground:not(:disabled) {\n    background: var(--theme-primary) !important;\n}\n\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    [data-slot="composer-surface"]\n    button.bg-foreground:not(:disabled):hover {\n    background: color-mix(in srgb, var(--dt-accent-foreground) 90%, #000) !important;\n}\n\n/* Match light-mode tooltip surfaces to the voice CTA without changing text. */\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"]) [data-slot="tooltip-content"] {\n    background: var(--dt-accent-foreground) !important;\n}\n\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    [data-slot="tooltip-content"]\n    [data-slot="tooltip-arrow"] {\n    fill: var(--dt-accent-foreground) !important;\n}\n';
@@ -792,101 +792,460 @@ var focus_default = '/*\n * Lumen clarity layer \u2014 focus visibility.\n */\n\
 var forms_default = '/*\n * Lumen clarity layer \u2014 global form controls and dropdown menus.\n *\n * These selectors target the app\'s shadcn-style `data-slot` primitives and the\n * `.desktop-input-chrome` class. They are stable component API relative to the\n * utility-class selectors used elsewhere (see docs/COMPATIBILITY.md).\n */\n\n:root[data-hermes-theme="lumen"]\n    :is(\n        .desktop-input-chrome,\n        [data-slot="input-group"],\n        [data-slot="input"],\n        [data-slot="textarea"],\n        [data-slot="select-trigger"]\n    ) {\n    background: var(--lumen-field-surface) !important;\n    border: 1px solid var(--lumen-field-border) !important;\n    border-radius: 0.375rem !important;\n    color: var(--ui-text-primary) !important;\n    box-shadow: none !important;\n    transition:\n        background-color 120ms ease,\n        border-color 120ms ease,\n        box-shadow 120ms ease;\n}\n\n:root[data-hermes-theme="lumen"]\n    :is(\n        input:not([type="checkbox"])\n            :not([type="radio"])\n            :not([type="range"])\n            :not([type="color"])\n            :not([type="file"])\n            :not([type="hidden"])\n            :not([type="button"])\n            :not([type="submit"])\n            :not([type="reset"])\n            :not([type="image"]),\n        textarea,\n        select\n    ) {\n    background-color: var(--lumen-field-surface);\n    border-color: var(--lumen-field-border);\n    color: var(--ui-text-primary);\n}\n\n:root[data-hermes-theme="lumen"]\n    :is(\n        .desktop-input-chrome,\n        [data-slot="input-group"],\n        [data-slot="input"],\n        [data-slot="textarea"],\n        [data-slot="select-trigger"]\n    ):hover:not(:focus):not(:focus-within):not([data-state="open"]) {\n    background: var(--lumen-field-hover-surface) !important;\n    border-color: var(--lumen-field-hover-border) !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    :is(\n        .desktop-input-chrome,\n        [data-slot="input-group"],\n        [data-slot="input"],\n        [data-slot="textarea"],\n        [data-slot="select-trigger"]\n    ):is(:focus, :focus-within, [data-state="open"]) {\n    background: var(--lumen-field-surface) !important;\n    border-color: var(--lumen-accent) !important;\n    outline: none !important;\n    box-shadow: 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, transparent) !important;\n}\n\n:root[data-hermes-theme="lumen"] :is(input, textarea)::placeholder {\n    color: var(--ui-text-tertiary) !important;\n    opacity: 1;\n}\n\n:root[data-hermes-theme="lumen"] [data-slot="select-trigger"] svg {\n    color: var(--ui-text-tertiary);\n    opacity: 0.9 !important;\n}\n\n/* ==========================================================================\n   Dropdown menus\n   ========================================================================== */\n\n:root[data-hermes-theme="lumen"] [data-slot="select-content"] {\n    box-sizing: border-box;\n    width: var(--radix-select-trigger-width) !important;\n    min-width: var(--radix-select-trigger-width) !important;\n    max-width: var(--radix-select-trigger-width) !important;\n    background: var(--ui-bg-elevated) !important;\n    border: 1px solid var(--lumen-field-border) !important;\n    border-radius: 0.5rem !important;\n    box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, #000 18%, transparent) !important;\n}\n\n:root[data-hermes-theme="lumen"] [data-slot="select-item"] {\n    overflow: hidden;\n    border-radius: 0.375rem !important;\n    color: var(--ui-text-secondary);\n    transition:\n        background-color 80ms ease,\n        color 80ms ease;\n}\n\n/*\n * Keep ordinary select rows inside the trigger width. The item text gets a\n * clean two-line clamp for long options, without widening the menu or\n * affecting custom popovers/command menus.\n */\n:root[data-hermes-theme="lumen"]\n    [data-slot="select-content"]\n    [data-slot="select-item"]\n    > [data-radix-select-item-text] {\n    display: -webkit-box;\n    min-width: 0;\n    flex: 1 1 auto;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: normal;\n    -webkit-box-orient: vertical;\n    -webkit-line-clamp: 2;\n    overflow-wrap: anywhere;\n}\n\n:root[data-hermes-theme="lumen"] [data-slot="select-item"]:is(:focus, [data-highlighted]) {\n    background: color-mix(in srgb, var(--lumen-accent) 13%, transparent) !important;\n    color: var(--ui-text-primary) !important;\n    outline: none;\n}\n';
 
 // src/styles/kanban.css
-var kanban_default = '/*\n * Lumen accents for the current Hermes Kanban UI: the board header count\n * lozenge and the native task dialog feed.\n * FRAGILE FALLBACK \u2014 task dialog feed: Hermes has no Kanban-specific dialog\n * hook, so the native 62rem width class identifies this dialog. The feed\n * structure below is only used by Activity, Runs, and Worker log. Native\n * dialog widths, feed heights, and scroll behavior are unchanged.\n */\n\n/* ==========================================================================\n   Board header count lozenge\n   ========================================================================== */\n\n/*\n * The task-count pill in the board page header ("Kanban \u27E8294\u27E9"). FRAGILE:\n * anchors the lozenge\'s exact utility combo \u2014 `rounded-full` +\n * `bg-(--ui-bg-quaternary)` + `py-px` + `tabular-nums` is unique to it in the\n * app today (see docs/COMPATIBILITY.md). Painted with the same purple\n * language as the dialog\'s run badges, mode-aware; pill shape and padding\n * stay as shipped.\n */\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {\n    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));\n    color: #5145be;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));\n}\n\n:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]\n    span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {\n    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);\n    color: #d6d0ff;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4:has(> div.overflow-y-auto.overscroll-contain) {\n    background-color: var(--lumen-field-surface);\n    border-radius: 0.375rem;\n    box-shadow: 0 0 0 1px var(--lumen-field-border);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4\n    > div.overflow-y-auto.overscroll-contain {\n    box-sizing: border-box;\n    padding: 0.375rem 0.5rem;\n}\n\n/* Keep failed run badges red; tint only the native muted status badge. */\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4\n    > div.overflow-y-auto.overscroll-contain\n    > ul\n    [data-slot="badge"].bg-muted {\n    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));\n    color: #5145be;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));\n}\n\n:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4\n    > div.overflow-y-auto.overscroll-contain\n    > ul\n    [data-slot="badge"].bg-muted {\n    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);\n    color: #d6d0ff;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);\n}\n\n/*\n * In dark mode the feed tabs\' raised active pill is the app\'s near-black\n * `bg-background` and reads as mud on the tinted track; paint it with the\n * same purple language as the run badges instead. Light mode keeps the\n * native white-on-gray pill.\n * FRAGILE: anchors the SegmentedControl\'s track utilities \u2014 the only\n * aria-pressed control inside the task dialog (see docs/COMPATIBILITY.md).\n */\n:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    div[class~="inline-grid"][class~="auto-cols-fr"]\n    > button[aria-pressed="true"] {\n    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);\n    color: #d6d0ff;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);\n}\n';
+var kanban_default = '/*\n * Lumen accents for the current Hermes Kanban UI: the board header count\n * lozenge and the native task dialog feed.\n * FRAGILE FALLBACK \u2014 task dialog feed: Hermes has no Kanban-specific dialog\n * hook, so the native 62rem width class identifies this dialog. The feed\n * structure below is only used by Activity, Runs, and Worker log. Native\n * dialog widths, feed heights, and scroll behavior are unchanged.\n */\n\n/* ==========================================================================\n   Board header count lozenge\n   ========================================================================== */\n\n/*\n * The task-count pill in the board page header ("Kanban \u27E8294\u27E9"). FRAGILE:\n * anchors the lozenge\'s exact utility combo \u2014 `rounded-full` +\n * `bg-(--ui-bg-quaternary)` + `py-px` + `tabular-nums` is unique to it in the\n * app today (see docs/COMPATIBILITY.md). Painted with the same purple\n * language as the dialog\'s run badges, mode-aware; pill shape and padding\n * stay as shipped.\n */\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {\n    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));\n    color: #5145be;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));\n}\n\n:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]\n    span[class~="rounded-full"][class~="bg-(--ui-bg-quaternary)"][class~="py-px"][class~="tabular-nums"] {\n    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);\n    color: #d6d0ff;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4:has(> div.overflow-y-auto.overscroll-contain) {\n    background-color: var(--lumen-field-surface);\n    border-radius: 0.375rem;\n    box-shadow: 0 0 0 1px var(--lumen-field-border);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4\n    > div.overflow-y-auto.overscroll-contain {\n    box-sizing: border-box;\n    padding: 0.375rem 0.5rem;\n}\n\n/* Keep failed run badges red; tint only the native muted status badge. */\n:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4\n    > div.overflow-y-auto.overscroll-contain\n    > ul\n    [data-slot="badge"].bg-muted {\n    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));\n    color: #5145be;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));\n}\n\n:root[data-hermes-theme="lumen"][data-hermes-mode="dark"]\n    [data-slot="dialog-content"][class~="w-[min(62rem,94vw)]"]\n    section.flex.flex-col.gap-3\n    > div.flex.flex-col.gap-4\n    > div.overflow-y-auto.overscroll-contain\n    > ul\n    [data-slot="badge"].bg-muted {\n    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);\n    color: #d6d0ff;\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);\n}\n';
 
-// src/styles/review.css
-var review_default = `/*
- * Lumen clarity layer \u2014 Review scope chips and toolbar layout.
+// src/styles/segmented.css
+var segmented_default = `/*
+ * Lumen clarity layer \u2014 SegmentedControl active pill.
  *
- * FRAGILE FALLBACK \u2014 Review has no dedicated data-slot. Identify its aside
- * through the direct header's reveal-suppression hook and SegmentedControl
- * grid utilities, rather than translated labels or a global aria-pressed rule.
- * See docs/COMPATIBILITY.md. All native nodes and interactions stay intact.
+ * FRAGILE FALLBACK \u2014 SegmentedControl exposes no data-slot. Anchor the shared
+ * track through its unique rounded-[5px] utility (the only rounded-[5px] in
+ * the app today; see docs/COMPATIBILITY.md) and reach its options through the
+ * aria-pressed buttons it renders, rather than translated labels or a global
+ * aria-pressed rule. All native nodes and interactions stay intact.
  */
 
-:root[data-hermes-theme="lumen"]
-    aside:has(> [data-suppress-pane-reveal-side] > div[class~="inline-grid"][class~="auto-cols-fr"]) {
-    container-name: lumen-review;
-    container-type: inline-size;
-}
-
-:root[data-hermes-theme="lumen"]
-    aside
-    > [data-suppress-pane-reveal-side]:has(> div[class~="inline-grid"][class~="auto-cols-fr"]) {
-    height: auto;
-    min-height: 1.75rem;
-    padding-block: 0.25rem;
-}
-
-:root[data-hermes-theme="lumen"]
-    aside
-    > [data-suppress-pane-reveal-side]
-    > div[class~="inline-grid"][class~="auto-cols-fr"] {
-    flex-shrink: 0;
-    grid-auto-columns: max-content;
-    max-width: 100%;
-    overflow-x: auto;
-    background: color-mix(in srgb, var(--lumen-accent) 8%, var(--ui-bg-sidebar));
-    border: 1px solid color-mix(in srgb, var(--lumen-accent) 20%, var(--ui-stroke-tertiary));
-    border-radius: 0.375rem;
-}
-
-:root[data-hermes-theme="lumen"]
-    aside
-    > [data-suppress-pane-reveal-side]
-    > div[class~="inline-grid"][class~="auto-cols-fr"]
-    > button[aria-pressed] {
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    line-height: 1.25;
-    white-space: nowrap;
-    color: var(--ui-text-secondary);
-}
-
-:root[data-hermes-theme="lumen"]
-    aside
-    > [data-suppress-pane-reveal-side]
-    > div[class~="inline-grid"][class~="auto-cols-fr"]
+/*
+ * One raised active pill for every SegmentedControl in the app (review scope
+ * tabs, Kanban task dialog tabs, settings pages, Bots dialogs, command
+ * center), painted with the same purple language as the Kanban run badges and
+ * the board header count lozenge. Inactive options and the tinted track stay
+ * native; pill shape and padding remain the component's own.
+ */
+:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])
+    div[class~="rounded-[5px]"]
     > button[aria-pressed="true"] {
-    background: color-mix(in srgb, var(--lumen-accent) 15%, var(--ui-bg-elevated));
-    color: var(--ui-text-primary);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 35%, transparent);
+    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));
+    color: #5145be;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));
 }
 
-:root[data-hermes-theme="lumen"]
-    aside
-    > [data-suppress-pane-reveal-side]
-    > div[class~="inline-grid"][class~="auto-cols-fr"]
-    > button[aria-pressed="false"]:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--lumen-accent) 8%, transparent);
-    color: var(--ui-text-primary);
-}
-
-/* Measure the pane, not the window: a narrow right zone can exist in a wide app. */
-@container lumen-review (max-width: 24rem) {
-    :root[data-hermes-theme="lumen"]
-        aside
-        > [data-suppress-pane-reveal-side]:has(> div[class~="inline-grid"][class~="auto-cols-fr"]) {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) repeat(5, max-content);
-        column-gap: 0.25rem;
-        row-gap: 0.375rem;
-        padding-block: 0.375rem;
-    }
-
-    :root[data-hermes-theme="lumen"]
-        aside
-        > [data-suppress-pane-reveal-side]
-        > div[class~="inline-grid"][class~="auto-cols-fr"] {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        margin-right: 0;
-    }
+:root[data-hermes-theme="lumen"][data-hermes-mode="dark"] div[class~="rounded-[5px]"] > button[aria-pressed="true"] {
+    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);
+    color: #d6d0ff;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);
 }
 `;
 
 // src/styles/sidebar.css
-var sidebar_default = '/*\n * Lumen clarity layer \u2014 sessions sidebar.\n *\n * Structure-anchored selectors below (`data-tour`, `data-slot`, `data-sidebar`\n * attributes) are the app\'s own hooks and reasonably stable. The session-row\n * rules match Tailwind utility classes, which are more fragile \u2014 flagged\n * inline and catalogued in docs/COMPATIBILITY.md.\n */\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > [data-slot="sidebar-group"]:first-child {\n    position: relative;\n    margin-bottom: 0.125rem;\n    padding-bottom: 0.4375rem !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > [data-slot="sidebar-group"]:first-child::after {\n    content: "";\n    position: absolute;\n    left: 0;\n    /* The sessions scroller below reserves a stable scrollbar gutter, so its\n     section border-tops end short of the sidebar padding on the right. Inset\n     this divider by the same gutter width so the two hairlines span an\n     identical box. */\n    right: var(--lumen-sidebar-scrollbar-width);\n    bottom: 0;\n    height: 1px;\n    background: var(--lumen-sidebar-divider);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > [data-slot="sidebar-group"]:first-child\n    [data-sidebar="menu-button"] {\n    width: calc(100% - 0.625rem);\n    border-color: transparent;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > [data-slot="sidebar-group"]:first-child\n    [data-sidebar="menu-button"]:hover {\n    background: var(--ui-control-hover-background);\n}\n\n/* ==========================================================================\n   Sidebar search\n   ========================================================================== */\n\n/*\n * Structural twin of the wrapper located by installSidebarSearchFocus()\n * (src/behaviors/sidebar-search.ts) \u2014 if the app\'s DOM shape changes, change\n * both together.\n */\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > div\n    > div:has(> input[type="text"]) {\n    width: 100%;\n    min-height: 1.875rem;\n    box-sizing: border-box;\n    margin-top: 0.25rem;\n    padding-inline: 0.5rem;\n    background: var(--lumen-field-surface);\n    border: 1px solid var(--lumen-field-border) !important;\n    border-radius: 0.375rem;\n    opacity: 0.92 !important;\n    box-shadow: none;\n    background-clip: padding-box;\n    cursor: text;\n}\n\n/*\n * Sit the search field flush with the sidebar\'s left content edge. The app\n * wraps the SearchField in a `px-2` container\n * (apps/desktop/src/app/chat/sidebar/index.tsx), which insets it 0.5rem\n * further left than the nav items above and the session sections below.\n * Dropping only the left inset keeps the wrapper\'s own right-edge geometry.\n * FRAGILE: anchors the app\'s `px-2` search wrapper utility (see\n * docs/COMPATIBILITY.md).\n */\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > div:has(> div > input[type="text"]) {\n    padding-left: 0;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > div\n    > div:has(> input[type="text"])\n    > input[type="text"] {\n    background: transparent !important;\n    background-color: transparent !important;\n    border: 0 !important;\n    border-color: transparent !important;\n    border-radius: 0 !important;\n    outline: 0 !important;\n    box-shadow: none !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > div\n    > div:has(> input[type="text"]):focus-within {\n    border-color: var(--lumen-accent) !important;\n    opacity: 1 !important;\n    box-shadow: 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, transparent);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > div\n    > div:has(> input[type="text"])\n    svg {\n    color: var(--ui-text-tertiary);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > div\n    > div:has(> input[type="text"])\n    input::placeholder {\n    color: var(--ui-text-tertiary);\n    opacity: 1;\n}\n\n/* ==========================================================================\n   Sidebar sections\n   ========================================================================== */\n\n/*\n * Section spacing is symmetric around each divider: the divider\'s own\n * margin-top matches the group\'s padding-top below it. The app\'s SidebarGroup\n * ships `p-2` (0.5rem bottom padding) which doubled the gap under the header\n * pill before the next divider \u2014 dropped to 0 so collapsed sections close up\n * flush (see the group-content rule below for the open-section counterpart).\n */\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] [data-sessions-mode] > [data-slot="sidebar-group"] {\n    border-top: 1px solid var(--lumen-sidebar-divider);\n    margin-top: 0.375rem;\n    padding-top: 0.375rem !important;\n    padding-bottom: 0 !important;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    > div:first-child {\n    min-height: 1.625rem;\n    box-sizing: border-box;\n    background: var(--lumen-sidebar-section-tint);\n    border: 0;\n    border-radius: 0.25rem;\n    /* Same accent language as the selected session row: a crisp 2px inset rail\n     clipped by the card radius, not a floating rounded pseudo-element. */\n    box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 75%, transparent);\n    margin-bottom: 0;\n    padding: 0.1875rem 0.375rem 0.1875rem 0.5625rem !important;\n}\n\n/*\n * Header-to-rows separation rides the group-content element instead of the\n * header pill\'s margin: the app only renders group content while a section\n * is open ({sectionOpen && <SidebarGroupContent>}), so collapsed sections\n * have nothing to push the next divider away and sit flush with the same\n * gap the divider has above the pill. Open sections keep the same 0.25rem\n * breathing room the pill margin used to provide.\n */\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    > [data-slot="sidebar-group-content"] {\n    margin-top: 0.25rem;\n    padding-inline: 0.0625rem;\n}\n\n/*\n * Sections that carry their own glyph (messaging channels pass a platform\n * avatar as the label icon) don\'t need the label\'s little dither square\n * doubling it. Sections without one \u2014 Cron jobs \u2014 keep the square. The label\n * span is the square\'s parent, and it is only ever not the header button\'s\n * first child when a glyph precedes it.\n */\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    > div:first-child\n    button\n    > span:not(:first-child)\n    > .dither {\n    display: none;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    > div:first-child\n    button\n    > span:has(> .dither):not(:first-child) {\n    padding-left: 0;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    > div:first-child\n    button\n    > span:has(> .lumen-section-glyph) {\n    padding-left: 0;\n}\n\n/*\n * Icon-less sections (Pinned, Cron jobs, Sessions, \u2026): the behavior layer\n * injects a matching codicon into the label\'s dither square; this shapes the\n * square into a chip the size of the platform avatars, tinted in the accent\n * language the pill already speaks.\n */\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .lumen-section-glyph {\n    box-sizing: border-box;\n    display: grid;\n    place-items: center;\n    width: 1rem;\n    height: 1rem;\n    border-radius: 0.25rem;\n    background: color-mix(in srgb, var(--lumen-accent) 14%, transparent);\n}\n\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .lumen-section-glyph > .codicon {\n    font-size: 0.625rem;\n    color: var(--theme-primary);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    [data-sidebar="menu-button"],\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    button[role="button"] {\n    box-shadow: none;\n}\n\n/* ==========================================================================\n   Session rows\n   ========================================================================== */\n\n/*\n * FRAGILE FALLBACK \u2014 matches the app\'s Tailwind utility classes, including the escaped\n * arbitrary-value classes `.text-(--ui-text-tertiary)` / quaternary. Re-verify\n * these after every Hermes Desktop update (see docs/COMPATIBILITY.md).\n */\n\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover {\n    transition:\n        background-color 120ms ease,\n        box-shadow 120ms ease,\n        transform 120ms ease;\n}\n\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover:hover {\n    box-shadow: inset 0 0 0 1px var(--lumen-row-hover-outline);\n}\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover[class*="bg-(--ui-row-active-background)"] {\n    box-shadow: inset 0 0 0 1px var(--lumen-row-selected-outline);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    .row-hover[class*="bg-(--ui-row-active-background)"]:hover {\n    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 52%, transparent);\n}\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    .row-hover[class*="bg-(--ui-row-active-background)"]\n    .text-\\(--ui-text-tertiary\\),\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    .row-hover[class*="bg-(--ui-row-active-background)"]\n    .text-\\(--ui-text-quaternary\\) {\n    color: color-mix(in srgb, var(--ui-text-secondary) 92%, var(--ui-text-primary)) !important;\n}\n\n/* Keep the selected session title prominent without changing its metadata. */\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    .row-hover[class*="bg-(--ui-row-active-background)"]\n    .hover-marquee {\n    font-weight: 600;\n}\n\n:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover [data-row-actions] button {\n    border-radius: 0.3125rem;\n}\n\n/* ==========================================================================\n   Profile rail\n   ========================================================================== */\n\n/*\n * FRAGILE FALLBACK \u2014 profile rail controls. Hermes exposes the stable\n * `profile-rail` root but not separate hooks for its draggable and disabled\n * squares, so the utility predicates remain contained beneath that root.\n */\n\n:root[data-hermes-theme="lumen"]\n    [data-slot="profile-rail"]\n    :is(\n        button.cursor-grab.touch-none.rounded-\\[3px\\].text-\\[0\\.5625rem\\][aria-pressed],\n        button.opacity-35.rounded-\\[3px\\].text-\\[0\\.5625rem\\]\n    ) {\n    color: var(--lumen-profile-rail-glyph) !important;\n    opacity: 0.92 !important;\n    filter: none !important;\n}\n\n/* ==========================================================================\n   Sidebar scrollbar\n   ========================================================================== */\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar {\n    width: var(--lumen-sidebar-scrollbar-width);\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar-track {\n    background: transparent;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar-thumb {\n    background: color-mix(in srgb, var(--ui-text-tertiary) 28%, transparent);\n    border: 3px solid transparent;\n    border-radius: 999px;\n    background-clip: padding-box;\n}\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar-thumb:hover {\n    background: color-mix(in srgb, var(--ui-text-secondary) 42%, transparent);\n    border: 2px solid transparent;\n    background-clip: padding-box;\n}\n\n/* ==========================================================================\n   Section hover\n   ========================================================================== */\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    [data-sessions-mode]\n    > [data-slot="sidebar-group"]\n    > div:first-child:hover {\n    background: color-mix(in srgb, var(--lumen-accent) 10%, var(--ui-bg-sidebar));\n}\n\n/* ==========================================================================\n   Active top navigation\n   ========================================================================== */\n\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > [data-slot="sidebar-group"]:first-child\n    [data-sidebar="menu-button"][aria-current="page"],\n:root[data-hermes-theme="lumen"]\n    [data-tour="sessions-sidebar"]\n    > [data-slot="sidebar-content"]\n    > [data-slot="sidebar-group"]:first-child\n    [data-sidebar="menu-button"][data-active="true"] {\n    box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 72%, transparent);\n}\n';
+var sidebar_default = `/*
+ * Lumen clarity layer \u2014 sessions sidebar.
+ *
+ * Structure-anchored selectors below (\`data-tour\`, \`data-slot\`, \`data-sidebar\`
+ * attributes) are the app's own hooks and reasonably stable. The session-row
+ * rules match Tailwind utility classes, which are more fragile \u2014 flagged
+ * inline and catalogued in docs/COMPATIBILITY.md.
+ */
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > [data-slot="sidebar-group"]:first-child {
+    position: relative;
+    margin-bottom: 0.125rem;
+    padding-bottom: 0.4375rem !important;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > [data-slot="sidebar-group"]:first-child::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    /* The sessions scroller below reserves a stable scrollbar gutter, so its
+     section border-tops end short of the sidebar padding on the right. Inset
+     this divider by the same gutter width so the two hairlines span an
+     identical box. */
+    right: var(--lumen-sidebar-scrollbar-width);
+    bottom: 0;
+    height: 1px;
+    background: var(--lumen-sidebar-divider);
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > [data-slot="sidebar-group"]:first-child
+    [data-sidebar="menu-button"] {
+    width: calc(100% - 0.625rem);
+    border-color: transparent;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > [data-slot="sidebar-group"]:first-child
+    [data-sidebar="menu-button"]:hover {
+    background: var(--ui-control-hover-background);
+}
+
+/* ==========================================================================
+   Sidebar search
+   ========================================================================== */
+
+/*
+ * Structural twin of the wrapper located by installSidebarSearchFocus()
+ * (src/behaviors/sidebar-search.ts) \u2014 if the app's DOM shape changes, change
+ * both together.
+ */
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > div
+    > div:has(> input[type="text"]) {
+    width: 100%;
+    min-height: 1.875rem;
+    box-sizing: border-box;
+    margin-top: 0.25rem;
+    padding-inline: 0.5rem;
+    background: var(--lumen-field-surface);
+    border: 1px solid var(--lumen-field-border) !important;
+    border-radius: 0.375rem;
+    opacity: 0.92 !important;
+    box-shadow: none;
+    background-clip: padding-box;
+    cursor: text;
+}
+
+/*
+ * Sit the search field flush with the sidebar's left content edge. The app
+ * wraps the SearchField in a \`px-2\` container
+ * (apps/desktop/src/app/chat/sidebar/index.tsx), which insets it 0.5rem
+ * further left than the nav items above and the session sections below.
+ * Dropping only the left inset keeps the wrapper's own right-edge geometry.
+ * FRAGILE: anchors the app's \`px-2\` search wrapper utility (see
+ * docs/COMPATIBILITY.md).
+ */
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > div:has(> div > input[type="text"]) {
+    padding-left: 0;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > div
+    > div:has(> input[type="text"])
+    > input[type="text"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > div
+    > div:has(> input[type="text"]):focus-within {
+    border-color: var(--lumen-accent) !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, transparent);
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > div
+    > div:has(> input[type="text"])
+    svg {
+    color: var(--ui-text-tertiary);
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > div
+    > div:has(> input[type="text"])
+    input::placeholder {
+    color: var(--ui-text-tertiary);
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Sidebar sections
+   ========================================================================== */
+
+/*
+ * Section spacing is symmetric around each divider: the divider's own
+ * margin-top matches the group's padding-top below it. The app's SidebarGroup
+ * ships \`p-2\` (0.5rem bottom padding) which doubled the gap under the header
+ * pill before the next divider \u2014 dropped to 0 so collapsed sections close up
+ * flush (see the group-content rule below for the open-section counterpart).
+ */
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] [data-sessions-mode] > [data-slot="sidebar-group"] {
+    border-top: 1px solid var(--lumen-sidebar-divider);
+    margin-top: 0.375rem;
+    padding-top: 0.375rem !important;
+    padding-bottom: 0 !important;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child {
+    min-height: 1.625rem;
+    box-sizing: border-box;
+    background: var(--lumen-sidebar-section-tint);
+    border: 0;
+    border-radius: 0.25rem;
+    margin-bottom: 0;
+    padding: 0.1875rem 0.375rem 0.1875rem 0.5625rem !important;
+}
+
+/*
+ * FRAGILE FALLBACK \u2014 a section header's trailing action cluster (the "+" and
+ * filter-menu controls,
+ * apps/desktop/src/app/chat/sidebar/index.tsx) renders the app's \`size-6\`
+ * (1.5rem) buttons, which outgrow the pill's 1.25rem content box and stretch
+ * icon-bearing headers (Projects) taller than icon-less ones (Pinned). Cap the
+ * cluster's controls to the pill's content box so every section header matches.
+ * The cluster is the header's last child and the only one that holds buttons.
+ * See docs/COMPATIBILITY.md.
+ */
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child
+    > :last-child:has(button)
+    :is(button, [class~="size-6"]) {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/*
+ * Header-to-rows separation rides the group-content element instead of the
+ * header pill's margin: the app only renders group content while a section
+ * is open ({sectionOpen && <SidebarGroupContent>}), so collapsed sections
+ * have nothing to push the next divider away and sit flush with the same
+ * gap the divider has above the pill. Open sections keep the same 0.25rem
+ * breathing room the pill margin used to provide.
+ */
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > [data-slot="sidebar-group-content"] {
+    margin-top: 0.25rem;
+    padding-inline: 0.0625rem;
+}
+
+/*
+ * Sections that carry their own glyph (messaging channels pass a platform
+ * avatar as the label icon) don't need the label's little dither square
+ * doubling it. Sections without one \u2014 Cron jobs \u2014 keep the square. The label
+ * span is the square's parent, and it is only ever not the header button's
+ * first child when a glyph precedes it.
+ */
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child
+    button
+    > span:not(:first-child)
+    > .dither {
+    display: none;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child
+    button
+    > span:has(> .dither):not(:first-child) {
+    padding-left: 0;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child
+    button
+    > span:has(> .lumen-section-glyph) {
+    padding-left: 0;
+}
+
+/*
+ * Icon-less sections (Pinned, Cron jobs, Sessions, \u2026): the behavior layer
+ * injects a matching codicon into the label's dither square; this shapes the
+ * square into a chip the size of the platform avatars, tinted in the accent
+ * language the pill already speaks.
+ */
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .lumen-section-glyph {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    background: color-mix(in srgb, var(--lumen-accent) 14%, transparent);
+}
+
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .lumen-section-glyph > .codicon {
+    font-size: 0.625rem;
+    color: var(--theme-primary);
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    [data-sidebar="menu-button"],
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    button[role="button"] {
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   Session rows
+   ========================================================================== */
+
+/*
+ * FRAGILE FALLBACK \u2014 matches the app's Tailwind utility classes, including the escaped
+ * arbitrary-value classes \`.text-(--ui-text-tertiary)\` / quaternary. Re-verify
+ * these after every Hermes Desktop update (see docs/COMPATIBILITY.md).
+ */
+
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover {
+    transition:
+        background-color 120ms ease,
+        box-shadow 120ms ease,
+        transform 120ms ease;
+}
+
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover:hover {
+    box-shadow: inset 0 0 0 1px var(--lumen-row-hover-outline);
+}
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover[class*="bg-(--ui-row-active-background)"] {
+    box-shadow: inset 0 0 0 1px var(--lumen-row-selected-outline);
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    .row-hover[class*="bg-(--ui-row-active-background)"]:hover {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 52%, transparent);
+}
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    .row-hover[class*="bg-(--ui-row-active-background)"]
+    .text-\\(--ui-text-tertiary\\),
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    .row-hover[class*="bg-(--ui-row-active-background)"]
+    .text-\\(--ui-text-quaternary\\) {
+    color: color-mix(in srgb, var(--ui-text-secondary) 92%, var(--ui-text-primary)) !important;
+}
+
+/* Keep the selected session title prominent without changing its metadata. */
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    .row-hover[class*="bg-(--ui-row-active-background)"]
+    .hover-marquee {
+    font-weight: 600;
+}
+
+:root[data-hermes-theme="lumen"] [data-tour="sessions-sidebar"] .row-hover [data-row-actions] button {
+    border-radius: 0.3125rem;
+}
+
+/* ==========================================================================
+   Profile rail
+   ========================================================================== */
+
+/*
+ * FRAGILE FALLBACK \u2014 profile rail controls. Hermes exposes the stable
+ * \`profile-rail\` root but not separate hooks for its draggable and disabled
+ * squares, so the utility predicates remain contained beneath that root.
+ */
+
+:root[data-hermes-theme="lumen"]
+    [data-slot="profile-rail"]
+    :is(
+        button.cursor-grab.touch-none.rounded-\\[3px\\].text-\\[0\\.5625rem\\][aria-pressed],
+        button.opacity-35.rounded-\\[3px\\].text-\\[0\\.5625rem\\]
+    ) {
+    color: var(--lumen-profile-rail-glyph) !important;
+    opacity: 0.92 !important;
+    filter: none !important;
+}
+
+/* ==========================================================================
+   Sidebar scrollbar
+   ========================================================================== */
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar {
+    width: var(--lumen-sidebar-scrollbar-width);
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--ui-text-tertiary) 28%, transparent);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+}
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    :is([data-slot="sidebar-content"], [data-sessions-mode])::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--ui-text-secondary) 42%, transparent);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* ==========================================================================
+   Section hover
+   ========================================================================== */
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    [data-sessions-mode]
+    > [data-slot="sidebar-group"]
+    > div:first-child:hover {
+    background: color-mix(in srgb, var(--lumen-accent) 10%, var(--ui-bg-sidebar));
+}
+
+/* ==========================================================================
+   Active top navigation
+   ========================================================================== */
+
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > [data-slot="sidebar-group"]:first-child
+    [data-sidebar="menu-button"][aria-current="page"],
+:root[data-hermes-theme="lumen"]
+    [data-tour="sessions-sidebar"]
+    > [data-slot="sidebar-content"]
+    > [data-slot="sidebar-group"]:first-child
+    [data-sidebar="menu-button"][data-active="true"] {
+    box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 72%, transparent);
+}
+`;
 
 // src/styles/tokens.css
 var tokens_default = `/*
@@ -1226,7 +1585,7 @@ var CSS = [
   bots_default,
   composer_default,
   kanban_default,
-  review_default,
+  segmented_default,
   capabilities_default,
   focus_default
 ].join("\n");

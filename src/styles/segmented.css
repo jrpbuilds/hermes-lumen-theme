@@ -1,0 +1,30 @@
+/*
+ * Lumen clarity layer — SegmentedControl active pill.
+ *
+ * FRAGILE FALLBACK — SegmentedControl exposes no data-slot. Anchor the shared
+ * track through its unique rounded-[5px] utility (the only rounded-[5px] in
+ * the app today; see docs/COMPATIBILITY.md) and reach its options through the
+ * aria-pressed buttons it renders, rather than translated labels or a global
+ * aria-pressed rule. All native nodes and interactions stay intact.
+ */
+
+/*
+ * One raised active pill for every SegmentedControl in the app (review scope
+ * tabs, Kanban task dialog tabs, settings pages, Bots dialogs, command
+ * center), painted with the same purple language as the Kanban run badges and
+ * the board header count lozenge. Inactive options and the tinted track stay
+ * native; pill shape and padding remain the component's own.
+ */
+:root[data-hermes-theme="lumen"]:not([data-hermes-mode="dark"])
+    div[class~="rounded-[5px]"]
+    > button[aria-pressed="true"] {
+    background-color: color-mix(in srgb, var(--lumen-accent) 13%, var(--theme-card-seed));
+    color: #5145be;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 32%, var(--dt-border));
+}
+
+:root[data-hermes-theme="lumen"][data-hermes-mode="dark"] div[class~="rounded-[5px]"] > button[aria-pressed="true"] {
+    background-color: color-mix(in srgb, var(--lumen-accent) 17%, #232a31);
+    color: #d6d0ff;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, #3e4854);
+}

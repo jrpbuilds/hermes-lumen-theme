@@ -1,6 +1,6 @@
 /*
- * Lumen clarity layer — capabilities surfaces (Skills / Toolsets / MCP /
- * Plugins tabs) and embedded capability pickers.
+ * Lumen clarity layer — capabilities surfaces (Skills / Toolsets /
+ * Connectors / Plugins tabs) and embedded capability pickers.
  *
  * The tab group is located structurally via `data-tour` attributes; text
  * contrast fixes target Tailwind opacity-variant utility classes, which are
@@ -13,7 +13,7 @@
  * every descendant regardless of the app's internal nesting depth under it.
  */
 :root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
         [data-tour="tab-plugins"]
     )
     :is(
@@ -26,7 +26,7 @@
 }
 
 :root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
         [data-tour="tab-plugins"]
     )
     [class~="text-foreground/85"] {
@@ -34,7 +34,7 @@
 }
 
 :root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
         [data-tour="tab-plugins"]
     )
     .cm-editor
@@ -43,12 +43,46 @@
 }
 
 :root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has(
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
         [data-tour="tab-plugins"]
     )
     .cm-editor
     .cm-gutters {
     color: var(--lumen-capabilities-readable-text) !important;
+}
+
+/* ==========================================================================
+   Capabilities scope divider — breathing room
+   ========================================================================== */
+
+/*
+ * The scope selector ("Configuring: …") row closes with a divider above
+ * the Skills, Toolsets and Connectors tab content. Give the divider air
+ * on both sides — the selector row's bottom padding grows and the tab
+ * content wrapper gains top padding, the latter only while the divider
+ * is actually above it (the Plugins tab and single-profile setups render
+ * no scope row) — and soften the divider itself so it reads as a quiet
+ * separator rather than a full-strength rule on every tab that shows it.
+ * The Connectors search divider (tertiary token) is deliberately left
+ * alone.
+ * FRAGILE FALLBACK — capabilities scope divider: the scope row is
+ * identified by its `border-(--ui-stroke-secondary)` + `py-2` tokens and
+ * the tab wrapper by the shell's content chain. Stable anchor:
+ * data-tour="tab-skills"/"tab-toolsets".
+ */
+:root[data-hermes-theme="lumen"]
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"])
+    [class~="border-(--ui-stroke-secondary)"][class~="py-2"] {
+    border-bottom-color: color-mix(in srgb, var(--ui-stroke-secondary) 55%, transparent);
+    padding-bottom: 0.75rem;
+}
+
+:root[data-hermes-theme="lumen"]
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"])
+    > div:last-child
+    > div:first-child:has(> div:first-child[class~="border-(--ui-stroke-secondary)"][class~="py-2"])
+    > div:last-child {
+    padding-top: 0.75rem;
 }
 
 /* ==========================================================================
@@ -60,10 +94,10 @@
  * toolsets); same compound-on-the-section scoping as above.
  */
 :root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-mcp"]):has([data-tour="tab-plugins"])
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])
     div:has(> iframe[src*="embed=picker"]),
 :root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-mcp"]):has([data-tour="tab-plugins"])
+    section:has([data-tour="tab-skills"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])
     iframe[src*="embed=picker"] {
     background: var(--lumen-embed-background) !important;
     color-scheme: dark;

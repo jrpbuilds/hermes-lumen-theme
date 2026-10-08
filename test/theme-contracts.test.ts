@@ -23,6 +23,7 @@ const STYLE_FILES = [
     "focus.css",
     "forms.css",
     "kanban.css",
+    "segmented.css",
     "sidebar.css",
     "tokens.css",
 ] as const
@@ -45,6 +46,21 @@ const FRAGILE_FALLBACKS = [
         cssFile: "sidebar.css",
         marker: "FRAGILE FALLBACK — profile rail controls",
         stableAnchor: "data-slot='profile-rail'",
+    },
+    {
+        cssFile: "sidebar.css",
+        marker: "FRAGILE FALLBACK — a section header's trailing action cluster",
+        stableAnchor: "data-tour='sessions-sidebar'",
+    },
+    {
+        cssFile: "segmented.css",
+        marker: "FRAGILE FALLBACK — SegmentedControl",
+        stableAnchor: "aria-pressed",
+    },
+    {
+        cssFile: "capabilities.css",
+        marker: "FRAGILE FALLBACK — capabilities scope divider",
+        stableAnchor: "data-tour='tab-skills'",
     },
 ] as const
 
@@ -135,6 +151,15 @@ const SIDEBAR_DOM = `
       <div data-slot="sidebar-group"><button data-sidebar="menu-button"></button></div>
       <div><div><input type="text" /></div></div>
       <div data-sessions-mode>
+        <div data-slot="sidebar-group">
+          <div>
+            <button role="button"></button>
+            <div class="flex shrink-0 items-center gap-0.5">
+              <button aria-label="New session" class="size-6"></button>
+              <div class="grid size-6 place-items-center"><button class="size-6"></button></div>
+            </div>
+          </div>
+        </div>
         <div data-slot="sidebar-group"><div><button role="button"></button></div></div>
       </div>
       <div class="row-hover bg-(--ui-row-active-background)">
@@ -152,11 +177,111 @@ const CAPABILITIES_DOM = `
   <section>
     <button data-tour="tab-skills"></button>
     <button data-tour="tab-toolsets"></button>
-    <button data-tour="tab-mcp"></button>
+    <button data-tour="tab-connectors"></button>
     <button data-tour="tab-plugins"></button>
     <p class="text-muted-foreground/70"></p>
     <div class="cm-editor"><div class="cm-gutters"></div></div>
   </section>
+`
+
+/*
+ * Mirrors the Capabilities page under its PageSearchShell for each tab that
+ * renders the scope selector: Skills, Toolsets and Connectors all show the
+ * "Configuring:" row (border-b + secondary stroke token) above the tab
+ * content wrapper (the shell's content chain). The Connectors tab carries
+ * the search row with the tertiary-stroke divider that must keep its
+ * native position. The Plugins tab renders NO scope row — its wrapper must
+ * not gain padding — and a decoy row outside any section must never be
+ * caught.
+ */
+const CAPABILITIES_TABS_DOM = `
+  <section>
+    <div class="shrink-0">
+      <div data-tour="page-tabs">
+        <button data-tour="tab-skills">Skills</button>
+        <button data-tour="tab-toolsets">Tools</button>
+        <button data-tour="tab-connectors">Connectors</button>
+        <button data-tour="tab-plugins">Plugins</button>
+      </div>
+    </div>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      <div class="flex h-full flex-col">
+        <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
+          <span>Configuring:</span><button>default — This device (current)</button>
+        </div>
+        <div class="flex min-h-0 flex-1 flex-col">
+          <div class="min-h-40 flex-1 overflow-hidden"><p>skills list</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="shrink-0">
+      <div data-tour="page-tabs">
+        <button data-tour="tab-skills">Skills</button>
+        <button data-tour="tab-toolsets">Tools</button>
+        <button data-tour="tab-connectors">Connectors</button>
+        <button data-tour="tab-plugins">Plugins</button>
+      </div>
+    </div>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      <div class="flex h-full flex-col">
+        <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
+          <span>Configuring:</span><button>default — This device (current)</button>
+        </div>
+        <div class="flex min-h-0 flex-1 flex-col">
+          <div class="min-h-0 flex-1"><p>toolsets list</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="shrink-0">
+      <div data-tour="page-tabs">
+        <button data-tour="tab-skills">Skills</button>
+        <button data-tour="tab-toolsets">Tools</button>
+        <button data-tour="tab-connectors">Connectors</button>
+        <button data-tour="tab-plugins">Plugins</button>
+      </div>
+    </div>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      <div class="flex h-full flex-col">
+        <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
+          <span>Configuring:</span><button>default — This device (current)</button>
+        </div>
+        <div class="flex min-h-0 flex-1 flex-col">
+          <div class="min-h-0 flex-1">
+            <div class="flex h-full min-h-0 flex-col gap-3 px-4 pb-2">
+              <div data-slot="connectors-directory" class="flex min-h-0 flex-1 flex-col gap-3">
+                <div class="flex shrink-0 items-center gap-3"><h2>Connectors</h2></div>
+                <div class="flex shrink-0 items-center gap-3 border-b border-(--ui-stroke-tertiary) pb-1.5">
+                  <input type="text" placeholder="Search 65 apps." />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="shrink-0">
+      <div data-tour="page-tabs">
+        <button data-tour="tab-skills">Skills</button>
+        <button data-tour="tab-toolsets">Tools</button>
+        <button data-tour="tab-connectors">Connectors</button>
+        <button data-tour="tab-plugins">Plugins</button>
+      </div>
+    </div>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      <div class="flex h-full flex-col">
+        <div class="flex min-h-0 flex-1 flex-col"><p>plugins list</p></div>
+      </div>
+    </div>
+  </section>
+  <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
+    <span>decoy row outside any section</span>
+  </div>
 `
 
 /*
@@ -207,6 +332,28 @@ const KANBAN_DIALOG_DOM = `
   </div>
 `
 
+/*
+ * Mirrors the app's SegmentedControl track both as the review scope row
+ * renders it (scope-row.tsx — twMerge replaced `inline-grid`/`auto-cols-fr`
+ * with `auto-cols-[minmax(0,auto)]` under the new dedicated row) and as the
+ * Kanban task dialog renders it (plain base classes, `mr-1` passed through).
+ * A near-miss `rounded-[5px]` div without SegmentedControl buttons must never
+ * be caught, and an inactive option must never take the active pill.
+ */
+const SEGMENTED_DOM = `
+  <aside aria-label="Review">
+    <div class="grid-flow-col gap-0.5 rounded-[5px] bg-(--ui-bg-tertiary) p-0.5 hidden w-full auto-cols-[minmax(0,auto)] @[13.5rem]:grid [&>button]:px-2">
+      <button aria-pressed="true" class="bg-background text-foreground shadow-sm"><span>Uncommitted</span></button>
+      <button aria-pressed="false" class="text-muted-foreground"><span>Branch</span></button>
+    </div>
+  </aside>
+  <div class="inline-grid w-fit auto-cols-fr grid-flow-col gap-0.5 rounded-[5px] bg-(--ui-bg-tertiary) p-0.5 mr-1">
+    <button aria-pressed="false" class="text-muted-foreground">Comments · 0</button>
+    <button aria-pressed="true" class="bg-background text-foreground shadow-sm">Activity · 37</button>
+  </div>
+  <div class="rounded-[5px]"><span aria-pressed="true">decoy span</span></div>
+`
+
 describe("Lumen theme contracts", () => {
     beforeEach(() => {
         document.documentElement.setAttribute("data-hermes-theme", "lumen")
@@ -254,6 +401,42 @@ describe("Lumen theme contracts", () => {
             expect(() => document.querySelectorAll(current), current).not.toThrow()
             expect(document.querySelectorAll(current), current).not.toHaveLength(0)
         }
+
+        // The Projects-style header action cluster (the header's last child
+        // holding the "+" and filter-menu buttons) is capped to the pill's
+        // content box; the icon-less section's label-only header has no
+        // action cluster, so nothing there may match.
+        const actionContainment = selector(
+            "sidebar.css",
+            `${LUMEN_SCOPE} [data-tour="sessions-sidebar"] [data-sessions-mode] > [data-slot="sidebar-group"] > div:first-child > :last-child:has(button) :is(button, [class~="size-6"])`,
+        )
+
+        expect(document.querySelectorAll(actionContainment)).toHaveLength(3)
+        // The label-only section header's button is not inside an action cluster:
+        // the header's last child is the button itself, which has no button
+        // descendants, so `:has(button)` excludes it.
+        expect(document.querySelectorAll(`${actionContainment} [role="button"]`)).toHaveLength(0)
+    })
+
+    it("removed the section-pill accent rail and keeps the pill geometry", () => {
+        document.body.innerHTML = SIDEBAR_DOM
+
+        const pill = selector(
+            "sidebar.css",
+            `${LUMEN_SCOPE} [data-tour="sessions-sidebar"] [data-sessions-mode] > [data-slot="sidebar-group"] > div:first-child`,
+        )
+
+        expect(document.querySelectorAll(pill)).toHaveLength(2)
+
+        // The pill's accent rail declaration is gone: no inset x-axis shadow
+        // remains in the pill rule's block (the fixture's rail would otherwise
+        // paint a 2px line on the first section header).
+        const pillRule = readSource("src/styles/sidebar.css").match(
+            /\[data-tour="sessions-sidebar"\]\s+\[data-sessions-mode\]\s+>\s+\[data-slot="sidebar-group"\]\s+>\s+div:first-child\s*\{[\s\S]*?\}/,
+        )
+
+        expect(pillRule?.[0]).toBeDefined()
+        expect(pillRule![0]).not.toMatch(/box-shadow|inset 2px/)
     })
 
     it("contains profile-rail fallbacks beneath Hermes' stable rail hook", () => {
@@ -309,7 +492,7 @@ describe("Lumen theme contracts", () => {
     it("targets the capabilities tab set and readable editor tiers", () => {
         document.body.innerHTML = CAPABILITIES_DOM
 
-        const selectorPrefix = `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-mcp"]):has([data-tour="tab-plugins"])`
+        const selectorPrefix = `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])`
 
         const selectors = [
             selector(
@@ -325,7 +508,64 @@ describe("Lumen theme contracts", () => {
         }
     })
 
-    it("targets the Kanban task dialog feed, muted badges, and dark active tab", () => {
+    it("airs the capabilities scope divider on every tab that shows it", () => {
+        document.body.innerHTML = CAPABILITIES_TABS_DOM
+
+        const selectors = [
+            // The scope selector row's divider gains bottom padding.
+            selector(
+                "capabilities.css",
+                `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]) [class~="border-(--ui-stroke-secondary)"][class~="py-2"]`,
+            ),
+            // The tab content wrapper gains top padding, only while the
+            // divider row actually precedes it.
+            selector(
+                "capabilities.css",
+                `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]) > div:last-child > div:first-child:has(> div:first-child[class~="border-(--ui-stroke-secondary)"][class~="py-2"]) > div:last-child`,
+            ),
+        ]
+
+        // Exactly the three scope rows (Skills, Toolsets, Connectors) are
+        // caught — never the Plugins wrapper or the decoy row.
+        expect(() => document.querySelectorAll(selectors[0])).not.toThrow()
+        expect(document.querySelectorAll(selectors[0])).toHaveLength(3)
+
+        for (const current of selectors) {
+            for (const element of document.querySelectorAll(current)) {
+                expect(element.textContent, current).not.toContain("decoy")
+            }
+        }
+
+        expect(document.querySelectorAll(selectors[1])).toHaveLength(3)
+        expect([...document.querySelectorAll(selectors[1])].map(element => element.textContent?.trim())).toEqual(
+            expect.arrayContaining(["skills list", "toolsets list", "Connectors"]),
+        )
+
+        // The Connectors search divider (tertiary token) is never the scope
+        // row, and the Plugins wrapper — which has no divider above it —
+        // gains no padding.
+        const searchDivider = document.querySelector('[class~="border-(--ui-stroke-tertiary)"]')
+        expect(searchDivider).not.toBeNull()
+        expect([...document.querySelectorAll(selectors[0])]).not.toContain(searchDivider)
+
+        const pluginsWrapper = [...document.querySelectorAll("section")]
+            .at(-1)
+            ?.querySelector("div.flex.h-full.flex-col > div:last-child")
+
+        expect(pluginsWrapper?.textContent).toContain("plugins list")
+        expect([...document.querySelectorAll(selectors[1])]).not.toContain(pluginsWrapper)
+
+        // The divider itself is softened — a color-mix toward transparent on
+        // the scope row's bottom border — so the line reads quiet on every tab
+        // that shows it rather than as a full-strength secondary rule.
+        const scopeRowRule = readSource("src/styles/capabilities.css").match(
+            /\[class~="border-\(--ui-stroke-secondary\)"\]\[class~="py-2"\]\s*\{[\s\S]*?\}/,
+        )
+
+        expect(scopeRowRule?.[0]).toMatch(/border-bottom-color:\s*color-mix\(in srgb, var\(--ui-stroke-secondary\)/)
+    })
+
+    it("targets the Kanban task dialog feed and muted badges", () => {
         document.documentElement.removeAttribute("data-hermes-mode")
         document.body.innerHTML = KANBAN_DIALOG_DOM
 
@@ -348,10 +588,6 @@ describe("Lumen theme contracts", () => {
             darkBadge: selector(
                 "kanban.css",
                 `${LUMEN_SCOPE}[data-hermes-mode="dark"] ${dialogAnchor} ${feedChain} > div.overflow-y-auto.overscroll-contain > ul [data-slot="badge"].bg-muted`,
-            ),
-            darkActiveTab: selector(
-                "kanban.css",
-                `${LUMEN_SCOPE}[data-hermes-mode="dark"] ${dialogAnchor} div[class~="inline-grid"][class~="auto-cols-fr"] > button[aria-pressed="true"]`,
             ),
             lightLozenge: selector(
                 "kanban.css",
@@ -379,15 +615,41 @@ describe("Lumen theme contracts", () => {
 
         // Dark-only rules stay inert while no mode is set.
         expect(document.querySelectorAll(selectors.darkBadge)).toHaveLength(0)
-        expect(document.querySelectorAll(selectors.darkActiveTab)).toHaveLength(0)
         expect(document.querySelectorAll(selectors.darkLozenge)).toHaveLength(0)
 
         document.documentElement.setAttribute("data-hermes-mode", "dark")
         expect(document.querySelectorAll(selectors.darkBadge)).toHaveLength(1)
-        expect(document.querySelectorAll(selectors.darkActiveTab)).toHaveLength(1)
-        expect(document.querySelector(selectors.darkActiveTab)?.textContent).toContain("Activity")
         expect(document.querySelectorAll(selectors.darkLozenge)).toHaveLength(1)
         expect(document.querySelectorAll(selectors.lightLozenge)).toHaveLength(0)
+    })
+
+    it("paints the active SegmentedControl pill app-wide in both modes", () => {
+        document.documentElement.removeAttribute("data-hermes-mode")
+        document.body.innerHTML = SEGMENTED_DOM
+
+        const pillSelector = selector(
+            "segmented.css",
+            `${LUMEN_SCOPE}:not([data-hermes-mode="dark"]) div[class~="rounded-[5px]"] > button[aria-pressed="true"]`,
+        )
+
+        const darkPillSelector = selector(
+            "segmented.css",
+            `${LUMEN_SCOPE}[data-hermes-mode="dark"] div[class~="rounded-[5px]"] > button[aria-pressed="true"]`,
+        )
+
+        // Both tracks' active options (scope row + Kanban dialog) are caught;
+        // the decoy's aria-pressed span is not a SegmentedControl button.
+        expect(document.querySelectorAll(pillSelector)).toHaveLength(2)
+        expect(document.querySelector(pillSelector)?.textContent).toContain("Uncommitted")
+        expect(document.querySelectorAll(`${pillSelector}, [aria-pressed="false"]`)).toHaveLength(4)
+
+        // Dark-only rules stay inert while no mode is set.
+        expect(document.querySelectorAll(darkPillSelector)).toHaveLength(0)
+
+        document.documentElement.setAttribute("data-hermes-mode", "dark")
+        expect(document.querySelectorAll(darkPillSelector)).toHaveLength(2)
+        expect(document.querySelector(darkPillSelector)?.textContent).toContain("Uncommitted")
+        expect(document.querySelectorAll(pillSelector)).toHaveLength(0)
     })
 })
 
