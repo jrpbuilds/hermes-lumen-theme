@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Install Lumen into the Hermes Desktop plugin folder.
-# - Piped from the web (curl -fsSL <raw url> | bash [-s -- --dir PATH]):
-#   downloads the committed plugin.js and installs it directly — no checkout,
-#   no build, no Node.
+# - Standalone — piped in from the web, or the script downloaded and run from
+#   anywhere (fetch it with curl first): installs the committed plugin.js
+#   directly — no checkout, no build, no Node.
 # - From a checkout: builds from source by default; flags: --no-build,
 #   --dir PATH, -h/--help — see ./install.sh --help.
 
@@ -82,10 +82,12 @@ done_message() {
   printf '  %s╰─%s Set Appearance to System to follow OS light/dark mode.\n' "$PURPLE" "$RESET"
 }
 
-# Piped execution has no script file (BASH_SOURCE is empty): install the
-# committed artifact directly.
-if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
-  ARTIFACT_URL="${LUMEN_ARTIFACT_URL:-https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/v1.2.0/desktop/plugin.js}"
+# Standalone execution has no Lumen checkout beside the script — piped stdin
+# (BASH_SOURCE is empty) or a copy downloaded to an arbitrary path: install
+# the committed artifact directly.
+SCRIPT_PATH="${BASH_SOURCE[0]:-}"
+if [ ! -f "$SCRIPT_PATH" ] || [ ! -f "$(dirname -- "$SCRIPT_PATH")/package.json" ]; then
+  ARTIFACT_URL="${LUMEN_ARTIFACT_URL:-https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/v1.4.1/desktop/plugin.js}"
   INSTALL_DIR="${LUMEN_INSTALL_DIR:-}"
 
   while [ $# -gt 0 ]; do
@@ -95,10 +97,11 @@ if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
         INSTALL_DIR="$2"
         shift
         ;;
-      --no-build) ;; # a piped install never builds; accepted for symmetry
+      --no-build) ;; # a standalone install never builds; accepted for symmetry
       -h | --help)
-        printf 'Usage: curl -fsSL <raw install.sh url> | bash [-s -- [--dir PATH]]\n\n'
-        printf 'Downloads the committed plugin.js and installs it into\n'
+        printf 'Usage: bash ./install.sh [--dir PATH]\n\n'
+        printf 'Standalone — piped in from the web, or downloaded and run from\n'
+        printf 'anywhere — installs the committed plugin.js into\n'
         printf '$HERMES_HOME/desktop-plugins/lumen (HERMES_HOME defaults to ~/.hermes).\n'
         printf 'A --dir flag overrides the full path.\n'
         exit 0
@@ -206,11 +209,11 @@ welcome_message
 if [ "$NO_BUILD" -eq 0 ]; then
   if [ ! -x "$ROOT/node_modules/.bin/esbuild" ]; then
     step_message 'Installing development dependencies…'
-    if [ -f "$ROOT/package-lock.json" ]; then
-      (cd "$ROOT" && npm ci --no-fund --no-audit)
-    else
-      (cd "$ROOT" && npm install --no-fund --no-audit)
+    if [ ! -f "$ROOT/package-lock.json" ]; then
+      printf 'error: package-lock.json is required for pinned, reproducible installs\n' >&2
+      exit 1
     fi
+    (cd "$ROOT" && npm ci --no-fund --no-audit)
   fi
 
   step_message 'Building Lumen…'

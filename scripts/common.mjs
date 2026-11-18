@@ -49,6 +49,11 @@ export function buildOptions(outfile) {
         format: "esm",
         target: ["es2022"],
         platform: "browser",
+        // Keep non-ASCII as literal UTF-8 rather than \uXXXX escapes: escape
+        // chains read as obfuscation to Hermes' plugin security scanner and to
+        // human reviewers alike, and the committed artifact is meant to be
+        // read (see minify above).
+        charset: "utf8",
         // Readable output is a feature: the artifact is committed and reviewed.
         minify: false,
         sourcemap: false,

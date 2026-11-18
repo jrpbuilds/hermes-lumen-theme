@@ -2,6 +2,19 @@
 
 All notable Lumen releases are documented here.
 
+## [1.4.1]
+
+### Fixed
+
+- Pass the Hermes plugin security scan clean (was a caution verdict with 28 findings). The bundle is now built with esbuild's `charset: "utf8"`, so the localized sessions-section labels and CSS em-dashes ship as literal UTF-8 instead of `\uXXXX` escape chains the scanner reads as obfuscation.
+- Standalone installer text no longer quotes a download-and-execute one-liner: `install.sh` help/header prose and the maintainer install docs describe fetch-then-run instead, and standalone mode now accepts the script downloaded outside a checkout (it previously fell into checkout mode and errored).
+- Dependency installs are pinned: the committed `package-lock.json` is required and installed with `npm ci`; the unpinned fallback install is gone.
+- The bots-sidebar fixture's remote connection uses a hostname label, so no test fixture trips the hardcoded-IP-port pattern.
+
+### Changed
+
+- The piped-install artifact URL now pins the v1.4.1 release tag (previously still v1.2.0).
+
 ## [1.4.0]
 
 ### Added

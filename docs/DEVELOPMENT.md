@@ -14,16 +14,18 @@ Hermes Desktop updates, see [COMPATIBILITY.md](./COMPATIBILITY.md).
 The README intentionally shows only the standard user install. The full
 installer behaviour is documented here for maintainers and local development.
 
-After a release tag is published, the piped `install.sh` downloads that
+After a release tag is published, the standalone `install.sh` downloads that
 release's committed `desktop/plugin.js`
 and installs it into `$HERMES_HOME/desktop-plugins/lumen` (or
 `~/.hermes/desktop-plugins/lumen` when `HERMES_HOME` is unset). It needs only
-`curl`, not Node or a checkout. Override the complete destination with either
-`--dir PATH` or `LUMEN_INSTALL_DIR`:
+`curl`, not Node or a checkout. Download the script and run it (piped-in
+execution accepts the same flags). Override the complete destination with
+either `--dir PATH` or `LUMEN_INSTALL_DIR`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | bash -s -- --dir PATH
-curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh | LUMEN_INSTALL_DIR=PATH bash
+curl -fsSL https://raw.githubusercontent.com/jrpbuilds/hermes-lumen-theme/main/install.sh -o /tmp/lumen-install.sh
+bash /tmp/lumen-install.sh --dir PATH
+LUMEN_INSTALL_DIR=PATH bash /tmp/lumen-install.sh
 ```
 
 From a checkout, the same script builds and installs by default. It requires

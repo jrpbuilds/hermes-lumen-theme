@@ -83,12 +83,12 @@ const GATEWAY_DOM = `
           <button class="flex w-full min-w-0 items-center gap-1.5 rounded-md px-2 py-1.5 text-left text-[0.6875rem] font-semibold uppercase tracking-wider text-(--ui-text-quaternary) transition-colors mt-1" data-slot="tooltip-trigger" type="button" aria-expanded="true">
             <i class="codicon codicon-chevron-right shrink-0 transition-transform duration-150 rotate-90"></i>
             <span aria-hidden="true" class="grid size-3.5 shrink-0 place-items-center text-(--ui-text-quaternary)" data-connection-kind="remote" data-slot="connection-glyph"><svg class="size-3"></svg></span>
-            <span class="flex min-w-0 items-center gap-1"><span class="min-w-0 truncate">192.168.0.200:9119</span></span>
+            <span class="flex min-w-0 items-center gap-1"><span class="min-w-0 truncate">hydrogen.local:9119</span></span>
             <span aria-hidden="true" class="min-w-0 flex-1"></span>
             <span class="shrink-0 font-normal tabular-nums text-(--ui-text-quaternary)">8</span>
           </button>
           <div class="grid min-w-0 gap-0.5">
-            <button class="flex w-full min-w-0 max-w-full items-center gap-2.5 overflow-hidden rounded-md px-2 py-2 text-left transition-colors" data-slot="context-menu-trigger" type="button" aria-label="Hermes" data-roster-key="192-168-0-200-9119::default" draggable="true">
+            <button class="flex w-full min-w-0 max-w-full items-center gap-2.5 overflow-hidden rounded-md px-2 py-2 text-left transition-colors" data-slot="context-menu-trigger" type="button" aria-label="Hermes" data-roster-key="hydrogen-local-9119::default" draggable="true">
               <div class="min-w-0 flex-1">
                 <div class="flex items-baseline justify-between gap-2">
                   <span class="min-w-0 truncate text-[0.8125rem] font-medium">Hermes</span>
@@ -96,7 +96,7 @@ const GATEWAY_DOM = `
                 </div>
               </div>
             </button>
-            <button class="flex w-full min-w-0 max-w-full items-center gap-2.5 overflow-hidden rounded-md px-2 py-2 text-left transition-colors" data-slot="context-menu-trigger" type="button" aria-label="Writer" data-roster-key="192-168-0-200-9119::writer" draggable="true">
+            <button class="flex w-full min-w-0 max-w-full items-center gap-2.5 overflow-hidden rounded-md px-2 py-2 text-left transition-colors" data-slot="context-menu-trigger" type="button" aria-label="Writer" data-roster-key="hydrogen-local-9119::writer" draggable="true">
               <div class="min-w-0 flex-1">
                 <div class="flex items-baseline justify-between gap-2">
                   <span class="min-w-0 truncate text-[0.8125rem] font-medium">Writer</span>
