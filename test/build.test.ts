@@ -25,8 +25,9 @@ describe("built desktop/plugin.js", () => {
         expect(readableArtifact).toMatch(/\[data-hermes-mode=["']dark["']\]/)
     })
 
-    it("uses the 18px global scale", () => {
-        expect(artifact).toContain("font-size: 18px")
+    it("scales through the app's baseSize field instead of a CSS override", () => {
+        expect(artifact).toContain('baseSize: "1.125rem"')
+        expect(artifact).not.toMatch(/font-size:\s*18px\s*!important/)
     })
 
     it("carries the third-party attribution", () => {
@@ -38,7 +39,7 @@ describe("built desktop/plugin.js", () => {
             "composer-surface",
             "sessions-sidebar",
             "bots-roster",
-            "tab-skills",
+            "lumen-capabilities-readable-text",
             "overscroll-contain",
             "lumen-scaffold-gradient",
         ]) {
@@ -57,15 +58,11 @@ describe("built desktop/plugin.js", () => {
         }
     })
 
-    it("keeps standard select menus aligned and long options contained", () => {
-        for (const marker of [
-            "--radix-select-trigger-width",
-            "data-radix-select-item-text",
-            "-webkit-line-clamp: 2",
-            "overflow-wrap: anywhere",
-        ]) {
-            expect(artifact, marker).toContain(marker)
-        }
+    it("keeps standard select menus aligned with their trigger", () => {
+        // The old [data-radix-select-item-text] two-line clamp is gone:
+        // Radix 2.3.8 no longer emits that attribute.
+        expect(artifact).toContain("--radix-select-trigger-width")
+        expect(artifact).not.toContain("data-radix-select-item-text")
     })
 
     it("bundles the self-hosted Manrope font", () => {

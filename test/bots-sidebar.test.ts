@@ -147,45 +147,50 @@ const FLAT_DOM = `  <div class="flex h-full flex-col">    <div class="flex items
 `
 
 /**
- * Group-chat workspace shape (the in-pane or main-tab room): header, activity
- * panel hairline, log scroller and the log grid with one user message (grey
- * fill) and one bot message.
+ * Group-chat workspace shape (the in-pane or main-tab room) as rebuilt
+ * upstream: a header hairline element, a tertiary-token activity divider, a
+ * `px-4` scroller wrapping the centered `max-w-3xl` log grid with message
+ * rows (`data-room-message`, the app's own user bubble) and a trailing
+ * reply-in-thread link, plus the seated composer in its own surface.
  */
 const ROOM_DOM = `
   <div class="relative flex h-full flex-col">
-    <div class="flex items-center gap-2 px-2.5 pt-2.5 pb-2"><span>Dev Team</span></div>
-    <div class="border-b border-(--ui-stroke-secondary)">
-      <div class="flex items-center gap-1"><button data-slot="row-button" type="button">Activity</button></div>
+    <header class="shrink-0 border-b border-(--ui-stroke-secondary) px-4 pb-2.5 pt-2"><span>Dev Team</span></header>
+    <div class="border-b border-(--ui-stroke-tertiary) px-4">
+      <div class="mx-auto flex w-full max-w-3xl items-center gap-1"><button data-slot="row-button" type="button">Activity</button></div>
     </div>
-    <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-      <div class="grid grid-cols-[minmax(0,1fr)] gap-1.5 px-2.5 pb-2">
-        <div class="group flex items-start gap-2 rounded-md bg-(--chrome-action-hover) px-2 py-1.5">
+    <div class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4">
+      <div class="mx-auto mt-auto grid w-full max-w-3xl grid-cols-[minmax(0,1fr)] gap-0.5 py-4">
+        <div class="group/room-message flex items-start gap-3 py-2" data-room-message="user">
+          <div class="mt-0.5 shrink-0"></div>
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2">
-              <span class="text-[0.7rem] font-semibold text-foreground">You</span>
-              <span class="text-[0.625rem] text-(--ui-text-quaternary)">41 min ago</span>
+            <div class="flex min-h-5 items-center gap-2">
+              <span class="truncate text-[0.8125rem] font-semibold text-foreground">You</span>
+              <span class="shrink-0 text-[0.6875rem] tabular-nums text-(--ui-text-tertiary)">41 min ago</span>
             </div>
-            <div class="min-w-0 text-xs text-(--ui-text-secondary)" data-selectable-text="true" data-slot="group-chat-message-content">
-              <p class="wrap-anywhere leading-(--dt-line-height)">Can you guys investigate this Hermes theme?</p>
+            <div class="w-fit max-w-full rounded-xl border border-(--ui-stroke-tertiary) bg-(--dt-user-bubble) px-3 py-2" data-selectable-text="true">
+              <p class="wrap-anywhere">Can you guys investigate this Hermes theme?</p>
             </div>
           </div>
         </div>
-        <div class="group flex items-start gap-2 px-2 py-1">
-          <div class="mt-0.5 shrink-0"><svg data-bot-face="orchestrator"></svg></div>
+        <div class="group/room-message flex items-start gap-3 py-2" data-room-message="member">
+          <div class="mt-0.5 shrink-0"></div>
           <div class="min-w-0 flex-1">
             <div class="min-w-0 text-xs text-(--ui-text-secondary)" data-selectable-text="true" data-slot="group-chat-message-content">
               <p class="wrap-anywhere leading-(--dt-line-height)">Queued: researcher → reviewer (gated).</p>
             </div>
           </div>
         </div>
+        <button class="w-fit px-2 pb-1 text-left text-[0.65rem] text-(--ui-accent) transition-colors" data-variant="link" type="button">Reply in thread</button>
+        <form class="grid gap-0 px-2 pb-1">
+          <div class="flex items-center gap-1.5"><textarea data-slot="textarea"></textarea></div>
+        </form>
       </div>
     </div>
-    <div class="border-t border-(--ui-stroke-secondary) p-2">
-      <form class="grid gap-0">
-        <div class="flex items-center gap-1.5">
-          <div class="relative min-w-0 flex-1"><textarea data-slot="textarea"></textarea></div>
-          <button class="shrink-0" type="button"></button>
-          <button class="px-2.5 py-1" type="submit">New Thread</button>
+    <div class="px-4">
+      <form class="pb-3 pt-1 mx-auto w-full max-w-3xl">
+        <div class="relative isolate rounded-2xl" data-slot="room-composer-surface">
+          <textarea data-slot="textarea"></textarea>
         </div>
       </form>
     </div>
@@ -314,27 +319,19 @@ const EXPECTATIONS: Expectation[] = [
     },
     {
         selector:
-            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2']",
-        gateway: 0,
-        flat: 0,
-        room: 1,
-    },
-    {
-        selector:
-            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)']",
-        gateway: 0,
-        flat: 0,
-        room: 1,
-    },
-    {
-        selector:
-            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-1.5'][class*='px-2.5'][class*='pb-2'] > div[class*='bg-(--chrome-action-hover)'] [data-slot='group-chat-message-content']",
+            "div.relative.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div[class*='grid-cols-[minmax(0,1fr)]'][class*='gap-0.5'] > button[data-variant='link']",
         gateway: 0,
         flat: 0,
         room: 1,
     },
     {
         selector: "div.relative.flex.h-full.flex-col textarea[data-slot='textarea']",
+        gateway: 0,
+        flat: 0,
+        room: 2,
+    },
+    {
+        selector: "div.relative.flex.h-full.flex-col > header[class*='border-(--ui-stroke-secondary)']",
         gateway: 0,
         flat: 0,
         room: 1,

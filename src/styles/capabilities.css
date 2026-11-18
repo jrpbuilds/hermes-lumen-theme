@@ -1,104 +1,20 @@
 /*
  * Lumen clarity layer — capabilities surfaces (Skills / Toolsets /
- * Connectors / Plugins tabs) and embedded capability pickers.
+ * Connectors / Plugins).
  *
- * The tab group is located structurally via `data-tour` attributes; text
- * contrast fixes target Tailwind opacity-variant utility classes, which are
- * FRAGILE (see docs/COMPATIBILITY.md).
+ * The tab group was rebuilt upstream as `apps/desktop/src/app/capabilities`
+ * with semantic page classes (`.capabilities-page`, `.catalog-*`) and no
+ * per-tab `data-tour="tab-*"` anchors, so the old contrast chain, the
+ * "Configuring:" scope-divider fix, and the embedded-picker backdrop all
+ * lost their anchors and were retired. What remains: one readability lift
+ * for the small muted server/scope labels.
+ *
+ * FRAGILE FALLBACK — capabilities muted label: the lift anchors the exact
+ * utility combo `text-[0.68rem] font-normal text-muted-foreground/60`,
+ * which is unique to those two labels in the app today (the Skills tab's
+ * server filter and the MCP editor's title). If the combo spreads or
+ * changes, re-audit before trusting the containment.
  */
-
-/*
- * Scope: the one section whose tab bar carries the capability tabs. All
- * `:has()` predicates compound on the section itself, so the rules apply to
- * every descendant regardless of the app's internal nesting depth under it.
- */
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
-        [data-tour="tab-plugins"]
-    )
-    :is(
-        [class~="text-muted-foreground/50"],
-        [class~="text-muted-foreground/60"],
-        [class~="text-muted-foreground/70"],
-        [class~="text-muted-foreground/80"]
-    ) {
+:root[data-hermes-theme="lumen"] [class~="text-muted-foreground/60"][class~="text-[0.68rem]"][class~="font-normal"] {
     color: var(--lumen-capabilities-readable-text) !important;
-}
-
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
-        [data-tour="tab-plugins"]
-    )
-    [class~="text-foreground/85"] {
-    color: var(--ui-text-primary) !important;
-}
-
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
-        [data-tour="tab-plugins"]
-    )
-    .cm-editor
-    :is(.cm-content, .cm-content span) {
-    color: var(--ui-text-primary) !important;
-}
-
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has(
-        [data-tour="tab-plugins"]
-    )
-    .cm-editor
-    .cm-gutters {
-    color: var(--lumen-capabilities-readable-text) !important;
-}
-
-/* ==========================================================================
-   Capabilities scope divider — breathing room
-   ========================================================================== */
-
-/*
- * The scope selector ("Configuring: …") row closes with a divider above
- * the Skills, Toolsets and Connectors tab content. Give the divider air
- * on both sides — the selector row's bottom padding grows and the tab
- * content wrapper gains top padding, the latter only while the divider
- * is actually above it (the Plugins tab and single-profile setups render
- * no scope row) — and soften the divider itself so it reads as a quiet
- * separator rather than a full-strength rule on every tab that shows it.
- * The Connectors search divider (tertiary token) is deliberately left
- * alone.
- * FRAGILE FALLBACK — capabilities scope divider: the scope row is
- * identified by its `border-(--ui-stroke-secondary)` + `py-2` tokens and
- * the tab wrapper by the shell's content chain. Stable anchor:
- * data-tour="tab-skills"/"tab-toolsets".
- */
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"])
-    [class~="border-(--ui-stroke-secondary)"][class~="py-2"] {
-    border-bottom-color: color-mix(in srgb, var(--ui-stroke-secondary) 55%, transparent);
-    padding-bottom: 0.75rem;
-}
-
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"])
-    > div:last-child
-    > div:first-child:has(> div:first-child[class~="border-(--ui-stroke-secondary)"][class~="py-2"])
-    > div:last-child {
-    padding-top: 0.75rem;
-}
-
-/* ==========================================================================
-   Embedded capability picker
-   ========================================================================== */
-
-/*
- * The picker keeps the three tab anchors it was validated with (no
- * toolsets); same compound-on-the-section scoping as above.
- */
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])
-    div:has(> iframe[src*="embed=picker"]),
-:root[data-hermes-theme="lumen"]
-    section:has([data-tour="tab-skills"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])
-    iframe[src*="embed=picker"] {
-    background: var(--lumen-embed-background) !important;
-    color-scheme: dark;
 }

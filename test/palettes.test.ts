@@ -13,8 +13,8 @@ import type { DesktopTerminalPalette, DesktopThemeColors } from "../src/types/de
 
 /**
  * Slug list mirrored from the app's built-in presets
- * (apps/desktop/src/themes/presets.ts @ v0.21.x). Contributed themes must not
- * shadow a built-in name — the app drops such contributions silently.
+ * (apps/desktop/src/themes/presets.ts @ v0.23.2+canary). Contributed themes
+ * must not shadow a built-in name — the app drops such contributions silently.
  */
 const BUILTIN_THEME_NAMES = new Set([
     "github",
@@ -23,10 +23,12 @@ const BUILTIN_THEME_NAMES = new Set([
     "everforest",
     "solarized",
     "nous-alt",
+    "classic",
     "midnight",
     "ember",
     "mono",
     "cyberpunk",
+    "slate",
 ])
 
 /** Every non-optional key of DesktopThemeColors. */
@@ -124,6 +126,14 @@ describe("theme contribution", () => {
         expect(typography.fontMono?.length).toBeGreaterThan(0)
         expect(typography.fontSans).toMatch(/^Manrope,/)
         expect(typography.fontUrl).toBeUndefined()
+    })
+
+    it("scales the root through the app's baseSize field, not a CSS override", () => {
+        // 1.125rem = 18px, the scale the clarity layer used to force with
+        // `font-size: 18px !important` on the scoped :root. The app now
+        // paints typography.baseSize as --dt-base-size on the real :root
+        // (themes/context.tsx), so the override is retired.
+        expect(theme.typography?.baseSize).toBe("1.125rem")
     })
 })
 

@@ -87,9 +87,6 @@
 
 :root[data-hermes-theme="lumen"] [data-slot="select-content"] {
     box-sizing: border-box;
-    width: var(--radix-select-trigger-width) !important;
-    min-width: var(--radix-select-trigger-width) !important;
-    max-width: var(--radix-select-trigger-width) !important;
     background: var(--ui-bg-elevated) !important;
     border: 1px solid var(--lumen-field-border) !important;
     border-radius: 0.5rem !important;
@@ -106,24 +103,11 @@
 }
 
 /*
- * Keep ordinary select rows inside the trigger width. The item text gets a
- * clean two-line clamp for long options, without widening the menu or
- * affecting custom popovers/command menus.
+ * Menu alignment is app-owned now: the popper content pins
+ * min-w-(--radix-select-trigger-width) natively (components/ui/select.tsx),
+ * so the old exact-width forcing (and the item-text clamp that went with
+ * it) is retired — forcing max-width with no clamp would clip long options.
  */
-:root[data-hermes-theme="lumen"]
-    [data-slot="select-content"]
-    [data-slot="select-item"]
-    > [data-radix-select-item-text] {
-    display: -webkit-box;
-    min-width: 0;
-    flex: 1 1 auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow-wrap: anywhere;
-}
 
 :root[data-hermes-theme="lumen"] [data-slot="select-item"]:is(:focus, [data-highlighted]) {
     background: color-mix(in srgb, var(--lumen-accent) 13%, transparent) !important;

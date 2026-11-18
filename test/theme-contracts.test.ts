@@ -59,8 +59,8 @@ const FRAGILE_FALLBACKS = [
     },
     {
         cssFile: "capabilities.css",
-        marker: "FRAGILE FALLBACK — capabilities scope divider",
-        stableAnchor: "data-tour='tab-skills'",
+        marker: "FRAGILE FALLBACK — capabilities muted label",
+        stableAnchor: "apps/desktop/src/app/capabilities",
     },
 ] as const
 
@@ -166,7 +166,8 @@ const SIDEBAR_DOM = `
         <span class="hover-marquee"></span>
       </div>
       <div data-slot="profile-rail">
-        <button aria-pressed="true" class="cursor-grab touch-none rounded-[3px] text-[0.5625rem]"></button>
+        <button data-slot="profile-rail-rest-square" class="rounded-[3px] text-[0.5625rem] opacity-55"></button>
+        <button aria-pressed="true" class="cursor-grab touch-none rounded-[3px] text-[0.5625rem] opacity-55"></button>
       </div>
     </div>
   </aside>
@@ -174,114 +175,10 @@ const SIDEBAR_DOM = `
 `
 
 const CAPABILITIES_DOM = `
-  <section>
-    <button data-tour="tab-skills"></button>
-    <button data-tour="tab-toolsets"></button>
-    <button data-tour="tab-connectors"></button>
-    <button data-tour="tab-plugins"></button>
-    <p class="text-muted-foreground/70"></p>
-    <div class="cm-editor"><div class="cm-gutters"></div></div>
+  <section class="capabilities-page">
+    <span class="text-[0.68rem] font-normal text-muted-foreground/60">all servers</span>
+    <span class="text-muted-foreground/60">decoy muted label</span>
   </section>
-`
-
-/*
- * Mirrors the Capabilities page under its PageSearchShell for each tab that
- * renders the scope selector: Skills, Toolsets and Connectors all show the
- * "Configuring:" row (border-b + secondary stroke token) above the tab
- * content wrapper (the shell's content chain). The Connectors tab carries
- * the search row with the tertiary-stroke divider that must keep its
- * native position. The Plugins tab renders NO scope row — its wrapper must
- * not gain padding — and a decoy row outside any section must never be
- * caught.
- */
-const CAPABILITIES_TABS_DOM = `
-  <section>
-    <div class="shrink-0">
-      <div data-tour="page-tabs">
-        <button data-tour="tab-skills">Skills</button>
-        <button data-tour="tab-toolsets">Tools</button>
-        <button data-tour="tab-connectors">Connectors</button>
-        <button data-tour="tab-plugins">Plugins</button>
-      </div>
-    </div>
-    <div class="min-h-0 flex-1 overflow-hidden">
-      <div class="flex h-full flex-col">
-        <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
-          <span>Configuring:</span><button>default — This device (current)</button>
-        </div>
-        <div class="flex min-h-0 flex-1 flex-col">
-          <div class="min-h-40 flex-1 overflow-hidden"><p>skills list</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section>
-    <div class="shrink-0">
-      <div data-tour="page-tabs">
-        <button data-tour="tab-skills">Skills</button>
-        <button data-tour="tab-toolsets">Tools</button>
-        <button data-tour="tab-connectors">Connectors</button>
-        <button data-tour="tab-plugins">Plugins</button>
-      </div>
-    </div>
-    <div class="min-h-0 flex-1 overflow-hidden">
-      <div class="flex h-full flex-col">
-        <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
-          <span>Configuring:</span><button>default — This device (current)</button>
-        </div>
-        <div class="flex min-h-0 flex-1 flex-col">
-          <div class="min-h-0 flex-1"><p>toolsets list</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section>
-    <div class="shrink-0">
-      <div data-tour="page-tabs">
-        <button data-tour="tab-skills">Skills</button>
-        <button data-tour="tab-toolsets">Tools</button>
-        <button data-tour="tab-connectors">Connectors</button>
-        <button data-tour="tab-plugins">Plugins</button>
-      </div>
-    </div>
-    <div class="min-h-0 flex-1 overflow-hidden">
-      <div class="flex h-full flex-col">
-        <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
-          <span>Configuring:</span><button>default — This device (current)</button>
-        </div>
-        <div class="flex min-h-0 flex-1 flex-col">
-          <div class="min-h-0 flex-1">
-            <div class="flex h-full min-h-0 flex-col gap-3 px-4 pb-2">
-              <div data-slot="connectors-directory" class="flex min-h-0 flex-1 flex-col gap-3">
-                <div class="flex shrink-0 items-center gap-3"><h2>Connectors</h2></div>
-                <div class="flex shrink-0 items-center gap-3 border-b border-(--ui-stroke-tertiary) pb-1.5">
-                  <input type="text" placeholder="Search 65 apps." />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section>
-    <div class="shrink-0">
-      <div data-tour="page-tabs">
-        <button data-tour="tab-skills">Skills</button>
-        <button data-tour="tab-toolsets">Tools</button>
-        <button data-tour="tab-connectors">Connectors</button>
-        <button data-tour="tab-plugins">Plugins</button>
-      </div>
-    </div>
-    <div class="min-h-0 flex-1 overflow-hidden">
-      <div class="flex h-full flex-col">
-        <div class="flex min-h-0 flex-1 flex-col"><p>plugins list</p></div>
-      </div>
-    </div>
-  </section>
-  <div class="flex min-w-0 items-center gap-2 border-b border-(--ui-stroke-secondary) px-3 py-2">
-    <span>decoy row outside any section</span>
-  </div>
 `
 
 /*
@@ -444,10 +341,12 @@ describe("Lumen theme contracts", () => {
 
         const profileRailControl = selector(
             "sidebar.css",
-            `${LUMEN_SCOPE} [data-slot="profile-rail"] :is(button.cursor-grab.touch-none.rounded-\\[3px\\].text-\\[0\\.5625rem\\][aria-pressed], button.opacity-35.rounded-\\[3px\\].text-\\[0\\.5625rem\\])`,
+            `${LUMEN_SCOPE} [data-slot="profile-rail"] :is(button[data-slot="profile-rail-rest-square"], button.cursor-grab.touch-none.rounded-\\[3px\\].text-\\[0\\.5625rem\\][aria-pressed])`,
         )
 
-        expect(document.querySelectorAll(profileRailControl)).toHaveLength(1)
+        // Both the rest square (its own data-slot hook) and the drag handle
+        // (the contained utility predicate) take the rail glyph treatment.
+        expect(document.querySelectorAll(profileRailControl)).toHaveLength(2)
         expect(document.querySelector("#unrelated-profile-control")?.matches(profileRailControl)).toBe(false)
     })
 
@@ -489,80 +388,25 @@ describe("Lumen theme contracts", () => {
         expect(document.querySelectorAll(selectors[1])).toHaveLength(3)
     })
 
-    it("targets the capabilities tab set and readable editor tiers", () => {
+    it("lifts the capabilities muted server labels, contained by their unique combo", () => {
         document.body.innerHTML = CAPABILITIES_DOM
 
-        const selectorPrefix = `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]):has([data-tour="tab-connectors"]):has([data-tour="tab-plugins"])`
+        const labelSelector = selector(
+            "capabilities.css",
+            `${LUMEN_SCOPE} [class~="text-muted-foreground/60"][class~="text-[0.68rem]"][class~="font-normal"]`,
+        )
 
-        const selectors = [
-            selector(
-                "capabilities.css",
-                `${selectorPrefix} :is([class~="text-muted-foreground/50"], [class~="text-muted-foreground/60"], [class~="text-muted-foreground/70"], [class~="text-muted-foreground/80"])`,
-            ),
-            selector("capabilities.css", `${selectorPrefix} .cm-editor .cm-gutters`),
-        ]
-
-        for (const current of selectors) {
-            expect(() => document.querySelectorAll(current), current).not.toThrow()
-            expect(document.querySelectorAll(current), current).not.toHaveLength(0)
-        }
+        // The Skills tab's server filter (and the MCP editor's title) is
+        // lifted; a plain /60 label without the rest of the combo is not.
+        expect(document.querySelectorAll(labelSelector)).toHaveLength(1)
+        expect(document.querySelector(labelSelector)?.textContent).toBe("all servers")
     })
 
-    it("airs the capabilities scope divider on every tab that shows it", () => {
-        document.body.innerHTML = CAPABILITIES_TABS_DOM
-
-        const selectors = [
-            // The scope selector row's divider gains bottom padding.
-            selector(
-                "capabilities.css",
-                `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]) [class~="border-(--ui-stroke-secondary)"][class~="py-2"]`,
-            ),
-            // The tab content wrapper gains top padding, only while the
-            // divider row actually precedes it.
-            selector(
-                "capabilities.css",
-                `${LUMEN_SCOPE} section:has([data-tour="tab-skills"]):has([data-tour="tab-toolsets"]) > div:last-child > div:first-child:has(> div:first-child[class~="border-(--ui-stroke-secondary)"][class~="py-2"]) > div:last-child`,
-            ),
-        ]
-
-        // Exactly the three scope rows (Skills, Toolsets, Connectors) are
-        // caught — never the Plugins wrapper or the decoy row.
-        expect(() => document.querySelectorAll(selectors[0])).not.toThrow()
-        expect(document.querySelectorAll(selectors[0])).toHaveLength(3)
-
-        for (const current of selectors) {
-            for (const element of document.querySelectorAll(current)) {
-                expect(element.textContent, current).not.toContain("decoy")
-            }
-        }
-
-        expect(document.querySelectorAll(selectors[1])).toHaveLength(3)
-        expect([...document.querySelectorAll(selectors[1])].map(element => element.textContent?.trim())).toEqual(
-            expect.arrayContaining(["skills list", "toolsets list", "Connectors"]),
-        )
-
-        // The Connectors search divider (tertiary token) is never the scope
-        // row, and the Plugins wrapper — which has no divider above it —
-        // gains no padding.
-        const searchDivider = document.querySelector('[class~="border-(--ui-stroke-tertiary)"]')
-        expect(searchDivider).not.toBeNull()
-        expect([...document.querySelectorAll(selectors[0])]).not.toContain(searchDivider)
-
-        const pluginsWrapper = [...document.querySelectorAll("section")]
-            .at(-1)
-            ?.querySelector("div.flex.h-full.flex-col > div:last-child")
-
-        expect(pluginsWrapper?.textContent).toContain("plugins list")
-        expect([...document.querySelectorAll(selectors[1])]).not.toContain(pluginsWrapper)
-
-        // The divider itself is softened — a color-mix toward transparent on
-        // the scope row's bottom border — so the line reads quiet on every tab
-        // that shows it rather than as a full-strength secondary rule.
-        const scopeRowRule = readSource("src/styles/capabilities.css").match(
-            /\[class~="border-\(--ui-stroke-secondary\)"\]\[class~="py-2"\]\s*\{[\s\S]*?\}/,
-        )
-
-        expect(scopeRowRule?.[0]).toMatch(/border-bottom-color:\s*color-mix\(in srgb, var\(--ui-stroke-secondary\)/)
+    it("scales the root through the app's baseSize field instead of a CSS override", () => {
+        // typography.baseSize (1.125rem) is painted as --dt-base-size on the
+        // real :root by themes/context.tsx; the clarity layer must not force
+        // its own root font size on top of it.
+        expect(readSource("src/styles/tokens.css")).not.toMatch(/font-size:\s*18px/)
     })
 
     it("targets the Kanban task dialog feed and muted badges", () => {

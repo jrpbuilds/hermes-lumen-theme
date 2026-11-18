@@ -120,24 +120,9 @@
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, transparent);
 }
 
-:root[data-hermes-theme="lumen"]
-    [data-tour="sessions-sidebar"]
-    > [data-slot="sidebar-content"]
-    > div
-    > div:has(> input[type="text"])
-    svg {
-    color: var(--ui-text-tertiary);
-}
-
-:root[data-hermes-theme="lumen"]
-    [data-tour="sessions-sidebar"]
-    > [data-slot="sidebar-content"]
-    > div
-    > div:has(> input[type="text"])
-    input::placeholder {
-    color: var(--ui-text-tertiary);
-    opacity: 1;
-}
+/* Search icon and placeholder ink are app-owned now (SearchField ships
+   text-muted-foreground/70 and placeholder:text-muted-foreground, and the
+   global placeholder rule below still applies). */
 
 /* ==========================================================================
    Sidebar sections
@@ -338,16 +323,19 @@
    ========================================================================== */
 
 /*
- * FRAGILE FALLBACK — profile rail controls. Hermes exposes the stable
- * `profile-rail` root but not separate hooks for its draggable and disabled
- * squares, so the utility predicates remain contained beneath that root.
+ * FRAGILE FALLBACK — profile rail controls. The rail root and the rest
+ * squares are stable hooks (`profile-rail`, `profile-rail-rest-square`);
+ * drag handles expose no hook, so their utility predicate remains contained
+ * beneath the root (`cursor-grab touch-none rounded-[3px]
+ * text-[0.5625rem]` + `aria-pressed`). The app ships these squares resting
+ * at `opacity-55`; Lumen pins its own rest opacity instead.
  */
 
 :root[data-hermes-theme="lumen"]
     [data-slot="profile-rail"]
     :is(
-        button.cursor-grab.touch-none.rounded-\[3px\].text-\[0\.5625rem\][aria-pressed],
-        button.opacity-35.rounded-\[3px\].text-\[0\.5625rem\]
+        button[data-slot="profile-rail-rest-square"],
+        button.cursor-grab.touch-none.rounded-\[3px\].text-\[0\.5625rem\][aria-pressed]
     ) {
     color: var(--lumen-profile-rail-glyph) !important;
     opacity: 0.92 !important;

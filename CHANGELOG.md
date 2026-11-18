@@ -2,6 +2,29 @@
 
 All notable Lumen releases are documented here.
 
+## [1.4.0]
+
+### Added
+
+- Adopt the app's `DesktopTheme.typography.baseSize` field (1.125rem = 18px) so the global scale flows through Hermes' supported `--dt-base-size` knob in both modes.
+
+### Changed
+
+- Re-anchored every clarity-layer rule against Hermes Desktop v0.23.2+canary (~1,900 upstream commits since v1.3.0).
+- Retire the capabilities layer's dead anchors: the rebuilt `app/capabilities` pages carry semantic classes and no per-tab tour anchors, so only the two muted server/scope labels keep a readability lift (contained by their unique utility combo).
+- Profile-rail glyphs now hook the stable `profile-rail-rest-square` data-slot; the drag-handle predicate follows the app's `opacity-55` rest state.
+- Bots group-chat room rules rebuilt for the centered reading column: the reply-in-thread link pill is re-anchored on the new log grid, the header hairline recolor follows the room's `header` element, and the own-message bubble rules are retired because the app now paints `--dt-user-bubble` natively.
+- Drop the standard-select width forcing and two-line clamp: the app pins menu width natively (`min-w-(--radix-select-trigger-width)`) and Radix 2.3.8 no longer emits `data-radix-select-item-text`; forcing max-width without a clamp would clip long options.
+- Drop the search-field icon/placeholder ink rules: SearchField ships both natively now.
+
+### Fixed
+
+- Refresh the mirrored `DesktopTheme` type (`baseSize`/`lineHeight`/`letterSpacing`, `customCSS`/`accentOf`) and the built-in theme fixture (`classic`, `slate`) so name-collision checks stay honest.
+
+### Compatibility
+
+- Validated against Hermes Desktop v0.23.2+canary (`f7e2898aae`); hermes-bots DOM is vendored in-app at `apps/desktop/src/plugins/hermes-bots/`.
+
 ## [1.3.0]
 
 ### Added

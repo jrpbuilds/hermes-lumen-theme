@@ -1,6 +1,6 @@
 /**
  * Mirrored theme model from NousResearch/hermes-agent
- * `apps/desktop/src/themes/types.ts` (v0.21.x).
+ * `apps/desktop/src/themes/types.ts` (v0.23.2+canary, f7e2898aae).
  *
  * The real SDK is not published to npm, so the contract the theme data must
  * satisfy is vendored here for typechecking. Keep in sync with the app —
@@ -46,6 +46,12 @@ export interface DesktopThemeTypography {
     fontMono: string
     /** Google/Bunny/self-hosted font stylesheet URL. */
     fontUrl?: string
+    /** Root base font size, painted as `--dt-base-size`. Mirrors the dashboard theme system. */
+    baseSize?: string
+    /** Root line height, painted as `--dt-line-height`. */
+    lineHeight?: string
+    /** Root letter spacing, painted as `--dt-letter-spacing`. */
+    letterSpacing?: string
 }
 
 /** Integrated-terminal ANSI palette (xterm `ITheme`, minus `background`). */
@@ -85,4 +91,12 @@ export interface DesktopTheme {
     terminal?: DesktopTerminalPalette
     /** Dark-variant terminal ANSI palette. Falls back to `terminal`. */
     darkTerminal?: DesktopTerminalPalette
+    /**
+     * Raw CSS injected as a scoped <style> tag on theme apply. Persists
+     * across updates because it lives in ~/.hermes/skins/, not inside
+     * app.asar. Contributions never ship one.
+     */
+    customCSS?: string
+    /** On a saved accent retint (`<base>-accent-<hex>`): the theme it was retinted from. */
+    accentOf?: string
 }

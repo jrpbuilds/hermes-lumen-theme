@@ -13,11 +13,10 @@
 
 :root[data-hermes-theme="lumen"] {
     /*
-   * Global UI scale. Lumen targets readable defaults; 18px on :root scales
-   * every rem-based size in the app (app native root is 16px via
-   * --dt-base-size; see docs/COMPATIBILITY.md for the impact).
+   * Global UI scale comes from the theme's `typography.baseSize` (18px),
+   * painted by the app as --dt-base-size on the real :root — no CSS
+   * override needed (see src/theme.ts and docs/COMPATIBILITY.md).
    */
-    font-size: 18px !important;
 
     /* Brand accent — tracks the palette ring (== primary) in both modes. */
     --lumen-accent: var(--dt-ring);
@@ -109,8 +108,6 @@
     --ui-inline-code-background: #eceff4;
     --ui-inline-code-foreground: #262b32;
     --lumen-capabilities-readable-text: #59636f;
-    /* Embedded capability pickers keep a constant dark backdrop in both modes. */
-    --lumen-embed-background: #171a1f;
 }
 
 /* Light user-message bubbles use Lumen's authored lavender instead of the
@@ -204,5 +201,4 @@
     --ui-inline-code-background: #2b323a;
     --ui-inline-code-foreground: #e7eaf0;
     --lumen-capabilities-readable-text: #b2bac4;
-    --lumen-embed-background: #171a1f;
 }

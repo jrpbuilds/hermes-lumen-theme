@@ -1,6 +1,8 @@
 /*
- * Lumen clarity layer — Bots sidebar (the hermes-bots plugin pane) and its
- * group-chat room. The pane root has no background of its own, so the zone's
+ * Lumen clarity layer — Bots sidebar (the hermes-bots pane; vendored inside
+ * Hermes Desktop since v0.23 at apps/desktop/src/plugins/hermes-bots) and
+ * its group-chat room. The pane root has no background of its own, so the
+ * zone's
  * chrome fill showed through a step darker than the sessions sidebar; this
  * layer paints it with the sidebar surface and carries the sessions'
  * section/row language onto the roster.
@@ -324,84 +326,34 @@
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--lumen-accent) 38%, transparent);
 }
 
-:root[data-hermes-theme="lumen"]
-    div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
-    > div.flex.min-w-0.items-center.gap-1.px-2\.5.pb-1\.5
-    > div:has(> input[type="text"])
-    svg {
-    color: var(--ui-text-tertiary);
-}
-
-:root[data-hermes-theme="lumen"]
-    div.flex.h-full.flex-col:has(> div.flex.items-center.justify-between.gap-2.px-2\.5.pt-2\.5.pb-1\.5)
-    > div.flex.min-w-0.items-center.gap-1.px-2\.5.pb-1\.5
-    > div:has(> input[type="text"])
-    input::placeholder {
-    color: var(--ui-text-tertiary);
-    opacity: 1;
-}
+/* Search icon and placeholder ink are app-owned now (SearchField ships
+   text-muted-foreground/70 and placeholder:text-muted-foreground, and the
+   global placeholder rule in forms.css still applies). */
 
 /* ==========================================================================
    Group chat room
    ========================================================================== */
 
 /*
- * The log grid has no top padding, so the first message sat flush under the
- * activity panel's hairline; the scroller anchor is the room's log grid.
- * FRAGILE FALLBACK — matches the group-chat log grid's exact utility chain;
- * the workspace root has no Bots-specific semantic hook.
+ * The room was redesigned upstream around a centered reading column: the
+ * scroller (`min-h-0 flex-1 flex-col … px-4`) now wraps a `max-w-3xl`
+ * `mt-auto` log grid (`grid-cols-[minmax(0,1fr)] gap-0.5 py-4`), message
+ * rows carry `data-room-message`, and the app itself paints the user's own
+ * body with the `--dt-user-bubble` bubble (RoomMessage). The old fill,
+ * spacing, and seated-composer rules were retired with that redesign; the
+ * reply-in-thread links and the room hairlines are re-anchored below.
  */
-:root[data-hermes-theme="lumen"]
-    div.relative.flex.h-full.flex-col
-    > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"] {
-    /* The app's gap-1.5 packs the log tight; open it up so messages breathe. */
-    gap: 0.75rem;
-    padding-top: 0.5rem;
-}
 
 /*
- * Your own messages wear the sessions bubble recipe: the per-mode Lumen
- * user-bubble seed (--dt-user-bubble), the bubble's 1px tertiary border and
- * padding, with transcript ink. Anchored on the fill class — the only log
- * row that carries one.
+ * Every thread's tail trails a "Reply in thread" link (variant="link",
+ * pushed into the log grid); render the links as quiet accent pills.
+ * FRAGILE FALLBACK — matches the room's log grid utility combo, which the
+ * workspace's activity grid does not carry (it has no grid-cols track).
  */
 :root[data-hermes-theme="lumen"]
     div.relative.flex.h-full.flex-col
     > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"]
-    > div[class*="bg-(--chrome-action-hover)"] {
-    background: var(--dt-user-bubble);
-    border: 1px solid var(--ui-stroke-tertiary);
-    border-radius: 0.25rem;
-    padding: 0.5rem 0.75rem !important;
-}
-
-:root[data-hermes-theme="lumen"]
-    div.relative.flex.h-full.flex-col
-    > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"]
-    > div[class*="bg-(--chrome-action-hover)"]:hover {
-    border-color: var(--ui-stroke-secondary);
-}
-
-:root[data-hermes-theme="lumen"]
-    div.relative.flex.h-full.flex-col
-    > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"]
-    > div[class*="bg-(--chrome-action-hover)"]
-    [data-slot="group-chat-message-content"] {
-    color: color-mix(in srgb, var(--ui-text-primary) 95%, transparent) !important;
-}
-
-/*
- * Every thread's last message trails a "Reply in thread" link (or, once
- * seated, the composer itself); render the links as quiet accent pills.
- */
-:root[data-hermes-theme="lumen"]
-    div.relative.flex.h-full.flex-col
-    > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"]
+    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-0.5"]
     > button[data-variant="link"] {
     background: color-mix(in srgb, var(--lumen-accent) 12%, transparent);
     border: 1px solid color-mix(in srgb, var(--lumen-accent) 30%, transparent);
@@ -411,35 +363,13 @@
 }
 
 /*
- * The seated thread composer sits below the thread's tail — no box of its
- * own; the tail's accent rail marks the pairing. Drop the form's own px-2 so
- * the field lines up flush with the message cards.
- */
-:root[data-hermes-theme="lumen"]
-    div.relative.flex.h-full.flex-col
-    > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"]
-    > form.grid {
-    margin-top: 0.25rem;
-    padding-left: 0;
-}
-
-:root[data-hermes-theme="lumen"]
-    div.relative.flex.h-full.flex-col
-    > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain
-    > div[class*="grid-cols-[minmax(0,1fr)]"][class*="gap-1.5"][class*="px-2.5"][class*="pb-2"]
-    > div.group:has(+ form.grid) {
-    box-shadow: inset 2px 0 0 color-mix(in srgb, var(--lumen-accent) 60%, transparent);
-}
-
-/*
  * The room's mention textarea rides high against its buttons for two
  * compounding reasons, both fixed here: inline-level flow puts the baseline
  * at the box's bottom edge (overflow-y: auto), so the wrapper's strut parks
  * ~6px below it and the buttons center lower than the input — block flow
- * removes the strut. And `min-h-9` outruns `field-sizing: content`'s
- * one-line box, leaving the line high inside — split that slack into the
- * padding instead.
+ * removes the strut. And the composer's min-height knob outruns
+ * `field-sizing: content`'s one-line box, leaving the line high inside —
+ * split that slack into the padding instead.
  */
 :root[data-hermes-theme="lumen"] div.relative.flex.h-full.flex-col textarea[data-slot="textarea"] {
     display: block;
@@ -447,12 +377,13 @@
 }
 
 /*
- * The room's structural hairlines (activity panel's bottom rule, composer's
- * top rule) ship a stroke a step brighter than the sessions sidebar's
- * dividers; align them to --lumen-sidebar-divider instead of touching the
- * token app-wide.
+ * The room's header hairline ships a stroke a step brighter than the
+ * sessions sidebar's dividers; align it to --lumen-sidebar-divider instead
+ * of touching the token app-wide. (The activity panel's divider moved to
+ * the tertiary token and the composer grew its own surface, so both are
+ * left native.)
  */
-:root[data-hermes-theme="lumen"] div.relative.flex.h-full.flex-col > div[class*="border-(--ui-stroke-secondary)"] {
+:root[data-hermes-theme="lumen"] div.relative.flex.h-full.flex-col > header[class*="border-(--ui-stroke-secondary)"] {
     border-color: var(--lumen-sidebar-divider);
 }
 
